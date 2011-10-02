@@ -459,6 +459,37 @@ namespace THOK.AS.Sorting.Dao
             return ExecuteQuery(string.Format(sql, orderId, orderNo,channelGroup)).Tables[0];
         }
 
+        /// <summary>
+        /// 查询多沟带缓存段
+        /// </summary>
+        /// <param name="channelGroup">通道组</param>
+        /// <param name="sortNoStart">前端订单号</param>
+        /// <returns>返回多沟带缓存段起所有订单数据</returns>         
+        public DataTable FindDetailForCacheOrderQuery(int channelGroup, int sortNoStart)
+        {
+            string sql = @"SELECT A.SORTNO,A.ORDERID,A.CIGARETTECODE, A.CIGARETTENAME, A.QUANTITY ,C.CUSTOMERNAME,B.CHANNELNAME,   
+                            CASE B.CHANNELTYPE 
+                        	  WHEN '2' 
+	                            THEN '立式机' 
+                              WHEN '5' 
+	                            THEN '立式机' 
+	                          ELSE '通道机' 
+                            END CHANNELTYPE,   
+                            CASE 
+	                          WHEN A.CHANNELGROUP=1 
+	                            THEN 'A线' 
+	                          ELSE 'B线' 
+                            END  CHANNELLINE,  
+                              ISNULL((SELECT TOP 1 PACKNO FROM AS_SORT_PACKORDER WHERE SORTNO = A.SORTNO AND EXPORTNO = 0 AND CHANNELGROUP = A.CHANNELGROUP),0) AS PACKNO0,  
+                              ISNULL((SELECT TOP 1 PACKNO FROM AS_SORT_PACKORDER WHERE SORTNO = A.SORTNO AND EXPORTNO = 1 AND CHANNELGROUP = A.CHANNELGROUP),0) AS PACKNO1,  
+                              ISNULL((SELECT TOP 1 PACKNO FROM AS_SORT_PACKORDER WHERE SORTNO = A.SORTNO AND EXPORTNO = 2 AND CHANNELGROUP = A.CHANNELGROUP),0) AS PACKNO2  
+                                FROM AS_SC_ORDER A  
+                                  LEFT JOIN AS_SC_CHANNELUSED B ON A.CHANNELCODE=B.CHANNELCODE   
+                                    LEFT JOIN AS_SC_PALLETMASTER C ON A.SORTNO = C.SORTNO AND A.ORDERID = C.ORDERID AND A.ORDERDATE = C.ORDERDATE
+                                      WHERE A.CHANNELGROUP ={0} AND A.SORTNO >={1} ORDER BY A.SORTNO,B.CHANNELADDRESS";
+            return ExecuteQuery(string.Format(sql, channelGroup, sortNoStart)).Tables[0];
+        }
+
         public DataTable FindDetailForCacheOrderQuery(int exportNo, int sortNo, string packMode)
         {
             string sql = "";
