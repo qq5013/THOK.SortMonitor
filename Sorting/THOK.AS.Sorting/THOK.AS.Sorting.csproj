@@ -1,0 +1,371 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7C262527-51F1-4586-B590-9F2AD56EDAAC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>THOK.AS.Sorting</RootNamespace>
+    <AssemblyName>THOK.AS.Sorting</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" />
+    <Reference Include="CrystalDecisions.Enterprise.Framework, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" />
+    <Reference Include="CrystalDecisions.Enterprise.InfoStore, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" />
+    <Reference Include="CrystalDecisions.Shared, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" />
+    <Reference Include="CrystalDecisions.Windows.Forms, Version=10.2.3600.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" />
+    <Reference Include="DataGridViewAutoFilter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Reference\DataGridViewAutoFilter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="THOK.AF.View, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Reference\THOK.AF.View.dll</HintPath>
+    </Reference>
+    <Reference Include="THOK.MCP, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Reference\THOK.MCP.dll</HintPath>
+    </Reference>
+    <Reference Include="THOK.MCP.Service.Package, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Reference\THOK.MCP.Service.Package.dll</HintPath>
+    </Reference>
+    <Reference Include="THOK.ParamUtil, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Reference\THOK.ParamUtil.dll</HintPath>
+    </Reference>
+    <Reference Include="THOK.UDP, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Reference\THOK.UDP.dll</HintPath>
+    </Reference>
+    <Reference Include="THOK.Util, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Reference\THOK.Util.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Dal\UploadDataDal.cs" />
+    <Compile Include="Dao\UploadDataDao.cs" />
+    <Compile Include="Report\ChannelCheckDataSet.cs">
+      <DependentUpon>ChannelCheckDataSet.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\ChannelCheckDataSet.designer.cs">
+      <DependentUpon>ChannelCheckDataSet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dal\ChannelDal.cs" />
+    <Compile Include="Dal\OrderDal.cs" />
+    <Compile Include="Dao\ChannelDao.cs" />
+    <Compile Include="Dao\OrderDao.cs" />
+    <Compile Include="Dao\ServerDao.cs" />
+    <Compile Include="Dao\SortStatusDao.cs" />
+    <Compile Include="Dao\StockDao.cs" />
+    <Compile Include="Parameter.cs" />
+    <Compile Include="Process01\CacheOrderProcess.cs" />
+    <Compile Include="Process01\CreatePackAndPrintDataProcess.cs" />
+    <Compile Include="Process01\LEDProcess.cs" />
+    <Compile Include="Process01\MissOrderProcess.cs" />
+    <Compile Include="Process01\OrderRequestProcess.cs" />
+    <Compile Include="Process01\CurrentOrderProcess.cs" />
+    <Compile Include="Process01\SortingOrderProcess.cs" />
+    <Compile Include="Process01\SortRunStatusProcess.cs" />
+    <Compile Include="Process02\ViewProcess.cs" />
+    <Compile Include="Process01\SortStatusProcess.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="RefreshData.cs" />
+    <Compile Include="Report\ChannelCheckReport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChannelCheckReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\CrystalSortSpeed.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CrystalSortSpeed.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report\SortDBDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SortDBDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Util\EQ2008_DataStruct.cs" />
+    <Compile Include="Util\GraphicsUtil.cs" />
+    <Compile Include="Util\LED2008.cs" />
+    <Compile Include="Util\LedCollection.cs" />
+    <Compile Include="Util\LEDUtil.cs" />
+    <Compile Include="Util\LogFile.cs" />
+    <Compile Include="Util\MessageUtil.cs" />
+    <Compile Include="Util\SerializableUtil.cs" />
+    <Compile Include="Util\SetUtil.cs" />
+    <Compile Include="Util\StringUtil.cs" />
+    <Compile Include="View\Control\ButtonArea.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\Control\ButtonArea.Designer.cs">
+      <DependentUpon>ButtonArea.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\ChannelGroupDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\ChannelGroupDialog.Designer.cs">
+      <DependentUpon>ChannelGroupDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Form\CacheOrderQueryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Form\CacheOrderQueryForm.Designer.cs">
+      <DependentUpon>CacheOrderQueryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\ChannelDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\ChannelDialog.Designer.cs">
+      <DependentUpon>ChannelDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Form\ChannelCheckForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Form\ChannelCheckForm.designer.cs">
+      <DependentUpon>ChannelCheckForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Form\ChannelQueryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Form\ChannelQueryForm.Designer.cs">
+      <DependentUpon>ChannelQueryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Form\CheckQueryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Form\CheckQueryForm.Designer.cs">
+      <DependentUpon>CheckQueryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Form\OrderQueryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Form\OrderQueryForm.Designer.cs">
+      <DependentUpon>OrderQueryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Form\CustomerOrderQueryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Form\CustomerOrderQueryForm.designer.cs">
+      <DependentUpon>CustomerOrderQueryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Form\ParameterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Form\ParameterForm.designer.cs">
+      <DependentUpon>ParameterForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\SortingStatus.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\Control\SortingStatus.designer.cs">
+      <DependentUpon>SortingStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\SortNoDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\SortNoDialog.Designer.cs">
+      <DependentUpon>SortNoDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\CigaretteQueryDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\CigaretteQueryDialog.Designer.cs">
+      <DependentUpon>CigaretteQueryDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Form\SortSpeedCrystalForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Form\SortSpeedCrystalForm.Designer.cs">
+      <DependentUpon>SortSpeedCrystalForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Form\UploadDataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Form\UploadDataForm.Designer.cs">
+      <DependentUpon>UploadDataForm.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\ChannelCheckReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ChannelCheckReport.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\CrystalSortSpeed.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CrystalSortSpeed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\CrystalSortSpeed.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CrystalSortSpeed.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Control\ButtonArea.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ButtonArea.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\ChannelGroupDialog.resx">
+      <DependentUpon>ChannelGroupDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Form\CacheOrderQueryForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CacheOrderQueryForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\ChannelDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ChannelDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Form\ChannelCheckForm.resx">
+      <DependentUpon>ChannelCheckForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Form\ChannelQueryForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ChannelQueryForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Form\CheckQueryForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CheckQueryForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Form\OrderQueryForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>OrderQueryForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Form\CustomerOrderQueryForm.resx">
+      <DependentUpon>CustomerOrderQueryForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Form\ParameterForm.resx">
+      <DependentUpon>ParameterForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Control\SortingStatus.resx">
+      <DependentUpon>SortingStatus.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\SortNoDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SortNoDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\CigaretteQueryDialog.resx">
+      <DependentUpon>CigaretteQueryDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Form\SortSpeedCrystalForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SortSpeedCrystalForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Form\UploadDataForm.resx">
+      <DependentUpon>UploadDataForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Image\Chart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Image\Exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Image\Info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Image\Save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Image\Modify.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Report\ChannelCheckDataSet.xsc">
+      <DependentUpon>ChannelCheckDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Report\ChannelCheckDataSet.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Report\ChannelCheckDataSet.xss">
+      <DependentUpon>ChannelCheckDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Image\Delete.png" />
+    <None Include="Report\SortDBDataSet.xsc">
+      <DependentUpon>SortDBDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Report\SortDBDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>SortDBDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Report\SortDBDataSet.xss">
+      <DependentUpon>SortDBDataSet.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{967B4E0D-AD0C-4609-AB67-0FA40C0206D8}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "THOK.AS.Sorting", "THOK.AS.Sorting\THOK.AS.Sorting.csproj", "{7C262527-51F1-4586-B590-9F2AD56EDAAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "THOK.AS.Sorting.MCS", "THOK.AS.Sorting.MCS\THOK.AS.Sorting.MCS.csproj", "{4A0A1F51-F716-4BCF-8D0A-F4DA67E6954D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7C262527-51F1-4586-B590-9F2AD56EDAAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C262527-51F1-4586-B590-9F2AD56EDAAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C262527-51F1-4586-B590-9F2AD56EDAAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C262527-51F1-4586-B590-9F2AD56EDAAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A0A1F51-F716-4BCF-8D0A-F4DA67E6954D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A0A1F51-F716-4BCF-8D0A-F4DA67E6954D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A0A1F51-F716-4BCF-8D0A-F4DA67E6954D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A0A1F51-F716-4BCF-8D0A-F4DA67E6954D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

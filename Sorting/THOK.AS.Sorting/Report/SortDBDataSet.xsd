@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="SortDBDataSet" targetNamespace="http://tempuri.org/SortDBDataSet.xsd" xmlns:mstns="http://tempuri.org/SortDBDataSet.xsd" xmlns="http://tempuri.org/SortDBDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="SortDBConnectionString" ConnectionStringObject="" IsAppSettingsProperty="True" Modifier="Assembly" Name="SortDBConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.THOK.AS.Sorting.Properties.Settings.GlobalReference.Default.SortDBConnectionString" Provider="System.Data.SqlClient">
+          </Connection>
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="效率报表TableAdapter" GeneratorDataComponentClassName="效率报表TableAdapter" Name="效率报表" UserDataComponentName="效率报表TableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="SortDBConnectionString (Settings)" DbObjectName="SortDB.dbo.效率报表" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="False" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="True" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="False">
+                    <CommandText>SELECT 分析时间, 总数量, 已分拣数量, 未分拣数量, 分拣运行效率, 分拣综合效率, 整体综合效率, 正常停机, 正常运行, 分拣机故障, 立式机缺烟, 打码机故障, 包装机故障 FROM 效率报表</CommandText>
+                    <Parameters>
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="分析时间" DataSetColumn="分析时间" />
+              <Mapping SourceColumn="总数量" DataSetColumn="总数量" />
+              <Mapping SourceColumn="已分拣数量" DataSetColumn="已分拣数量" />
+              <Mapping SourceColumn="未分拣数量" DataSetColumn="未分拣数量" />
+              <Mapping SourceColumn="分拣运行效率" DataSetColumn="分拣运行效率" />
+              <Mapping SourceColumn="分拣综合效率" DataSetColumn="分拣综合效率" />
+              <Mapping SourceColumn="整体综合效率" DataSetColumn="整体综合效率" />
+              <Mapping SourceColumn="正常停机" DataSetColumn="正常停机" />
+              <Mapping SourceColumn="正常运行" DataSetColumn="正常运行" />
+              <Mapping SourceColumn="分拣机故障" DataSetColumn="分拣机故障" />
+              <Mapping SourceColumn="立式机缺烟" DataSetColumn="立式机缺烟" />
+              <Mapping SourceColumn="打码机故障" DataSetColumn="打码机故障" />
+              <Mapping SourceColumn="包装机故障" DataSetColumn="包装机故障" />
+            </Mappings>
+            <Sources>
+            </Sources>
+          </TableAdapter>
+        </Tables>
+        <Sources>
+        </Sources>
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="SortDBDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="SortDBDataSet" msprop:Generator_DataSetName="SortDBDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="效率报表" msprop:Generator_UserTableName="效率报表" msprop:Generator_RowDeletedName="效率报表RowDeleted" msprop:Generator_RowChangedName="效率报表RowChanged" msprop:Generator_RowClassName="效率报表Row" msprop:Generator_RowChangingName="效率报表RowChanging" msprop:Generator_RowEvArgName="效率报表RowChangeEvent" msprop:Generator_RowEvHandlerName="效率报表RowChangeEventHandler" msprop:Generator_TableClassName="效率报表DataTable" msprop:Generator_TableVarName="table效率报表" msprop:Generator_RowDeletingName="效率报表RowDeleting" msprop:Generator_TablePropName="效率报表">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="分析时间" msprop:Generator_UserColumnName="分析时间" msprop:Generator_ColumnVarNameInTable="column分析时间" msprop:Generator_ColumnPropNameInRow="分析时间" msprop:Generator_ColumnPropNameInTable="分析时间Column" type="xs:dateTime" />
+              <xs:element name="总数量" msprop:Generator_UserColumnName="总数量" msprop:Generator_ColumnVarNameInTable="column总数量" msprop:Generator_ColumnPropNameInRow="总数量" msprop:Generator_ColumnPropNameInTable="总数量Column" type="xs:int" />
+              <xs:element name="已分拣数量" msprop:Generator_UserColumnName="已分拣数量" msprop:Generator_ColumnVarNameInTable="column已分拣数量" msprop:Generator_ColumnPropNameInRow="已分拣数量" msprop:Generator_ColumnPropNameInTable="已分拣数量Column" type="xs:int" />
+              <xs:element name="未分拣数量" msdata:ReadOnly="true" msprop:Generator_UserColumnName="未分拣数量" msprop:Generator_ColumnVarNameInTable="column未分拣数量" msprop:Generator_ColumnPropNameInRow="未分拣数量" msprop:Generator_ColumnPropNameInTable="未分拣数量Column" type="xs:int" minOccurs="0" />
+              <xs:element name="分拣运行效率" msprop:Generator_UserColumnName="分拣运行效率" msprop:Generator_ColumnVarNameInTable="column分拣运行效率" msprop:Generator_ColumnPropNameInRow="分拣运行效率" msprop:Generator_ColumnPropNameInTable="分拣运行效率Column" type="xs:double" />
+              <xs:element name="分拣综合效率" msprop:Generator_UserColumnName="分拣综合效率" msprop:Generator_ColumnVarNameInTable="column分拣综合效率" msprop:Generator_ColumnPropNameInRow="分拣综合效率" msprop:Generator_ColumnPropNameInTable="分拣综合效率Column" type="xs:double" />
+              <xs:element name="整体综合效率" msprop:Generator_UserColumnName="整体综合效率" msprop:Generator_ColumnVarNameInTable="column整体综合效率" msprop:Generator_ColumnPropNameInRow="整体综合效率" msprop:Generator_ColumnPropNameInTable="整体综合效率Column" type="xs:double" />
+              <xs:element name="正常停机" msprop:Generator_UserColumnName="正常停机" msprop:Generator_ColumnVarNameInTable="column正常停机" msprop:Generator_ColumnPropNameInRow="正常停机" msprop:Generator_ColumnPropNameInTable="正常停机Column" type="xs:int" />
+              <xs:element name="正常运行" msprop:Generator_UserColumnName="正常运行" msprop:Generator_ColumnVarNameInTable="column正常运行" msprop:Generator_ColumnPropNameInRow="正常运行" msprop:Generator_ColumnPropNameInTable="正常运行Column" type="xs:int" />
+              <xs:element name="分拣机故障" msprop:Generator_UserColumnName="分拣机故障" msprop:Generator_ColumnVarNameInTable="column分拣机故障" msprop:Generator_ColumnPropNameInRow="分拣机故障" msprop:Generator_ColumnPropNameInTable="分拣机故障Column" type="xs:int" />
+              <xs:element name="立式机缺烟" msprop:Generator_UserColumnName="立式机缺烟" msprop:Generator_ColumnVarNameInTable="column立式机缺烟" msprop:Generator_ColumnPropNameInRow="立式机缺烟" msprop:Generator_ColumnPropNameInTable="立式机缺烟Column" type="xs:int" />
+              <xs:element name="打码机故障" msprop:Generator_UserColumnName="打码机故障" msprop:Generator_ColumnVarNameInTable="column打码机故障" msprop:Generator_ColumnPropNameInRow="打码机故障" msprop:Generator_ColumnPropNameInTable="打码机故障Column" type="xs:int" />
+              <xs:element name="包装机故障" msprop:Generator_UserColumnName="包装机故障" msprop:Generator_ColumnVarNameInTable="column包装机故障" msprop:Generator_ColumnPropNameInRow="包装机故障" msprop:Generator_ColumnPropNameInTable="包装机故障Column" type="xs:int" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

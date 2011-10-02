@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="gb2312"?>
+<Application>
+	<Caption MinBox="true" MaxBox="true"/>
+	<Title Visible="false"/>
+	<MenuBar Width="180"/>
+	<MenuItem Height="22"/>
+
+	<Menus Name="统计查询">
+		<Menu Name="分拣订单查询" Type="THOK.AS.Sorting.View.OrderQueryForm,THOK.AS.Sorting.dll"/>
+		<Menu Name="客户订单查询" Type="THOK.AS.Sorting.View.CustomerOrderQueryForm,THOK.AS.Sorting.dll"/>
+		<Menu Name="分拣烟道查询" Type="THOK.AS.Sorting.View.ChannelQueryForm,THOK.AS.Sorting.dll"/>
+		<Menu Name="分拣烟道盘点" Type="THOK.AS.Sorting.View.CheckQueryForm,THOK.AS.Sorting.dll"/>
+		<Menu Name="分拣效率查询" Type="THOK.AS.Sorting.View.SortSpeedCrystalForm,THOK.AS.Sorting.dll"/>
+		<Menu Name="分拣情况上报" Type="THOK.AS.Sorting.View.UploadDataForm,THOK.AS.Sorting.dll"/>
+	</Menus>
+	<Menus Name="数据盘点">
+		<Menu Name="烟道实时盘点" Type="THOK.AS.Sorting.View.ChannelCheckForm,THOK.AS.Sorting.dll"/>
+	</Menus>
+	<Menus Name="系统">
+		<Menu Name="参数设置" Type="THOK.AS.Sorting.View.ParameterForm,THOK.AS.Sorting.dll"/>
+	</Menus>
+</Application>

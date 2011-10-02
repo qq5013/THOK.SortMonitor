@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ChannelCheckDataSet" targetNamespace="http://tempuri.org/ChannelCheckDataSet.xsd" xmlns:mstns="http://tempuri.org/ChannelCheckDataSet.xsd" xmlns="http://tempuri.org/ChannelCheckDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+        </Connections>
+        <Tables>
+        </Tables>
+        <Sources>
+        </Sources>
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ChannelCheckDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="ChannelCheckDataSet" msprop:Generator_DataSetName="ChannelCheckDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DTChannelCheck" msprop:Generator_UserTableName="DTChannelCheck" msprop:Generator_RowDeletedName="DTChannelCheckRowDeleted" msprop:Generator_RowChangedName="DTChannelCheckRowChanged" msprop:Generator_RowClassName="DTChannelCheckRow" msprop:Generator_RowChangingName="DTChannelCheckRowChanging" msprop:Generator_RowEvArgName="DTChannelCheckRowChangeEvent" msprop:Generator_RowEvHandlerName="DTChannelCheckRowChangeEventHandler" msprop:Generator_TableClassName="DTChannelCheckDataTable" msprop:Generator_TableVarName="tableDTChannelCheck" msprop:Generator_RowDeletingName="DTChannelCheckRowDeleting" msprop:Generator_TablePropName="DTChannelCheck">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="LINECODE" msprop:Generator_UserColumnName="LINECODE" msprop:Generator_ColumnPropNameInRow="LINECODE" msprop:Generator_ColumnVarNameInTable="columnLINECODE" msprop:Generator_ColumnPropNameInTable="LINECODEColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="CHANNELGROUP" msprop:Generator_UserColumnName="CHANNELGROUP" msprop:Generator_ColumnPropNameInRow="CHANNELGROUP" msprop:Generator_ColumnVarNameInTable="columnCHANNELGROUP" msprop:Generator_ColumnPropNameInTable="CHANNELGROUPColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="CHANNELNAME" msprop:Generator_UserColumnName="CHANNELNAME" msprop:Generator_ColumnVarNameInTable="columnCHANNELNAME" msprop:Generator_ColumnPropNameInRow="CHANNELNAME" msprop:Generator_ColumnPropNameInTable="CHANNELNAMEColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="CHANNELTYPE" msprop:Generator_UserColumnName="CHANNELTYPE" msprop:Generator_ColumnVarNameInTable="columnCHANNELTYPE" msprop:Generator_ColumnPropNameInRow="CHANNELTYPE" msprop:Generator_ColumnPropNameInTable="CHANNELTYPEColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="CIGARETTECODE" msprop:Generator_UserColumnName="CIGARETTECODE" msprop:Generator_ColumnVarNameInTable="columnCIGARETTECODE" msprop:Generator_ColumnPropNameInRow="CIGARETTECODE" msprop:Generator_ColumnPropNameInTable="CIGARETTECODEColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="CIGARETTENAME" msprop:Generator_UserColumnName="CIGARETTENAME" msprop:Generator_ColumnVarNameInTable="columnCIGARETTENAME" msprop:Generator_ColumnPropNameInRow="CIGARETTENAME" msprop:Generator_ColumnPropNameInTable="CIGARETTENAMEColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="QUANTITY" msprop:Generator_UserColumnName="QUANTITY" msprop:Generator_ColumnVarNameInTable="columnQUANTITY" msprop:Generator_ColumnPropNameInRow="QUANTITY" msprop:Generator_ColumnPropNameInTable="QUANTITYColumn" type="xs:int" minOccurs="0" />
+              <xs:element name="SORTQUANTITY" msprop:Generator_UserColumnName="SORTQUANTITY" msprop:Generator_ColumnPropNameInRow="SORTQUANTITY" msprop:Generator_ColumnVarNameInTable="columnSORTQUANTITY" msprop:Generator_ColumnPropNameInTable="SORTQUANTITYColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="NOSORTQUANTITY" msprop:Generator_UserColumnName="NOSORTQUANTITY" msprop:Generator_ColumnPropNameInRow="NOSORTQUANTITY" msprop:Generator_ColumnVarNameInTable="columnNOSORTQUANTITY" msprop:Generator_ColumnPropNameInTable="NOSORTQUANTITYColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="ALLQUANTITY" msprop:Generator_UserColumnName="ALLQUANTITY" msprop:Generator_ColumnVarNameInTable="columnALLQUANTITY" msprop:Generator_ColumnPropNameInRow="ALLQUANTITY" msprop:Generator_ColumnPropNameInTable="ALLQUANTITYColumn" type="xs:int" minOccurs="0" />
+              <xs:element name="REMAINQUANTITY" msprop:Generator_UserColumnName="REMAINQUANTITY" msprop:Generator_ColumnVarNameInTable="columnREMAINQUANTITY" msprop:Generator_ColumnPropNameInRow="REMAINQUANTITY" msprop:Generator_ColumnPropNameInTable="REMAINQUANTITYColumn" type="xs:int" minOccurs="0" />
+              <xs:element name="BOXQUANTITY" msprop:Generator_UserColumnName="BOXQUANTITY" msprop:Generator_ColumnVarNameInTable="columnBOXQUANTITY" msprop:Generator_ColumnPropNameInRow="BOXQUANTITY" msprop:Generator_ColumnPropNameInTable="BOXQUANTITYColumn" type="xs:int" minOccurs="0" />
+              <xs:element name="ITEMQUANTITY" msprop:Generator_UserColumnName="ITEMQUANTITY" msprop:Generator_ColumnVarNameInTable="columnITEMQUANTITY" msprop:Generator_ColumnPropNameInRow="ITEMQUANTITY" msprop:Generator_ColumnPropNameInTable="ITEMQUANTITYColumn" type="xs:int" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

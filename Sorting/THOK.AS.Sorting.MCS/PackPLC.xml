@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<Config>
+  <PLCServer PortName="COM2" BaudRate="19200" Parity="Even" DataBits="8" StopBits="One" UpdateRate="350">
+    <PLCItem ItemName="PackageRequest" Address="120" ItemType="READ" isValidate="false" />
+    <PLCItem ItemName="PackageData" Address="300" ItemType="WRITE" isValidate="true" />
+    <PLCItem ItemName="OrderCount" Address="162" ItemType="WRITE" isValidate="false" />
+    <PLCItem ItemName="WriteFlag" Address="160" ItemType="WRITE" isValidate="false" />
+  </PLCServer>
+</Config>

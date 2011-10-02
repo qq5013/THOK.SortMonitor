@@ -1,0 +1,17 @@
+﻿<?xml version='1.0' ?>
+<Config>
+  <OPCServer ConnectionString="OPC.SimaticNET">
+    <OPCGroup GroupName="DefaultGroup" GroupString="S7:[@LOCALSERVER]" UpdateRate="250">
+      <OPCItem ItemName="OrderRequest" ClientHandler="1" OPCItemName="DB1,INT0,1"  ItemType="READ"/>
+      <OPCItem ItemName="CurrentOrder" ClientHandler="2" OPCItemName="DB1,INT2,1"  ItemType="READ"/>
+      <OPCItem ItemName="OrderData" ClientHandler="3" OPCItemName="DB1,INT0,90"  ItemType="WRITE"/>
+      <OPCItem ItemName="ChannelData" ClientHandler="4" OPCItemName="DB1,INT0,86"  ItemType="WRITE"/>
+      <OPCItem ItemName="ChannelChangeData" ClientHandler="5" OPCItemName="DB1,INT226,3"  ItemType="WRITE"/>
+      <OPCItem ItemName="RestartData" ClientHandler="6" OPCItemName="DB1,INT172,1"  ItemType="WRITE"/>
+      <OPCItem ItemName="EmptyErr" ClientHandler="7" OPCItemName="DB1,INT174,1"  ItemType="READ"/>
+      <OPCItem ItemName="MissOrder" ClientHandler="8" OPCItemName="DB1,INT176,1"  ItemType="READ"/>
+      <OPCItem ItemName="UpdateMissOrder" ClientHandler="9" OPCItemName="DB1,INT178,1"  ItemType="WRITE"/>
+      <OPCItem ItemName="Check" ClientHandler="10" OPCItemName="DB1,INT0,86"  ItemType="READ" IsActive="false"/>
+    </OPCGroup>
+  </OPCServer>
+</Config>
