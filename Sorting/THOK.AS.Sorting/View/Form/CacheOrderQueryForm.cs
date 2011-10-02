@@ -160,9 +160,25 @@ namespace THOK.AS.Sorting.View
             }
         }
 
+        public void LoadColor()
+        {
+            string cigaretteCode1 = Convert.ToString(dgvDetail.Rows[dgvDetail.Rows.Count - 2].Cells["CIGARETTECODE"]);
+            string cigaretteCode2 = Convert.ToString(dgvDetail.Rows[dgvDetail.Rows.Count - 1].Cells["CIGARETTECODE"]);
+            if (cigaretteCode1 == cigaretteCode2)
+            {
+                dgvDetail.Rows[dgvDetail.Rows.Count - 2].DefaultCellStyle.BackColor = Color.Green;
+                dgvDetail.Rows[dgvDetail.Rows.Count - 1].DefaultCellStyle.BackColor = Color.Red;
+            }
+        }
+
         public void CacheOrderQueryForm_Paint(object sender, PaintEventArgs e)
         {
             LoadColor(this.sortNo, this.channelGroup);
+        }
+
+        public void CacheOrderQueryFormPaint(object send, PaintEventArgs e)
+        {
+            LoadColor();
         }
     }
 }
