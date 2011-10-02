@@ -107,7 +107,21 @@ namespace THOK.AS.Sorting.Dal
                 }
             }
         }
-
+         
+        /// <summary>
+        ///  多沟带数据显示DAL方法       多沟带数据显示DAL
+        /// </summary>
+        /// <param name="channelGroup"></param>
+        /// <param name="sortNoStart"></param>
+        /// <returns></returns>
+        public DataTable GetAllOrderDetailForCacheOrderQuery(int channelGroup, int sortNoStart)
+        {
+            using (PersistentManager pm = new PersistentManager())
+            {
+                OrderDao orderDao = new OrderDao();
+                return orderDao.FindDetailForCacheOrderQuery(channelGroup, sortNoStart);
+            }
+        }
         public DataTable GetOrderDetailForCacheOrderQuery(int channelGroup, int sortNo)
         {
             using (PersistentManager pm = new PersistentManager())
