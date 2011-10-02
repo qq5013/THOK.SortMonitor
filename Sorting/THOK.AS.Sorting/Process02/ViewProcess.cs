@@ -12,11 +12,12 @@ namespace THOK.AS.Sorting.Process
         protected override void StateChanged(StateItem stateItem, IProcessDispatcher dispatcher)
         {
             THOK.MCP.View.ViewClickArgs e = (THOK.MCP.View.ViewClickArgs)stateItem.State;
-            CacheOrderQueryForm cacheOrderQueryForm = null;
 
             Logger.Info(string.Format("²éÑ¯ {0} {1} ¶©µ¥ÐÅÏ¢£¡", e.DeviceClass, e.DeviceNo));
-            
+
             int sortNo = 0;
+            int sortNoStart = 0;
+            int sumQuantity = 0;//»º´æ¶Î¾íÑÌÊýÁ¿
             int channelGroup = 0;
             int exportNo = 0;
             int deviceNo = 0;
@@ -35,87 +36,78 @@ namespace THOK.AS.Sorting.Process
 
                     switch (e.DeviceClass)
                     {
-                        case "¶©µ¥»º´æ¶Î":
+                        //»º´æ¶ÎÈ¥³ýµ²°å£¬¸ÄÓÃ¶à¹µ´ø¡£
+                        case "¶à¹µ´ø»º´æ¶Î":
                             switch (e.DeviceNo)
                             {
                                 case 1:
-                                    sortNo = sortNoes[0];
+                                    sortNoStart = sortNoes[0];
+                                    sumQuantity = sortNoes[1];
                                     channelGroup = 1;
                                     deviceNo = 1;
                                     break;
                                 case 2:
-                                    sortNo = sortNoes[1];
+                                    sortNoStart = sortNoes[0];
+                                    sumQuantity = sortNoes[2];
                                     channelGroup = 1;
                                     deviceNo = 2;
                                     break;
                                 case 3:
-                                    sortNo = sortNoes[2];
-                                    channelGroup = 1;
+                                    sortNoStart = sortNoes[3];
+                                    sumQuantity = sortNoes[4];
+                                    channelGroup = 2;
                                     deviceNo = 3;
-                                    break;
+                                    break; ;
                                 case 4:
-                                    sortNo = sortNoes[3];
+                                    sortNoStart = sortNoes[3];
+                                    sumQuantity = sortNoes[5];
                                     channelGroup = 2;
-                                    deviceNo = 1;
-                                    break;
-                                case 5:
-                                    sortNo = sortNoes[4];
-                                    channelGroup = 2;
-                                    deviceNo = 2;
-                                    break;
-                                case 6:
-                                    sortNo = sortNoes[5];
-                                    channelGroup = 2;
-                                    deviceNo = 3;
+                                    deviceNo = 4;
                                     break;
                                 default:
                                     break;
+
                             }
-                            cacheOrderQueryForm = new CacheOrderQueryForm(deviceNo, channelGroup, sortNo);
-                            cacheOrderQueryForm.Text = "¶©µ¥»º´æ¶Î:";
-                            cacheOrderQueryForm.ShowDialog(Application.OpenForms["MainForm"]);
+                            CacheOrderQueryForm cacheOrderQueryForm1 = (new CacheOrderQueryForm(deviceNo, channelGroup, sortNoStart, sumQuantity));
+                            cacheOrderQueryForm1.Paint += new PaintEventHandler(cacheOrderQueryForm1.CacheOrderQueryFormPaint);//´°ÌåÖØ»æ¼ÓÔØÑÕÉ«
+                            cacheOrderQueryForm1.Text = "¶à¹µ´ø»º´æ¶Î:";
+                            cacheOrderQueryForm1.ShowDialog(Application.OpenForms["MainForm"]);
                             break;
-                        case "°Ú¶¯»º´æ¶Î":
-                            if (e.DeviceNo == 7)
-                            {
-                                sortNo = sortNoes[6];
-                                channelGroup = sortNoes[7];
-                                deviceNo = 1;
-                            }
-                            else if (e.DeviceNo == 8)
+                        case "´òÂë»º´æ¶Î":
+                            if (e.DeviceNo == 5)
                             {
                                 sortNo = sortNoes[8];
                                 channelGroup = sortNoes[9];
-                                deviceNo = 2;
+                                deviceNo = 1;
                             }
-                            else if (e.DeviceNo == 9)
+                            else if (e.DeviceNo == 6)
                             {
                                 sortNo = sortNoes[10];
                                 channelGroup = sortNoes[11];
-                                deviceNo = 3;
+                                deviceNo = 2;
                             }
-                            cacheOrderQueryForm = new CacheOrderQueryForm(deviceNo, channelGroup, sortNo);
-                            cacheOrderQueryForm.Text = "°Ú¶¯»º´æ¶Î:";
-                            cacheOrderQueryForm.ShowDialog(Application.OpenForms["MainForm"]);
+                            CacheOrderQueryForm cacheOrderQueryForm2 = new CacheOrderQueryForm(deviceNo, channelGroup, sortNo);
+                            cacheOrderQueryForm2.Text = "´òÂë»º´æ¶Î:";
+                            cacheOrderQueryForm2.ShowDialog(Application.OpenForms["MainForm"]);
                             break;
                         case "°ü×°»º´æ¶Î":
-                            if (e.DeviceNo == 10)
+                            if (e.DeviceNo == 7)
                             {
                                 sortNo = sortNoes[12];
                                 channelGroup = sortNoes[13];
                                 exportNo = 1;
                             }
-                            else if (e.DeviceNo == 11)
+                            else if (e.DeviceNo == 8)
                             {
                                 sortNo = sortNoes[14];
                                 channelGroup = sortNoes[15];
                                 exportNo = 2;
                             }
                             packMode = sortNoes[16].ToString();
-                            cacheOrderQueryForm = new CacheOrderQueryForm(packMode, exportNo, sortNo,channelGroup);
-                            cacheOrderQueryForm.Text = "°ü×°»º´æ¶Î:";
-                            cacheOrderQueryForm.Paint += new PaintEventHandler(cacheOrderQueryForm.CacheOrderQueryForm_Paint);
-                            cacheOrderQueryForm.ShowDialog(Application.OpenForms["MainForm"]);
+                            CacheOrderQueryForm cacheOrderQueryForm3 = new CacheOrderQueryForm(packMode, exportNo, sortNo, channelGroup);
+                            cacheOrderQueryForm3.Paint += new PaintEventHandler(cacheOrderQueryForm2.CacheOrderQueryForm_Paint);
+                            cacheOrderQueryForm3.Text = "°ü×°»º´æ¶Î:";
+                            cacheOrderQueryForm3.ShowDialog(Application.OpenForms["MainForm"]);
                             break;
                         default:
                             break;
