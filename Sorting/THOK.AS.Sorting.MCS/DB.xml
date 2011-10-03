@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
 <Connections>
-	<Connection Name="DefaultConnection" DatabaseType="SQLSERVER">
-		<ConnectionString Value="server=10.66.21.81;database=SORTDB;uid=sa;" />
-		<Password Name="password" Value="65CED0851FFD283F" />
-	</Connection>
-	<Connection Name="ServerConnection" DatabaseType="SQLSERVER">
-		<ConnectionString Value="server=10.66.21.68;database=Logistics;uid=sa;" />
-		<Password Name="password" Value="65CED0851FFD283F" />
-	</Connection>
-	<Connection Name="StockServerConnection" DatabaseType="SQLSERVER">
-		<ConnectionString Value="server=.;database=StockDB;uid=sa;" />
-		<Password Name="password" Value="65CED0851FFD283F" />
-	</Connection>
-	<Connection Name="DB2Connection" DatabaseType="DB2">
-		<ConnectionString Value="server=10.66.1.21:50000;database=WLCTR;uid=ms;" />
-		<Password Name="password" Value="A0E5B8AA619AE888" />
-	</Connection>
+  <Connection Name="DefaultConnection" DatabaseType="SQLSERVER">
+    <ConnectionString Value="server=.;database=SortDB;uid=sa;" />
+    <Password Name="password" Value="65CED0851FFD283F" />
+  </Connection>
+  <Connection Name="ServerConnection" DatabaseType="SQLSERVER">
+    <ConnectionString Value="server=.;database=Logistics;uid=sa;" />
+    <Password Name="password" Value="65CED0851FFD283F" />
+  </Connection>
+  <Connection Name="StockServerConnection" DatabaseType="SQLSERVER">
+    <ConnectionString Value="server=192.168.1.21;database=StockDB;uid=sa;" />
+    <Password Name="password" Value="65CED0851FFD283F" />
+  </Connection>
+  <Connection Name="DB2Connection" DatabaseType="DB2">
+    <ConnectionString Value="server=10.66.1.21:50000;database=WLCTR;uid=ms;" />
+    <Password Name="password" Value="A0E5B8AA619AE888" />
+  </Connection>
 </Connections>

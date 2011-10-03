@@ -5,12 +5,12 @@
     <Attribute Name="LineCode" Value="01" />
     <Attribute Name="ExportIP" Value="192.168.1.47" />
     <Attribute Name="ExportPort" Value="5000" />
-    <Attribute Name="SupplyIP" Value="127.0.0.1" />
+    <Attribute Name="SupplyIP" Value="192.168.1.21" />
     <Attribute Name="SupplyPort" Value="7000" />
-    <Attribute Name="SortLedIP" Value="192.168.1.50" />
+    <Attribute Name="SortLedIP" Value="192.168.1.44" />
     <Attribute Name="SortLedPort" Value="6000" />
-	<Attribute Name="PackDataPath" Value="D:/PackData/" />
-	<Attribute Name="IsActiveLeds" Value="1,192.168.1.29;2,192.168.1.30;3,192.168.1.31;4,192.168.1.32;5,192.168.1.33;6,192.168.1.34" />
+    <Attribute Name="PackDataPath" Value="D:/PackData/" />
+    <Attribute Name="IsActiveLeds" Value="1,192.168.1.29;2,192.168.1.30;3,192.168.1.31;4,192.168.1.32;5,192.168.1.33;6,192.168.1.34" />
   </Attributes>
   <Services>
     <Service Name="SortPLC" Type="THOK.MCP.Service.Siemens.dll, THOK.MCP.Service.Siemens.OPCService" ConfigFile="SortPLC.xml" />
@@ -19,39 +19,37 @@
   <Processes>
     <Process Name="OrderRequestProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.OrderRequestProcess" Suspend="true">
       <Item ServiceName="SortPLC" ItemName="OrderRequestA" />
-		<Item ServiceName="SortPLC" ItemName="OrderRequestB" />
-	 </Process>
-
-	  <Process Name="SortingOrderProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.SortingOrderProcess">
-		 <Item ServiceName="SortPLC" ItemName="SortingOrderA" />
-		<Item ServiceName="SortPLC" ItemName="SortingOrderB" />
-	  </Process>
-	  
+      <Item ServiceName="SortPLC" ItemName="OrderRequestB" />
+    </Process>
+    <Process Name="SortingOrderProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.SortingOrderProcess">
+      <Item ServiceName="SortPLC" ItemName="SortingOrderA" />
+      <Item ServiceName="SortPLC" ItemName="SortingOrderB" />
+    </Process>
     <Process Name="CurrentOrderProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.CurrentOrderProcess">
       <Item ServiceName="SortPLC" ItemName="CurrentOrderA" />
-		  <Item ServiceName="SortPLC" ItemName="CurrentOrderB" />
-	  </Process>
-	  
+      <Item ServiceName="SortPLC" ItemName="CurrentOrderB" />
+    </Process>
     <!--<Process Name="PackRequestProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.PackRequestProcess" Suspend="true">
       <Item ServiceName="PackPLC" ItemName="PackageRequest" />
     </Process>-->
-	  
     <Process Name="MissOrderProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.MissOrderProcess">
       <Item ServiceName="SortPLC" ItemName="MissOrderA" />
-		  <Item ServiceName="SortPLC" ItemName="MissOrderB" />
-	  </Process>
-	  
+      <Item ServiceName="SortPLC" ItemName="MissOrderB" />
+    </Process>
     <Process Name="ViewProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.ViewProcess" />
-	<Process Name="CreatePackAndPrintDataProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.CreatePackAndPrintDataProcess" />
-	  
+    <Process Name="CreatePackAndPrintDataProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.CreatePackAndPrintDataProcess" />
     <Process Name="LEDProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.LEDProcess">
       <Item ServiceName="SortPLC" ItemName="EmptyErrA" />
-		  <Item ServiceName="SortPLC" ItemName="EmptyErrB" />
-	  </Process>
-	  
-	<Process Name="SortStatusProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.SortStatusProcess">
-		<Item ServiceName="SortPLC" ItemName="SortStatus" />
-	</Process>
-
+      <Item ServiceName="SortPLC" ItemName="EmptyErrB" />
+    </Process>
+    <Process Name="SortStatusProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.SortStatusProcess">
+      <Item ServiceName="SortPLC" ItemName="SortStatus" />
+    </Process>
+    <Process Name="SortRunStatusProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.SortRunStatusProcess">
+      <Item ServiceName="SortPLC" ItemName="SortRunStatus" />
+    </Process>
+    <Process Name="CacheOrderProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.CacheOrderProcess">
+      <Item ServiceName="SortPLC" ItemName="CacheOrderSortNoes" />
+    </Process>
   </Processes>
 </Configuration>
