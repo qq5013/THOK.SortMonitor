@@ -9,7 +9,7 @@ using THOK.AS.Sorting.Util;
 
 namespace THOK.AS.Sorting.Process
 {
-    public class OrderRequestProcess: AbstractProcess
+    public class OrderRequestProcess : AbstractProcess
     {
         private MessageUtil messageUtil = null;
 
@@ -44,7 +44,7 @@ namespace THOK.AS.Sorting.Process
                     default:
                         return;
                 }
-              
+
                 //读取A线订单明细并写给PLC
                 object o = ObjectUtil.GetObject(stateItem.State);
 
@@ -70,7 +70,7 @@ namespace THOK.AS.Sorting.Process
                                 string endSortNo = orderDao.FindEndSortNoForChannelGroup(channelGroup);
                                 int exportNo = Convert.ToInt32(masterTable.Rows[0]["EXPORTNO" + (channelGroup == "A" ? "" : "1")]);
 
-                                int[] orderData = new int[37];
+                                int[] orderData = new int[97];
                                 if (detailTable.Rows.Count > 0)
                                 {
                                     for (int i = 0; i < detailTable.Rows.Count; i++)
@@ -80,19 +80,19 @@ namespace THOK.AS.Sorting.Process
                                 }
 
                                 //分拣流水号
-                                orderData[30] = Convert.ToInt32(sortNo);
+                                orderData[90] = Convert.ToInt32(sortNo);
                                 //订单数量
-                                orderData[31] = Convert.ToInt32(masterTable.Rows[0]["QUANTITY" + (channelGroup == "A" ? "" : "1")]);
+                                orderData[91] = Convert.ToInt32(masterTable.Rows[0]["QUANTITY" + (channelGroup == "A" ? "" : "1")]);
                                 //是否换户
-                                orderData[32] = maxSortNo == sortNo ? 1 : 0;
+                                orderData[92] = maxSortNo == sortNo ? 1 : 0;
                                 //客户分拣流水号
-                                orderData[33] = Convert.ToInt32(masterTable.Rows[0]["CUSTOMERSORTNO"].ToString());
+                                orderData[93] = Convert.ToInt32(masterTable.Rows[0]["CUSTOMERSORTNO"].ToString());
                                 //包装机号
-                                orderData[34] = exportNo;
+                                orderData[94] = exportNo;
                                 //本分拣线路是否结束
-                                orderData[35] = endSortNo == sortNo ? 1 : 0;
+                                orderData[95] = endSortNo == sortNo ? 1 : 0;
                                 //完成标志
-                                orderData[36] = 1;
+                                orderData[96] = 1;
                                 if (WriteToService("SortPLC", "OrderData" + channelGroup, orderData))
                                 {
                                     orderDao.UpdateOrderStatus(sortNo, "1", channelGroup);

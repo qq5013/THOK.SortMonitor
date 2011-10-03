@@ -9,7 +9,7 @@ using THOK.AS.Sorting.Util;
 
 namespace THOK.AS.Sorting.Process
 {
-    public class LEDProcess: AbstractProcess
+    public class LEDProcess : AbstractProcess
     {
         [Serializable]
         public class RestartState
@@ -39,16 +39,16 @@ namespace THOK.AS.Sorting.Process
                     }
                     else
                     {
-                        Logger.Error(Convert.ToInt32(led.Split(',')[0]) + "号LED屏故障，请检查！IP:[" +  led.Split(',')[1] +"]");                        
+                        Logger.Error(Convert.ToInt32(led.Split(',')[0]) + "号LED屏故障，请检查！IP:[" + led.Split(',')[1] + "]");
                     }
-                }      
+                }
 
                 restartState = Util.SerializableUtil.Deserialize<RestartState>(true, @".\RestartState.sl");
-                ledUtil = new LEDUtil();                
+                ledUtil = new LEDUtil();
             }
             catch (Exception e)
             {
-                Logger.Error(string.Format("LEDProcess 初始化失败！原因：{0}！ {1}", e.Message, "LEDProcess.cs 行号：52！"));
+                Logger.Error(string.Format("LEDProcess 初始化失败！原因：{0}！ {1}", e.Message, "LEDProcess.cs 行号：51！"));
             }
         }
 
@@ -61,7 +61,7 @@ namespace THOK.AS.Sorting.Process
             }
             catch (Exception e)
             {
-                Logger.Error(string.Format("LEDProcess 释放资源失败！原因：{0}！ {1}", e.Message, "LEDProcess.cs 行号：47！"));
+                Logger.Error(string.Format("LEDProcess 释放资源失败！原因：{0}！ {1}", e.Message, "LEDProcess.cs 行号：64！"));
             }
 
         }
@@ -83,8 +83,8 @@ namespace THOK.AS.Sorting.Process
                         Util.SerializableUtil.Serialize(true, @".\RestartState.sl", restartState);
 
                         //LED显示盘点数据和卷烟品牌
-                        Show("A",false);
-                        Show("B",false);
+                        Show("A", false);
+                        Show("B", false);
 
                         break;
                     case "Check"://由盘点按钮事件发出
@@ -94,10 +94,10 @@ namespace THOK.AS.Sorting.Process
                             if (statea is Array)
                             {
                                 Array array = (Array)statea;
-                                if (array.Length == 30)
+                                if (array.Length == 40)
                                 {
                                     //LED显示盘点数据和卷烟品牌
-                                    int[] quantity = new int[30];
+                                    int[] quantity = new int[40];
                                     array.CopyTo(quantity, 0);
                                     Show("A", true, quantity);
                                 }
@@ -106,10 +106,10 @@ namespace THOK.AS.Sorting.Process
                             if (stateb is Array)
                             {
                                 Array array = (Array)stateb;
-                                if (array.Length == 30)
+                                if (array.Length == 40)
                                 {
                                     //LED显示盘点数据和卷烟品牌
-                                    int[] quantity = new int[30];
+                                    int[] quantity = new int[40];
                                     array.CopyTo(quantity, 0);
                                     Show("B", true, quantity);
                                 }
@@ -126,7 +126,7 @@ namespace THOK.AS.Sorting.Process
                         if (restartState.IsRestart)
                         {
                             restartState.IsRestart = false;
-                            Util.SerializableUtil.Serialize(true, @".\RestartState.sl", restartState);                            
+                            Util.SerializableUtil.Serialize(true, @".\RestartState.sl", restartState);
                         }
 
                         //延时处理，再启动分拣订单处理线程，及包装订单处理线程。                        
@@ -141,8 +141,8 @@ namespace THOK.AS.Sorting.Process
                         }
 
                         //LED不显示盘点数据，只显示卷烟品牌
-                        Show("A",false);
-                        Show("B",false);
+                        Show("A", false);
+                        Show("B", false);
 
                         break;
                     case "EmptyErrA":
@@ -152,7 +152,7 @@ namespace THOK.AS.Sorting.Process
                         if (channelAddressA == 0)
                         {
                             ledUtil.errChannelAddress.Clear();
-                            Show("A",false);
+                            Show("A", false);
                         }
                         else
                         {
@@ -166,10 +166,10 @@ namespace THOK.AS.Sorting.Process
                                 if (statea is Array)
                                 {
                                     Array array = (Array)statea;
-                                    if (array.Length == 30)
+                                    if (array.Length == 40)
                                     {
                                         //LED显示盘点数据和卷烟品牌
-                                        int[] quantity = new int[30];
+                                        int[] quantity = new int[40];
                                         array.CopyTo(quantity, 0);
                                         Show("A", true, quantity);
                                     }
@@ -179,8 +179,8 @@ namespace THOK.AS.Sorting.Process
                                 Show("A", true);
 
                             ledUtil.errChannelAddress.Clear();
-                        }   
-                     
+                        }
+
                         break;
                     case "EmptyErrB":
                         //缺烟报警
@@ -189,7 +189,7 @@ namespace THOK.AS.Sorting.Process
                         if (channelAddressB == 0)
                         {
                             ledUtil.errChannelAddress.Clear();
-                            Show("B",false);
+                            Show("B", false);
                         }
                         else
                         {
@@ -202,16 +202,17 @@ namespace THOK.AS.Sorting.Process
                                 if (stateb is Array)
                                 {
                                     Array array = (Array)stateb;
-                                    if (array.Length == 30)
+                                    if (array.Length == 40)
                                     {
                                         //LED显示盘点数据和卷烟品牌
-                                        int[] quantity = new int[30];
+                                        int[] quantity = new int[40];
                                         array.CopyTo(quantity, 0);
                                         Show("B", true, quantity);
                                     }
                                 }
-                                
-                            }else 
+
+                            }
+                            else
                                 Show("B", true);
                             ledUtil.errChannelAddress.Clear();
                         }
@@ -221,7 +222,7 @@ namespace THOK.AS.Sorting.Process
             }
             catch (Exception e)
             {
-                Logger.Error(string.Format("LED 更新操作失败！原因：{0}！ {1}", e.Message, "LEDProcess.cs 行号：171！"));
+                Logger.Error(string.Format("LED 更新操作失败！原因：{0}！ {1}", e.Message, "LEDProcess.cs 行号：224！"));
             }
         }
 
@@ -236,26 +237,26 @@ namespace THOK.AS.Sorting.Process
 
                     string sortNo = "";
                     DataTable channelTable = null;
-                 
+
                     sortNo = orderDao.FindMaxSortedMaster(channelGroup);
                     channelTable = channelDao.FindChannelQuantity(sortNo, channelGroup);
 
                     DataRow[] channelRows = channelTable.Select("CHANNELTYPE='立式机'", "CHANNELNAME");
 
-                    if (!restartState.IsRestart && checkMode && quantity.Length  > 0 )
+                    if (!restartState.IsRestart && checkMode && quantity.Length > 0)
                     {
-                        foreach (DataRow  row in channelRows)
+                        foreach (DataRow row in channelRows)
                         {
                             row["REMAINQUANTITY"] = Convert.ToInt32(row["REMAINQUANTITY"]) + quantity[Convert.ToInt32(row["CHANNELADDRESS"]) - 1];
                         }
                     }
 
-                    ledUtil.Show(isActiveLeds,channelRows, checkMode);
+                    ledUtil.Show(isActiveLeds, channelRows, checkMode);
                 }
             }
             catch (Exception e)
             {
-                Logger.Error(string.Format("LED SHOW 操作失败！原因：{0}！ {1}", e.Message, "LEDProcess.cs 行号：205！"));
+                Logger.Error(string.Format("LED SHOW 操作失败！原因：{0}！ {1}", e.Message, "LEDProcess.cs 行号：258！"));
             }
         }
 
@@ -269,8 +270,8 @@ namespace THOK.AS.Sorting.Process
                     DataTable channelTableA = channelDao.FindLastSortNo(1);//获取A线烟道
                     DataTable channeltableB = channelDao.FindLastSortNo(2);//获取B线烟道
 
-                    int[] channelDataA = new int[30];
-                    int[] channelDataB = new int[30];
+                    int[] channelDataA = new int[40];
+                    int[] channelDataB = new int[40];
 
                     for (int i = 0; i < channelTableA.Rows.Count; i++)
                     {
@@ -302,6 +303,6 @@ namespace THOK.AS.Sorting.Process
             {
                 Logger.Error("写重新分拣标志操作失败！原因：" + e.Message);
             }
-        }    
+        }
     }
 }
