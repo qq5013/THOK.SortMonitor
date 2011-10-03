@@ -12,6 +12,8 @@ namespace THOK.AS.Sorting.View
     public partial class CacheOrderQueryForm :Form
     {
         private int sortNo = 0;
+        private int sortNoStart = 0;
+        private int sumQuantity = 0;
         private int channelGroup = 0;
         private OrderDal orderDal = new OrderDal();
         public CacheOrderQueryForm(int deviceNo,int channelGroup, int sortNo)

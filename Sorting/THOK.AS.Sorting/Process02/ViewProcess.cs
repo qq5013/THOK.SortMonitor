@@ -105,7 +105,7 @@ namespace THOK.AS.Sorting.Process
                             }
                             packMode = sortNoes[16].ToString();
                             CacheOrderQueryForm cacheOrderQueryForm3 = new CacheOrderQueryForm(packMode, exportNo, sortNo, channelGroup);
-                            cacheOrderQueryForm3.Paint += new PaintEventHandler(cacheOrderQueryForm2.CacheOrderQueryForm_Paint);
+                            cacheOrderQueryForm3.Paint += new PaintEventHandler(cacheOrderQueryForm3.CacheOrderQueryForm_Paint);
                             cacheOrderQueryForm3.Text = "°ü×°»º´æ¶Î:";
                             cacheOrderQueryForm3.ShowDialog(Application.OpenForms["MainForm"]);
                             break;

@@ -136,6 +136,7 @@
     <None Include="Resources\S1.gif" />
     <None Include="Resources\S11.gif" />
     <None Include="Resources\S12.gif" />
+    <None Include="Resources\S13.gif" />
     <Content Include="SortPLC.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
