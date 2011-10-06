@@ -164,8 +164,8 @@ namespace THOK.AS.Sorting.View
 
         public void LoadColor()
         {
-            string cigaretteCode1 = Convert.ToString(dgvDetail.Rows[dgvDetail.Rows.Count - 2].Cells["CIGARETTECODE"]);
-            string cigaretteCode2 = Convert.ToString(dgvDetail.Rows[dgvDetail.Rows.Count - 1].Cells["CIGARETTECODE"]);
+            string cigaretteCode1 =dgvDetail.Rows[dgvDetail.Rows.Count - 2].Cells["CIGARETTECODE"].Value.ToString();
+            string cigaretteCode2 =dgvDetail.Rows[dgvDetail.Rows.Count - 1].Cells["CIGARETTECODE"].Value.ToString();
             if (cigaretteCode1 == cigaretteCode2)
             {
                 dgvDetail.Rows[dgvDetail.Rows.Count - 2].DefaultCellStyle.BackColor = Color.Green;
