@@ -62,7 +62,7 @@ namespace THOK.AS.Sorting.Util
                     if (cigaretteName.Length == 0)
                     {
                         text = string.Format("{0} {1} {2}", "", "  нч  ", "");
-                        leds.AddTextToProgram(led_card, led_x, led_y, led_height, led_width, text, Util.LED2008.GREEN, false);
+                        leds.AddTextToProgram(led_card, led_x, led_y, led_height, led_width, text, Util.LED2008.RED, false);
                     }
                     else
                     {
@@ -71,11 +71,11 @@ namespace THOK.AS.Sorting.Util
                             text = string.Format("{0}{1}", quantity, cigaretteName);
                             if (errChannelAddress.ContainsKey(channelAddress))
                             {
-                                leds.AddTextToProgram(led_card, led_x, led_y, led_height, led_width, text, Util.LED2008.RED, true);
+                                leds.AddTextToProgram(led_card, led_x, led_y, led_height, led_width, text, Util.LED2008.GREEN, true);
                             }
                             else
                             {
-                                leds.AddTextToProgram(led_card, led_x, led_y, led_height, led_width, text, Util.LED2008.GREEN, true);
+                                leds.AddTextToProgram(led_card, led_x, led_y, led_height, led_width, text, Util.LED2008.RED, true);
                             }
                         }
                         else
@@ -84,11 +84,11 @@ namespace THOK.AS.Sorting.Util
 
                             if (errChannelAddress.ContainsKey(channelAddress))
                             {
-                                leds.AddTextToProgram(led_card, led_x, led_y, led_height, led_width, text, Util.LED2008.RED, true);
+                                leds.AddTextToProgram(led_card, led_x, led_y, led_height, led_width, text, Util.LED2008.GREEN, true);
                             }
                             else
                             {
-                                leds.AddTextToProgram(led_card, led_x, led_y, led_height, led_width, text, Util.LED2008.GREEN, true);
+                                leds.AddTextToProgram(led_card, led_x, led_y, led_height, led_width, text, Util.LED2008.RED, true);
                             }
                         }
                     }
