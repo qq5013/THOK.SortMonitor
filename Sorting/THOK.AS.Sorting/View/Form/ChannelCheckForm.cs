@@ -59,7 +59,7 @@ namespace THOK.AS.Sorting.View
         {
             try
             {
-                int[] quantity = new int[30];
+                int[] quantity = new int[40];
                 object state = null;
 
                 if (channelGroup == "1")
@@ -74,7 +74,7 @@ namespace THOK.AS.Sorting.View
                 if (state is Array)
                 {
                     Array array = (Array)state;
-                    if (array.Length == 30)
+                    if (array.Length == 40)
                     {
                         array.CopyTo(quantity, 0);
                     }
