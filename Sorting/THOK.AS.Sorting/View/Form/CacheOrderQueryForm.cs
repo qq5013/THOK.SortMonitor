@@ -12,7 +12,10 @@ namespace THOK.AS.Sorting.View
     public partial class CacheOrderQueryForm :Form
     {
         private int sortNo = 0;
+        private int deviceNo = 0;
         private int sortNoStart = 0;
+        private int frontQuantity = 0;
+        private int laterQuantity = 0;
         private int sumQuantity = 0;
         private int channelGroup = 0;
         private OrderDal orderDal = new OrderDal();
@@ -37,95 +40,116 @@ namespace THOK.AS.Sorting.View
         /// <summary>
         /// 窗体加载重载方法查询出多沟带缓存段的所有订单数据
         /// </summary>
-        /// <param name="deviceNo">设备名</param>
-        /// <param name="channelGroup">通道组</param>
-        /// <param name="sortNoStart">首个流水号</param>
-        /// <param name="sumQuantity">缓存段卷烟数量</param>
-        public CacheOrderQueryForm(int deviceNo, int channelGroup, int sortNoStart, int sumQuantity)
+        /// <param name="deviceNo"></param>
+        /// <param name="channelGroup"></param>
+        /// <param name="sortNoStart"></param>
+        /// <param name="frontQuantity"></param>
+        /// <param name="laterQuantity"></param>
+        public CacheOrderQueryForm(int deviceNo, int channelGroup, int sortNoStart,int frontQuantity,int laterQuantity)
         {
             InitializeComponent();
+            this.deviceNo = deviceNo;
             this.channelGroup = channelGroup;
             this.sortNoStart = sortNoStart;
-            this.sumQuantity = sumQuantity;
+            this.frontQuantity = frontQuantity;
+            this.laterQuantity = laterQuantity;
+            this.sumQuantity = frontQuantity + laterQuantity;
             string strhead = "";
-            DataTable Table = new DataTable();//添加虚拟表并添加相应字段
-
-            Table.Columns.Add("SORTNO");
-            Table.Columns.Add("ORDERID");
-            Table.Columns.Add("CIGARETTECODE");
-            Table.Columns.Add("CIGARETTENAME");
-            Table.Columns.Add("QUANTITY");
-            Table.Columns.Add("CUSTOMERNAME");
-            Table.Columns.Add("CHANNELNAME");
-            Table.Columns.Add("CHANNELTYPE");
-            Table.Columns.Add("CHANNELLINE");
-            Table.Columns.Add("PACKNO0");
-            Table.Columns.Add("PACKNO1");
-            Table.Columns.Add("PACKNO2");
 
             DataTable orderTable = orderDal.GetAllOrderDetailForCacheOrderQuery(channelGroup, sortNoStart);
-            if (orderTable.Rows.Count != 0)
+
+            if (deviceNo == 2 || deviceNo== 4)
             {
-                int tempQuantity = 0;
-                foreach (DataRow orderDetailRow in orderTable.Rows)
+                DataTable Table = new DataTable();
+                CreatTableForCacheOrder(Table);
+
+                if (orderTable.Rows.Count != 0)
                 {
-                    int orderQuantity = Convert.ToInt32(orderDetailRow["QUANTITY"]);
-                    tempQuantity = tempQuantity + orderQuantity;
-                    if (tempQuantity >= sumQuantity)
+                    int tempQuantity = 0;
+                    foreach (DataRow orderDetailRow in orderTable.Rows)
                     {
-                        orderDetailRow["QUANTITY"] = orderQuantity + sumQuantity - tempQuantity;//更改最后一单数量
-                        Table.Rows.Add();//增加一列并赋值
-                        Table.Rows[Table.Rows.Count - 1]["SORTNO"] = orderDetailRow["SORTNO"];
-                        Table.Rows[Table.Rows.Count - 1]["ORDERID"] = orderDetailRow["ORDERID"];
-                        Table.Rows[Table.Rows.Count - 1]["CIGARETTECODE"] = orderDetailRow["CIGARETTECODE"];
-                        Table.Rows[Table.Rows.Count - 1]["CIGARETTENAME"] = orderDetailRow["CIGARETTENAME"];
-                        Table.Rows[Table.Rows.Count - 1]["QUANTITY"] = orderDetailRow["QUANTITY"];
-                        Table.Rows[Table.Rows.Count - 1]["CUSTOMERNAME"] = orderDetailRow["CUSTOMERNAME"];
-                        Table.Rows[Table.Rows.Count - 1]["CHANNELNAME"] = orderDetailRow["CHANNELNAME"];
-                        Table.Rows[Table.Rows.Count - 1]["CHANNELTYPE"] = orderDetailRow["CHANNELTYPE"];
-                        Table.Rows[Table.Rows.Count - 1]["CHANNELLINE"] = orderDetailRow["CHANNELLINE"];
-                        Table.Rows[Table.Rows.Count - 1]["PACKNO0"] = orderDetailRow["PACKNO0"];
-                        Table.Rows[Table.Rows.Count - 1]["PACKNO1"] = orderDetailRow["PACKNO1"];
-                        Table.Rows[Table.Rows.Count - 1]["PACKNO2"] = orderDetailRow["PACKNO2"];
+                        int orderQuantity = Convert.ToInt32(orderDetailRow["QUANTITY"]);
+                        tempQuantity = tempQuantity + orderQuantity;
 
-                        orderDetailRow["QUANTITY"] = tempQuantity - sumQuantity;//补上最后一单余数
-                        Table.Rows.Add();//增加一列并赋值
-                        Table.Rows[Table.Rows.Count - 1]["SORTNO"] = orderDetailRow["SORTNO"];
-                        Table.Rows[Table.Rows.Count - 1]["ORDERID"] = orderDetailRow["ORDERID"];
-                        Table.Rows[Table.Rows.Count - 1]["CIGARETTECODE"] = orderDetailRow["CIGARETTECODE"];
-                        Table.Rows[Table.Rows.Count - 1]["CIGARETTENAME"] = orderDetailRow["CIGARETTENAME"];
-                        Table.Rows[Table.Rows.Count - 1]["QUANTITY"] = orderDetailRow["QUANTITY"];
-                        Table.Rows[Table.Rows.Count - 1]["CUSTOMERNAME"] = orderDetailRow["CUSTOMERNAME"];
-                        Table.Rows[Table.Rows.Count - 1]["CHANNELNAME"] = orderDetailRow["CHANNELNAME"];
-                        Table.Rows[Table.Rows.Count - 1]["CHANNELTYPE"] = orderDetailRow["CHANNELTYPE"];
-                        Table.Rows[Table.Rows.Count - 1]["CHANNELLINE"] = orderDetailRow["CHANNELLINE"];
-                        Table.Rows[Table.Rows.Count - 1]["PACKNO0"] = orderDetailRow["PACKNO0"];
-                        Table.Rows[Table.Rows.Count - 1]["PACKNO1"] = orderDetailRow["PACKNO1"];
-                        Table.Rows[Table.Rows.Count - 1]["PACKNO2"] = orderDetailRow["PACKNO2"];
-                        break;
+                        if (tempQuantity >= frontQuantity)
+                        {
+                            orderDetailRow["QUANTITY"] = orderQuantity + frontQuantity - tempQuantity;//更改最后一单数量
+                            AddCacheOrderTableRow(Table, orderDetailRow);
+
+                            orderDetailRow["QUANTITY"]= tempQuantity - frontQuantity;//补上最后一单余数
+                            AddCacheOrderTableRow(Table, orderDetailRow);
+                            break;
+                        }
+                        else
+                        {
+                            AddCacheOrderTableRow(Table, orderDetailRow);
+                        }
                     }
-                    else
-                    {
-                        Table.Rows.Add();//增加一列并赋值
-                        Table.Rows[Table.Rows.Count - 1]["SORTNO"] = orderDetailRow["SORTNO"];
-                        Table.Rows[Table.Rows.Count - 1]["ORDERID"] = orderDetailRow["ORDERID"];
-                        Table.Rows[Table.Rows.Count - 1]["CIGARETTECODE"] = orderDetailRow["CIGARETTECODE"];
-                        Table.Rows[Table.Rows.Count - 1]["CIGARETTENAME"] = orderDetailRow["CIGARETTENAME"];
-                        Table.Rows[Table.Rows.Count - 1]["QUANTITY"] = orderDetailRow["QUANTITY"];
-                        Table.Rows[Table.Rows.Count - 1]["CUSTOMERNAME"] = orderDetailRow["CUSTOMERNAME"];
-                        Table.Rows[Table.Rows.Count - 1]["CHANNELNAME"] = orderDetailRow["CHANNELNAME"];
-                        Table.Rows[Table.Rows.Count - 1]["CHANNELTYPE"] = orderDetailRow["CHANNELTYPE"];
-                        Table.Rows[Table.Rows.Count - 1]["CHANNELLINE"] = orderDetailRow["CHANNELLINE"];
-                        Table.Rows[Table.Rows.Count - 1]["PACKNO0"] = orderDetailRow["PACKNO0"];
-                        Table.Rows[Table.Rows.Count - 1]["PACKNO1"] = orderDetailRow["PACKNO1"];
-                        Table.Rows[Table.Rows.Count - 1]["PACKNO2"] = orderDetailRow["PACKNO2"];
-                    }
+                    dgvDetail.DataSource = Table;
+                    strhead = string.Format("[{0}线多沟带缓存{1}][流水号：{2}][总数量：{3}]", channelGroup == 1 ? "A" : "B", deviceNo, sortNoStart, frontQuantity);
+                    this.Text = this.Text + strhead;
                 }
-                dgvDetail.DataSource = Table;
-
             }
-            strhead = string.Format("[{0}线多沟带缓存{1}][流水号：{2}][总数量：{3}]", channelGroup == 1 ? "A" : "B", deviceNo, sortNoStart, sumQuantity);
-            this.Text = this.Text + strhead;
+            else
+            {
+                DataTable Table = new DataTable();
+                CreatTableForCacheOrder(Table);
+
+                if (orderTable.Rows.Count != 0)
+                {
+                    int tempQuantity = 0;
+                    bool flag = false;
+                    foreach (DataRow orderDetailRow in orderTable.Rows)
+                    {
+                        int orderQuantity = Convert.ToInt32(orderDetailRow["QUANTITY"]);
+                        tempQuantity = tempQuantity + orderQuantity;
+
+                        if (flag == false)
+                        {
+                            if (tempQuantity >= frontQuantity)
+                            {
+                                if (laterQuantity != 0)
+                                {
+                                    orderDetailRow["QUANTITY"] = tempQuantity - frontQuantity;//补上最后一单余数
+                                    AddCacheOrderTableRow(Table, orderDetailRow);
+                                    flag = true;
+                                }
+                                else
+                                {
+                                    orderDetailRow["QUANTITY"] = orderQuantity + frontQuantity - tempQuantity;//更改最后一单数量
+                                    AddCacheOrderTableRow(Table, orderDetailRow);
+
+                                    orderDetailRow["QUANTITY"] = tempQuantity - frontQuantity;//补上最后一单余数
+                                    AddCacheOrderTableRow(Table, orderDetailRow);
+                                    break;
+                                }
+                                
+                            }
+                        }
+                        else
+                        {
+                            if (tempQuantity >= sumQuantity)
+                            {
+                                orderDetailRow["QUANTITY"] = orderQuantity + sumQuantity - tempQuantity;//更改最后一单数量
+                                AddCacheOrderTableRow(Table, orderDetailRow);
+
+                                orderDetailRow["QUANTITY"] = tempQuantity - sumQuantity;//补上最后一单余数
+                                AddCacheOrderTableRow(Table, orderDetailRow);
+                                break;
+
+                            }
+                            else
+                            { 
+                                AddCacheOrderTableRow(Table, orderDetailRow);
+                            }
+                        }       
+                    }
+                    dgvDetail.DataSource = Table;
+                    strhead = string.Format("[{0}线多沟带缓存{1}][流水号：{2}][总数量：{3}]", channelGroup == 1 ? "A" : "B", deviceNo, sortNoStart,laterQuantity);
+                    this.Text = this.Text + strhead;
+                }
+            }
+            
         }
         public CacheOrderQueryForm(string packMode, int exportNo,int sortNo,int channelGroup)
         {
@@ -181,6 +205,46 @@ namespace THOK.AS.Sorting.View
         public void CacheOrderQueryFormPaint(object send, PaintEventArgs e)
         {
             LoadColor();
+        }
+        /// <summary>
+        /// 添加虚拟表并添加相应字段
+        /// </summary>
+        /// <returns>订单表</returns>
+        public void CreatTableForCacheOrder(DataTable table)
+        {
+            table.Columns.Add("SORTNO");
+            table.Columns.Add("ORDERID");
+            table.Columns.Add("CIGARETTECODE");
+            table.Columns.Add("CIGARETTENAME");
+            table.Columns.Add("QUANTITY");
+            table.Columns.Add("CUSTOMERNAME");
+            table.Columns.Add("CHANNELNAME");
+            table.Columns.Add("CHANNELTYPE");
+            table.Columns.Add("CHANNELLINE");
+            table.Columns.Add("PACKNO0");
+            table.Columns.Add("PACKNO1");
+            table.Columns.Add("PACKNO2");
+        }
+        /// <summary>
+        /// 增加行数据
+        /// </summary>
+        /// <param name="Table">订单表</param>
+        /// <param name="orderDetailRow">订单行</param>
+        public void AddCacheOrderTableRow(DataTable table, DataRow row)
+        {
+            table.Rows.Add();
+            table.Rows[table.Rows.Count - 1]["SORTNO"] = row["SORTNO"];
+            table.Rows[table.Rows.Count - 1]["ORDERID"] = row["ORDERID"];
+            table.Rows[table.Rows.Count - 1]["CIGARETTECODE"] = row["CIGARETTECODE"];
+            table.Rows[table.Rows.Count - 1]["CIGARETTENAME"] = row["CIGARETTENAME"];
+            table.Rows[table.Rows.Count - 1]["QUANTITY"] = row["QUANTITY"];
+            table.Rows[table.Rows.Count - 1]["CUSTOMERNAME"] = row["CUSTOMERNAME"];
+            table.Rows[table.Rows.Count - 1]["CHANNELNAME"] = row["CHANNELNAME"];
+            table.Rows[table.Rows.Count - 1]["CHANNELTYPE"] = row["CHANNELTYPE"];
+            table.Rows[table.Rows.Count - 1]["CHANNELLINE"] = row["CHANNELLINE"];
+            table.Rows[table.Rows.Count - 1]["PACKNO0"] = row["PACKNO0"];
+            table.Rows[table.Rows.Count - 1]["PACKNO1"] = row["PACKNO1"];
+            table.Rows[table.Rows.Count - 1]["PACKNO2"] = row["PACKNO2"];
         }
     }
 }

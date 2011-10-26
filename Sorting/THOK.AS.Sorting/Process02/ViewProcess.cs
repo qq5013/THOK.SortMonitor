@@ -17,6 +17,8 @@ namespace THOK.AS.Sorting.Process
 
             int sortNo = 0;
             int sortNoStart = 0;
+            int frontQuantity = 0;
+            int laterQuantity = 0;
             int sumQuantity = 0;//»º´æ¶Î¾íÑÌÊýÁ¿
             int channelGroup = 0;
             int exportNo = 0;
@@ -42,25 +44,29 @@ namespace THOK.AS.Sorting.Process
                             {
                                 case 1:
                                     sortNoStart = sortNoes[0];
-                                    sumQuantity = sortNoes[1];
+                                    frontQuantity = sortNoes[2];
+                                    laterQuantity = sortNoes[1];
                                     channelGroup = 1;
                                     deviceNo = 1;
                                     break;
                                 case 2:
                                     sortNoStart = sortNoes[0];
-                                    sumQuantity = sortNoes[2];
+                                    frontQuantity = sortNoes[2];
+                                    laterQuantity = sortNoes[1];
                                     channelGroup = 1;
                                     deviceNo = 2;
                                     break;
                                 case 3:
                                     sortNoStart = sortNoes[3];
-                                    sumQuantity = sortNoes[4];
+                                    frontQuantity = sortNoes[5];
+                                    laterQuantity = sortNoes[4];
                                     channelGroup = 2;
                                     deviceNo = 3;
                                     break; ;
                                 case 4:
                                     sortNoStart = sortNoes[3];
-                                    sumQuantity = sortNoes[5];
+                                    frontQuantity = sortNoes[5];
+                                    laterQuantity = sortNoes[4];
                                     channelGroup = 2;
                                     deviceNo = 4;
                                     break;
@@ -68,9 +74,8 @@ namespace THOK.AS.Sorting.Process
                                     break;
 
                             }
-                            CacheOrderQueryForm cacheOrderQueryForm1 = (new CacheOrderQueryForm(deviceNo, channelGroup, sortNoStart, sumQuantity));
+                            CacheOrderQueryForm cacheOrderQueryForm1 = (new CacheOrderQueryForm(deviceNo, channelGroup, sortNoStart,frontQuantity,laterQuantity));
                             cacheOrderQueryForm1.Paint += new PaintEventHandler(cacheOrderQueryForm1.CacheOrderQueryFormPaint);//´°ÌåÖØ»æ¼ÓÔØÑÕÉ«
-                            cacheOrderQueryForm1.Text = "¶à¹µ´ø»º´æ¶Î:";
                             cacheOrderQueryForm1.ShowDialog(Application.OpenForms["MainForm"]);
                             break;
                         case "´òÂë»º´æ¶Î":
