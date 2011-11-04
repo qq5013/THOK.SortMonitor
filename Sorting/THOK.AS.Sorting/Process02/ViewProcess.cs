@@ -19,7 +19,6 @@ namespace THOK.AS.Sorting.Process
             int sortNoStart = 0;
             int frontQuantity = 0;
             int laterQuantity = 0;
-            int sumQuantity = 0;//»º´æ¶Î¾íÑÌÊýÁ¿
             int channelGroup = 0;
             int exportNo = 0;
             int deviceNo = 0;

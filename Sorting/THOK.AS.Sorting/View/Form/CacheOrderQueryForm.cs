@@ -58,11 +58,11 @@ namespace THOK.AS.Sorting.View
 
             DataTable orderTable = orderDal.GetAllOrderDetailForCacheOrderQuery(channelGroup, sortNoStart);
 
+            DataTable Table = new DataTable();
+            CreatTableForCacheOrder(Table);
+
             if (deviceNo == 2 || deviceNo== 4)
             {
-                DataTable Table = new DataTable();
-                CreatTableForCacheOrder(Table);
-
                 if (orderTable.Rows.Count != 0)
                 {
                     int tempQuantity = 0;
@@ -73,10 +73,10 @@ namespace THOK.AS.Sorting.View
 
                         if (tempQuantity >= frontQuantity)
                         {
-                            orderDetailRow["QUANTITY"] = orderQuantity + frontQuantity - tempQuantity;//更改最后一单数量
+                            orderDetailRow["QUANTITY"] = orderQuantity + frontQuantity - tempQuantity;
                             AddCacheOrderTableRow(Table, orderDetailRow);
 
-                            orderDetailRow["QUANTITY"]= tempQuantity - frontQuantity;//补上最后一单余数
+                            orderDetailRow["QUANTITY"]= tempQuantity - frontQuantity;
                             AddCacheOrderTableRow(Table, orderDetailRow);
                             break;
                         }
@@ -85,16 +85,12 @@ namespace THOK.AS.Sorting.View
                             AddCacheOrderTableRow(Table, orderDetailRow);
                         }
                     }
-                    dgvDetail.DataSource = Table;
                     strhead = string.Format("[{0}线多沟带缓存{1}][流水号：{2}][总数量：{3}]", channelGroup == 1 ? "A" : "B", deviceNo, sortNoStart, frontQuantity);
-                    this.Text = this.Text + strhead;
                 }
+
             }
             else
             {
-                DataTable Table = new DataTable();
-                CreatTableForCacheOrder(Table);
-
                 if (orderTable.Rows.Count != 0)
                 {
                     int tempQuantity = 0;
@@ -110,16 +106,16 @@ namespace THOK.AS.Sorting.View
                             {
                                 if (laterQuantity != 0)
                                 {
-                                    orderDetailRow["QUANTITY"] = tempQuantity - frontQuantity;//补上最后一单余数
+                                    orderDetailRow["QUANTITY"] = tempQuantity - frontQuantity;
                                     AddCacheOrderTableRow(Table, orderDetailRow);
                                     flag = true;
                                 }
                                 else
                                 {
-                                    orderDetailRow["QUANTITY"] = orderQuantity + frontQuantity - tempQuantity;//更改最后一单数量
+                                    orderDetailRow["QUANTITY"] = orderQuantity + frontQuantity - tempQuantity;
                                     AddCacheOrderTableRow(Table, orderDetailRow);
 
-                                    orderDetailRow["QUANTITY"] = tempQuantity - frontQuantity;//补上最后一单余数
+                                    orderDetailRow["QUANTITY"] = tempQuantity - frontQuantity;
                                     AddCacheOrderTableRow(Table, orderDetailRow);
                                     break;
                                 }
@@ -130,10 +126,10 @@ namespace THOK.AS.Sorting.View
                         {
                             if (tempQuantity >= sumQuantity)
                             {
-                                orderDetailRow["QUANTITY"] = orderQuantity + sumQuantity - tempQuantity;//更改最后一单数量
+                                orderDetailRow["QUANTITY"] = orderQuantity + sumQuantity - tempQuantity;
                                 AddCacheOrderTableRow(Table, orderDetailRow);
 
-                                orderDetailRow["QUANTITY"] = tempQuantity - sumQuantity;//补上最后一单余数
+                                orderDetailRow["QUANTITY"] = tempQuantity - sumQuantity;
                                 AddCacheOrderTableRow(Table, orderDetailRow);
                                 break;
 
@@ -144,12 +140,11 @@ namespace THOK.AS.Sorting.View
                             }
                         }       
                     }
-                    dgvDetail.DataSource = Table;
                     strhead = string.Format("[{0}线多沟带缓存{1}][流水号：{2}][总数量：{3}]", channelGroup == 1 ? "A" : "B", deviceNo, sortNoStart,laterQuantity);
-                    this.Text = this.Text + strhead;
                 }
             }
-            
+            dgvDetail.DataSource = Table;
+            this.Text = this.Text + strhead;
         }
         public CacheOrderQueryForm(string packMode, int exportNo,int sortNo,int channelGroup)
         {
@@ -188,12 +183,45 @@ namespace THOK.AS.Sorting.View
 
         public void LoadColor()
         {
-            string cigaretteCode1 =dgvDetail.Rows[dgvDetail.Rows.Count - 2].Cells["CIGARETTECODE"].Value.ToString();
-            string cigaretteCode2 =dgvDetail.Rows[dgvDetail.Rows.Count - 1].Cells["CIGARETTECODE"].Value.ToString();
-            if (cigaretteCode1 == cigaretteCode2)
+            if (dgvDetail.Rows.Count == 2)
             {
-                dgvDetail.Rows[dgvDetail.Rows.Count - 2].DefaultCellStyle.BackColor = Color.Green;
-                dgvDetail.Rows[dgvDetail.Rows.Count - 1].DefaultCellStyle.BackColor = Color.Red;
+                string cigaretteCode1 = dgvDetail.Rows[dgvDetail.Rows.Count - 2].Cells["CIGARETTECODE"].Value.ToString();
+                string cigaretteCode2 = dgvDetail.Rows[dgvDetail.Rows.Count - 1].Cells["CIGARETTECODE"].Value.ToString();
+                int quantity = Convert.ToInt32(dgvDetail.Rows[dgvDetail.Rows.Count - 1].Cells["CIGARETTECODE"].Value);
+                if (cigaretteCode1 == cigaretteCode2 && quantity != 0)
+                {
+                    dgvDetail.Rows[dgvDetail.Rows.Count - 2].DefaultCellStyle.BackColor = Color.Blue;
+                    dgvDetail.Rows[dgvDetail.Rows.Count - 1].DefaultCellStyle.BackColor = Color.Red;
+                }
+                if (cigaretteCode1 == cigaretteCode2 && quantity == 0)
+                {
+                    foreach (DataGridViewRow row in dgvDetail.Rows)
+                    {
+                        int quantity1 = Convert.ToInt32(row.Cells["QUANTITY"].Value);
+                        if (quantity1 == 0)
+                        {
+                            dgvDetail.Rows.Remove(row);
+                        }
+                    }
+                }
+            }
+            if (dgvDetail.Rows.Count >= 3)
+            {
+                string cigaretteCode1 = dgvDetail.Rows[dgvDetail.Rows.Count - 2].Cells["CIGARETTECODE"].Value.ToString();
+                string cigaretteCode2 = dgvDetail.Rows[dgvDetail.Rows.Count - 1].Cells["CIGARETTECODE"].Value.ToString();
+                if (cigaretteCode1 == cigaretteCode2)
+                {
+                    dgvDetail.Rows[dgvDetail.Rows.Count - 2].DefaultCellStyle.BackColor = Color.Blue;
+                    dgvDetail.Rows[dgvDetail.Rows.Count - 1].DefaultCellStyle.BackColor = Color.Red;
+                }
+                foreach (DataGridViewRow row in dgvDetail.Rows)
+                {
+                    int quantity = Convert.ToInt32(row.Cells["QUANTITY"].Value);
+                    if (quantity == 0)
+                    {
+                        dgvDetail.Rows.Remove(row);
+                    }
+                }
             }
         }
 
