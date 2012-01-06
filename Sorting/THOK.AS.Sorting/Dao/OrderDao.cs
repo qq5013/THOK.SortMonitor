@@ -617,42 +617,54 @@ namespace THOK.AS.Sorting.Dao
             ExecuteQuery("UPDATE AS_SORT_PACKORDERSTATUS SET STATUS = '0'");
         }
 
+        //internal DataTable FindOrderDetailForPack(string orderId, string exportNo)
+        //{
+        //    string sql = "SELECT A.* ,B.CHANNELADDRESS," +
+        //         "  CASE WHEN " +
+        //         " 	    A.CHANNELGROUP = 1" +
+        //         "  THEN" +
+        //         " 	    CASE WHEN " +
+        //         " 	    (" +
+        //         " 	    SELECT ISNULL(MAX(SORTNO),0) FROM AS_SC_ORDER " +
+        //         " 	    WHERE ORDERID = A.ORDERID AND ORDERNO = A.ORDERNO AND CHANNELGROUP = A.CHANNELGROUP" +
+        //         " 	    ) = (" +
+        //         " 	    SELECT ISNULL(MAX(SORTNO),0) FROM AS_SC_PALLETMASTER " +
+        //         " 	    WHERE ORDERID= A.ORDERID AND QUANTITY != 0" +
+        //         "      )" +
+        //         " 	    THEN 10000 " +
+        //         " 	    ELSE ORDERNO " +
+        //         "      END " +
+        //         "  ELSE" +
+        //         "      CASE WHEN " +
+        //         " 	    (" +
+        //         " 	    SELECT ISNULL(MAX(SORTNO),0) FROM AS_SC_ORDER" +
+        //         " 	    WHERE ORDERID = A.ORDERID AND ORDERNO = A.ORDERNO AND CHANNELGROUP = A.CHANNELGROUP" +
+        //         " 	    ) = (" +
+        //         " 	    SELECT ISNULL(MAX(SORTNO),0) FROM AS_SC_PALLETMASTER" +
+        //         " 	    WHERE ORDERID= A.ORDERID AND QUANTITY1 != 0" +
+        //         "      )" +
+        //         " 	    THEN 10000 " +
+        //         " 	    ELSE ORDERNO " +
+        //         "      END " +
+        //         "  END" +
+        //         "  ORDERNO_PACKNO" +
+        //    " FROM AS_SC_ORDER A " +
+        //    " LEFT JOIN AS_SC_CHANNELUSED B ON A.LINECODE = B.LINECODE AND A.CHANNELCODE = B.CHANNELCODE " +
+        //    " WHERE A.ORDERID = '{0}' AND A.EXPORTNO IN ({1})" +
+        //    " ORDER BY ORDERNO_PACKNO,CHANNELGROUP DESC,SORTNO,CHANNELADDRESS";
+        //    return ExecuteQuery(string.Format(sql,orderId,exportNo)).Tables[0];
+        //}
+
         internal DataTable FindOrderDetailForPack(string orderId, string exportNo)
         {
             string sql = "SELECT A.* ,B.CHANNELADDRESS," +
-                 "  CASE WHEN " +
-                 " 	    A.CHANNELGROUP = 1" +
-                 "  THEN" +
-                 " 	    CASE WHEN " +
-                 " 	    (" +
-                 " 	    SELECT ISNULL(MAX(SORTNO),0) FROM AS_SC_ORDER " +
-                 " 	    WHERE ORDERID = A.ORDERID AND ORDERNO = A.ORDERNO AND CHANNELGROUP = A.CHANNELGROUP" +
-                 " 	    ) = (" +
-                 " 	    SELECT ISNULL(MAX(SORTNO),0) FROM AS_SC_PALLETMASTER " +
-                 " 	    WHERE ORDERID= A.ORDERID AND QUANTITY != 0" +
-                 "      )" +
-                 " 	    THEN 10000 " +
-                 " 	    ELSE ORDERNO " +
-                 "      END " +
-                 "  ELSE" +
-                 "      CASE WHEN " +
-                 " 	    (" +
-                 " 	    SELECT ISNULL(MAX(SORTNO),0) FROM AS_SC_ORDER" +
-                 " 	    WHERE ORDERID = A.ORDERID AND ORDERNO = A.ORDERNO AND CHANNELGROUP = A.CHANNELGROUP" +
-                 " 	    ) = (" +
-                 " 	    SELECT ISNULL(MAX(SORTNO),0) FROM AS_SC_PALLETMASTER" +
-                 " 	    WHERE ORDERID= A.ORDERID AND QUANTITY1 != 0" +
-                 "      )" +
-                 " 	    THEN 10000 " +
-                 " 	    ELSE ORDERNO " +
-                 "      END " +
-                 "  END" +
-                 "  ORDERNO_PACKNO" +
-            " FROM AS_SC_ORDER A " +
-            " LEFT JOIN AS_SC_CHANNELUSED B ON A.LINECODE = B.LINECODE AND A.CHANNELCODE = B.CHANNELCODE " +
-            " WHERE A.ORDERID = '{0}' AND A.EXPORTNO IN ({1})" +
-            " ORDER BY ORDERNO_PACKNO,CHANNELGROUP DESC,SORTNO,CHANNELADDRESS";
-            return ExecuteQuery(string.Format(sql,orderId,exportNo)).Tables[0];
+                         " ORDERNO " +
+                         " ORDERNO_PACKNO" +
+                         " FROM AS_SC_ORDER A " +
+                         " LEFT JOIN AS_SC_CHANNELUSED B ON A.LINECODE = B.LINECODE AND A.CHANNELCODE = B.CHANNELCODE " +
+                         " WHERE A.ORDERID = '{0}' AND A.EXPORTNO IN ({1})" +
+                         " ORDER BY ORDERNO_PACKNO,CHANNELGROUP DESC,SORTNO,CHANNELADDRESS";
+            return ExecuteQuery(string.Format(sql, orderId, exportNo)).Tables[0];
         }
     }
 }
