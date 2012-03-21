@@ -651,10 +651,11 @@ namespace THOK.AS.Sorting.Dao
         {
             string sql = @"SELECT CONVERT(NVARCHAR(10), A.ORDERDATE, 120)AS ORDERDATE,A.BATCHNO,A.LINECODE,
                                 A.SORTNO,A.ORDERID,A.ROUTECODE,A.ROUTENAME,A.CUSTOMERCODE,A.CUSTOMERNAME,
-                                A.QUANTITY+A.QUANTITY1 AS TQUANTITY,A.PACKNO,B.CIGARETTECODE,B.CIGARETTENAME,SUM(B.QUANTITY)AS QUANTITY
-                             FROM dbo.AS_SC_PALLETMASTER  A LEFT JOIN dbo.AS_SC_ORDER B ON A.SORTNO=B.SORTNO WHERE A.PACKNO={0} OR A.PACKNO1={0}
+                                A.QUANTITY+A.QUANTITY1 AS TQUANTITY,B.CIGARETTECODE,B.CIGARETTENAME,SUM(B.QUANTITY)AS QUANTITY,B.CHANNELGROUP,B.CHANNELCODE
+                             FROM dbo.AS_SC_PALLETMASTER  A LEFT JOIN dbo.AS_SC_ORDER B ON A.SORTNO=B.SORTNO WHERE B.PACKNO={0}
                              GROUP BY A.ORDERDATE,A.BATCHNO,A.LINECODE,A.SORTNO,A.ORDERID,A.ROUTECODE,A.ROUTENAME,A.CUSTOMERCODE,
-                                A.CUSTOMERNAME,A.QUANTITY,A.QUANTITY1,A.PACKNO,B.CIGARETTECODE,B.CIGARETTENAME";
+                                A.CUSTOMERNAME,A.QUANTITY,A.QUANTITY1,B.CIGARETTECODE,B.CIGARETTENAME,B.CHANNELGROUP,B.CHANNELCODE 
+                                ORDER BY B.CHANNELGROUP DESC,B.CHANNELCODE ASC";
             return ExecuteQuery(string.Format(sql, packNo)).Tables[0];
         }
 
@@ -662,13 +663,14 @@ namespace THOK.AS.Sorting.Dao
         {
             string sql = @"SELECT CONVERT(NVARCHAR(10), A.ORDERDATE, 120)AS ORDERDATE,A.BATCHNO,A.LINECODE,
                                 A.SORTNO,A.ORDERID,A.ROUTECODE,A.ROUTENAME,A.CUSTOMERCODE,A.CUSTOMERNAME,
-                                A.QUANTITY+A.QUANTITY1 AS TQUANTITY,A.PACKNO1 AS PACKNO,B.CIGARETTECODE,B.CIGARETTENAME,SUM(B.QUANTITY)AS QUANTITY
-                             FROM dbo.AS_SC_PALLETMASTER  A LEFT JOIN dbo.AS_SC_ORDER B ON A.SORTNO=B.SORTNO WHERE A.PACKNO={0} OR A.PACKNO1={0}
+                                A.QUANTITY+A.QUANTITY1 AS TQUANTITY,B.CIGARETTECODE,B.CIGARETTENAME,SUM(B.QUANTITY)AS QUANTITY,B.CHANNELGROUP,B.CHANNELCODE
+                             FROM dbo.AS_SC_PALLETMASTER  A LEFT JOIN dbo.AS_SC_ORDER B ON A.SORTNO=B.SORTNO WHERE B.PACKNO={0}
                              GROUP BY A.ORDERDATE,A.BATCHNO,A.LINECODE,A.SORTNO,A.ORDERID,A.ROUTECODE,A.ROUTENAME,A.CUSTOMERCODE,
-                                A.CUSTOMERNAME,A.QUANTITY,A.QUANTITY1,A.PACKNO1,B.CIGARETTECODE,B.CIGARETTENAME";
+                                A.CUSTOMERNAME,A.QUANTITY,A.QUANTITY1,B.CIGARETTECODE,B.CIGARETTENAME,B.CHANNELGROUP,B.CHANNELCODE 
+                                ORDER BY B.CHANNELGROUP DESC,B.CHANNELCODE ASC";
             return ExecuteQuery(string.Format(sql, packNo)).Tables[0];
         }
-        public void InsertPackExport(DataRow InRow,int exportNo)
+        public void InsertPackExport(DataRow InRow,int exportNo,int customerSortNo)
         {
             SqlCreate sql = new SqlCreate(string.Format("AS_SC_EXPORTPACK{0}",exportNo), SqlType.INSERT);
 
@@ -681,6 +683,7 @@ namespace THOK.AS.Sorting.Dao
             sql.AppendQuote("ROUTENAME", InRow["ROUTENAME"]);
             sql.AppendQuote("CUSTOMERCODE", InRow["CUSTOMERCODE"]);
             sql.AppendQuote("CUSTOMERNAME", InRow["CUSTOMERNAME"]);
+            sql.AppendQuote("CUSTOMERSORTNO",customerSortNo);
             sql.AppendQuote("CIGARETTECODE", InRow["CIGARETTECODE"]);
             sql.AppendQuote("CIGARETTENAME", InRow["CIGARETTENAME"]);
             sql.AppendQuote("TQUANTITY", InRow["TQUANTITY"]);
@@ -688,6 +691,17 @@ namespace THOK.AS.Sorting.Dao
             sql.AppendQuote("QUANTITY", InRow["QUANTITY"]);
             ExecuteNonQuery(sql.GetSQL());
         }
+        /// <summary>
+        /// 客户顺序
+        /// </summary>
+        /// <param name="customerCode">客户代码</param>
+        /// <returns>客户分拣流水号</returns>
+        public int FindCustomerSortNo(string customerCode)
+        {
+            string sql = "SELECT DISTINCT ORDERNO2 FROM dbo.V_SORT_PACKORDER_ALL WHERE CUSTOMERCODE='{0}'";
+            return Convert.ToInt32(ExecuteQuery(string.Format(sql, customerCode)).Tables[0].Rows[0][0]);
+        }
+
 
     }
 }

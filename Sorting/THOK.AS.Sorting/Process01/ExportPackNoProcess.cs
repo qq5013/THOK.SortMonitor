@@ -39,6 +39,7 @@ namespace THOK.AS.Sorting.Process
                         arrayExportPackNo.CopyTo(ExportPackNo, 0);
                         int ExportPackNo1 = ExportPackNo[0];
                         int ExportPackNo2 = ExportPackNo[1];
+
                         using (PersistentManager pm = new PersistentManager())
                         {
                             OrderDao orderDao = new OrderDao();
@@ -50,14 +51,16 @@ namespace THOK.AS.Sorting.Process
                             {
                                 foreach (DataRow inRow in ExportTable1.Rows)
                                 {
-                                    orderDao.InsertPackExport(inRow, 1);
+                                    int Customer1 = orderDao.FindCustomerSortNo(inRow["CUSTOMERCODE"].ToString());
+                                    orderDao.InsertPackExport(inRow, 1,Customer1);
                                 }
                             }
                             if (ExportTable2.Rows.Count >= 1)
                             {
                                 foreach (DataRow inRow2 in ExportTable2.Rows)
                                 {
-                                    orderDao.InsertPackExport(inRow2, 2);
+                                    int Customer2 = orderDao.FindCustomerSortNo(inRow2["CUSTOMERCODE"].ToString());
+                                    orderDao.InsertPackExport(inRow2, 2,Customer2);
                                 }
                             }
 
