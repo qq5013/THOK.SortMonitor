@@ -59,7 +59,9 @@ namespace THOK.AS.Sorting.Process
                             DataTable masterTable = orderDao.FindSortMaster(channelGroup);
 
                             if (masterTable.Rows.Count != 0)
-                            {
+                            { 
+                                //当前包号
+                                int packNo = Convert.ToInt32(masterTable.Rows[0]["PACKNO" + (channelGroup == "A" ? "" : "1")]);
                                 //当前流水号
                                 string sortNo = masterTable.Rows[0]["SORTNO"].ToString();
                                 //获取这个订单ID的流水号，判断是否换户
@@ -69,7 +71,6 @@ namespace THOK.AS.Sorting.Process
                                 //查询本分拣线组最后流水号，判断是否结束
                                 string endSortNo = orderDao.FindEndSortNoForChannelGroup(channelGroup);
                                 int exportNo = Convert.ToInt32(masterTable.Rows[0]["EXPORTNO" + (channelGroup == "A" ? "" : "1")]);
-
                                 int[] orderData = new int[97];
                                 if (detailTable.Rows.Count > 0)
                                 {
@@ -79,6 +80,8 @@ namespace THOK.AS.Sorting.Process
                                     }
                                 }
 
+                                //分拣包号
+                                orderData[89] = Convert.ToInt32(packNo);
                                 //分拣流水号
                                 orderData[90] = Convert.ToInt32(sortNo);
                                 //订单数量

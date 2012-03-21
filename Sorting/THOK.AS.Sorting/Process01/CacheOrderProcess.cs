@@ -28,38 +28,60 @@ namespace THOK.AS.Sorting.Process
         {
             try
             {
-                object state = Context.Services["SortPLC"].Read("CacheOrderSortNoes");
+                object stateCacheA = Context.Services["SortPLC"].Read("CacheOrderSortNoesA");
+                object stateCacheB = Context.Services["SortPLC"].Read("CacheOrderSortNoesB");
+                object stateBarCode1 = Context.Services["SortPLC"].Read("CacheOrderSortNoesBarCode1");
+                object stateBarCode2 = Context.Services["SortPLC"].Read("CacheOrderSortNoesBarCode2");
+                object statePacker1 = Context.Services["SortPLC"].Read("CacheOrderSortNoesPacker1");
+                object statePacker2 = Context.Services["SortPLC"].Read("CacheOrderSortNoesPacker2");
 
-                int[] sortNoes = new int[17];
+                int[] sortNoesA = new int[3];
+                int[] sortNoesB = new int[3];
+                int[] sortNoesBarCode1 = new int[2];
+                int[] sortNoesBarCode2 = new int[2];
+                int[] sortNoesPacker1 = new int[2];
+                int[] sortNoesPacker2 = new int[2];
 
-                if (state != null && state is Array)
+                if (stateCacheA is Array && stateCacheB is Array && stateBarCode1 is Array && stateBarCode2 is Array && statePacker1 is Array && statePacker2 is Array)
                 {
-                    Array array = (Array)state;
-                    if (array.Length == 17)
+                    Array arrayCacheA = (Array)stateCacheA;
+                    Array arrayCacheB = (Array)stateCacheB;
+                    Array arrayBarCode1 = (Array)stateBarCode1;
+                    Array arrayBarCode2 = (Array)stateBarCode2;
+                    Array arryPacker1 = (Array)statePacker1;
+                    Array arryPacker2 = (Array)statePacker2;
+                    if (arrayCacheA.Length == 3 && arrayCacheB.Length == 3 && arrayBarCode1.Length == 2 && arrayBarCode2.Length == 2 && arryPacker1.Length == 2 && arryPacker2.Length == 2)
                     {
-                        array.CopyTo(sortNoes, 0);
+                        arrayCacheA.CopyTo(sortNoesA, 0);
+                        arrayCacheB.CopyTo(sortNoesB, 0);
+                        arrayBarCode1.CopyTo(sortNoesBarCode1, 0);
+                        arrayBarCode2.CopyTo(sortNoesBarCode2, 0);
+                        arryPacker1.CopyTo(sortNoesPacker1, 0);
+                        arryPacker2.CopyTo(sortNoesPacker2, 0);
+
 
                         Dictionary<string, int> parameter = new Dictionary<string, int>();
 
-                        parameter.Add("SwitchOneSortNo", sortNoes[8]);
-                        parameter.Add("SwitchOneChannelGroup", sortNoes[9]);
-                        parameter.Add("SwitchTwoSortNo", sortNoes[10]);
-                        parameter.Add("SwitchTwoChannelGroup", sortNoes[11]);
+                        parameter.Add("SwitchOneSortNo", sortNoesBarCode1[0]);
+                        parameter.Add("SwitchOneChannelGroup", sortNoesBarCode1[1]);
+                        parameter.Add("SwitchTwoSortNo", sortNoesBarCode2[0]);
+                        parameter.Add("SwitchTwoChannelGroup", sortNoesBarCode2[1]);
 
-                        parameter.Add("PackerOneSortNo", sortNoes[12]);
-                        parameter.Add("PackerOneChannelGroup", sortNoes[13]);
-                        parameter.Add("PackerTwoSortNo", sortNoes[14]);
-                        parameter.Add("PackerTwoChannelGroup", sortNoes[15]);
+                        parameter.Add("PackerOneSortNo", sortNoesPacker1[0]);
+                        parameter.Add("PackerOneChannelGroup", sortNoesPacker1[1]);
+                        parameter.Add("PackerTwoSortNo", sortNoesPacker2[0]);
+                        parameter.Add("PackerTwoChannelGroup", sortNoesPacker2[1]);
 
                         messageUtil.SendToExport(parameter);
                     }
                 }
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                Logger.Error("CacheOrderProcess 初始化失败！原因：" + e.Message);
             }
         }
+
     }
 }

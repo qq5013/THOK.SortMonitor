@@ -94,10 +94,10 @@ namespace THOK.AS.Sorting.Process
                             if (statea is Array)
                             {
                                 Array array = (Array)statea;
-                                if (array.Length == 40)
+                                if (array.Length == 42)
                                 {
                                     //LED显示盘点数据和卷烟品牌
-                                    int[] quantity = new int[40];
+                                    int[] quantity = new int[42];
                                     array.CopyTo(quantity, 0);
                                     Show("A", true, quantity);
                                 }
@@ -106,10 +106,10 @@ namespace THOK.AS.Sorting.Process
                             if (stateb is Array)
                             {
                                 Array array = (Array)stateb;
-                                if (array.Length == 40)
+                                if (array.Length == 42)
                                 {
                                     //LED显示盘点数据和卷烟品牌
-                                    int[] quantity = new int[40];
+                                    int[] quantity = new int[42];
                                     array.CopyTo(quantity, 0);
                                     Show("B", true, quantity);
                                 }
@@ -166,10 +166,10 @@ namespace THOK.AS.Sorting.Process
                                 if (statea is Array)
                                 {
                                     Array array = (Array)statea;
-                                    if (array.Length == 40)
+                                    if (array.Length == 42)
                                     {
                                         //LED显示盘点数据和卷烟品牌
-                                        int[] quantity = new int[40];
+                                        int[] quantity = new int[42];
                                         array.CopyTo(quantity, 0);
                                         Show("A", true, quantity);
                                     }
@@ -202,10 +202,10 @@ namespace THOK.AS.Sorting.Process
                                 if (stateb is Array)
                                 {
                                     Array array = (Array)stateb;
-                                    if (array.Length == 40)
+                                    if (array.Length == 42)
                                     {
                                         //LED显示盘点数据和卷烟品牌
-                                        int[] quantity = new int[40];
+                                        int[] quantity = new int[42];
                                         array.CopyTo(quantity, 0);
                                         Show("B", true, quantity);
                                     }
@@ -270,8 +270,8 @@ namespace THOK.AS.Sorting.Process
                     DataTable channelTableA = channelDao.FindLastSortNo(1);//获取A线烟道
                     DataTable channeltableB = channelDao.FindLastSortNo(2);//获取B线烟道
 
-                    int[] channelDataA = new int[40];
-                    int[] channelDataB = new int[40];
+                    int[] channelDataA = new int[42];
+                    int[] channelDataB = new int[42];
 
                     for (int i = 0; i < channelTableA.Rows.Count; i++)
                     {

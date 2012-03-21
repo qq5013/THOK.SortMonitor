@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using EQ2008_DataStruct;
 
 namespace THOK.AS.Sorting.Util
 {
@@ -117,7 +118,7 @@ namespace THOK.AS.Sorting.Util
                 Text.FontInfo.bFontItaic = false;
                 Text.FontInfo.bFontUnderline = false;
                 Text.FontInfo.colorFont = colorFont;
-                Text.FontInfo.iFontSize = 12;
+                Text.FontInfo.iFontSize =12;
                 Text.FontInfo.strFontName = "@ËÎÌו";
                 Text.FontInfo.iAlignStyle = 0;
                 Text.FontInfo.iVAlignerStyle = 0;
@@ -125,8 +126,8 @@ namespace THOK.AS.Sorting.Util
 
                 Text.MoveSet.bClear = false;
                 Text.MoveSet.iActionSpeed = 0;
-                Text.MoveSet.iActionType = 20;
-                Text.MoveSet.iHoldTime = 50;
+                Text.MoveSet.iActionType = 1;
+                Text.MoveSet.iHoldTime = 40;
 
                 if (!isMove)
                 {

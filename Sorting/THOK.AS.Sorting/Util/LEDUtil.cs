@@ -24,6 +24,11 @@ namespace THOK.AS.Sorting.Util
             leds = null;
         }
 
+        public void ÊÇµÄ()
+        { 
+        
+        }
+
         public void Show(Dictionary<int, string> isActiveLeds, DataRow[] channelRows, bool checkMode)
         {
             leds.DelAllProgram();
@@ -45,10 +50,10 @@ namespace THOK.AS.Sorting.Util
                     string quantity = StringUtil.ToSBC(Convert.ToString((Convert.ToInt32(row["REMAINQUANTITY"]) % 50)).PadRight(2, " "[0]));
                     int channelAddress = Convert.ToInt32(row["CHANNELADDRESS"]);
 
-                    cigaretteName = cigaretteName.Replace("(", StringUtil.ToSBC("¦à"));
-                    cigaretteName = cigaretteName.Replace(")", StringUtil.ToSBC("¦á"));
-                    cigaretteName = cigaretteName.Replace("£¨", StringUtil.ToSBC("¦à"));
-                    cigaretteName = cigaretteName.Replace("£©", StringUtil.ToSBC("¦á"));
+                    cigaretteName = cigaretteName.Replace("(", StringUtil.ToSBC(""));
+                    cigaretteName = cigaretteName.Replace(")", StringUtil.ToSBC(""));
+                    cigaretteName = cigaretteName.Replace("£¨", StringUtil.ToSBC(""));
+                    cigaretteName = cigaretteName.Replace("£©", StringUtil.ToSBC(""));
                     cigaretteName = cigaretteName.Replace(" ", "");
                     cigaretteName = cigaretteName.Replace("  ", "");
 
