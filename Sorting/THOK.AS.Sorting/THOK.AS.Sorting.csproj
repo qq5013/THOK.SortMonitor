@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="Dal\UploadDataDal.cs" />
     <Compile Include="Dao\UploadDataDao.cs" />
+    <Compile Include="Process01\ExportPackNoProcess.cs" />
     <Compile Include="Report\ChannelCheckDataSet.cs">
       <DependentUpon>ChannelCheckDataSet.xsd</DependentUpon>
       <SubType>Component</SubType>

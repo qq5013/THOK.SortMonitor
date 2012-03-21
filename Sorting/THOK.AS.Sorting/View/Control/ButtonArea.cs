@@ -62,14 +62,14 @@ namespace THOK.AS.Sorting.View
                 if (btnDownload.Enabled == true)
                 {
                     UploadDataDal udal=new UploadDataDal();
-                    DataTable sortTable =udal.GetSortUploadData("1");
-                    if (sortTable==null||sortTable.Rows.Count==0)
-                    {
+                    //DataTable sortTable =udal.GetSortUploadData("1");
+                    //if (sortTable==null||sortTable.Rows.Count==0)
+                    //{
                         btnDownload.Enabled = false;
                         DownloadData();
                         btnDownload.Enabled = true;
-                    }else
-                        MessageBox.Show("分拣情况表数据没有上报！请确认上报数据，再下载！", "消息", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    //}else
+                    //    MessageBox.Show("分拣情况表数据没有上报！请确认上报数据，再下载！", "消息", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }            
         }

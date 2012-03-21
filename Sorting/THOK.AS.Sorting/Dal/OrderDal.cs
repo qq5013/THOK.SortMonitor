@@ -119,15 +119,10 @@ namespace THOK.AS.Sorting.Dal
             using (PersistentManager pm = new PersistentManager())
             {
                 OrderDao orderDao = new OrderDao();
-                DataTable table = orderDao.FindStartNoForCacheOrderQuery(channelGroup, sortNoStart);
-                if (table.Rows.Count != 0)
-                {
-                    int sortNo = Convert.ToInt32(table.Rows[0]["SORTNO"]);
-                    return orderDao.FindDetailForCacheOrderQuery(channelGroup, sortNo);
-                }
-                return (new DataTable());
+                return orderDao.FindDetailForCacheOrderQuery(channelGroup, sortNoStart);
             }
         }
+
         public DataTable GetOrderDetailForCacheOrderQuery(int channelGroup, int sortNo)
         {
             using (PersistentManager pm = new PersistentManager())

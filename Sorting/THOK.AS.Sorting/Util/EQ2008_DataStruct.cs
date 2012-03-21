@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace THOK.AS.Sorting.Util
+namespace EQ2008_DataStruct
 {
     /// <summary>
     /// 节目区域参数

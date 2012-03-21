@@ -123,6 +123,7 @@ namespace THOK.AS.Sorting.Process
 
                     orderDao.UpdatePackOrderStatus(0);
                     CreatePackAndPrintDataFile(0);
+
                     Logger.Info("单独包装机数据生成成功！");
 
                     pm.Commit();                    
