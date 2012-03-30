@@ -605,6 +605,8 @@ namespace THOK.AS.Sorting.Dao
             ExecuteQuery("TRUNCATE TABLE AS_SORT_PACKORDER");
             ExecuteQuery("TRUNCATE TABLE AS_SC_EXPORTPACK1");
             ExecuteQuery("TRUNCATE TABLE AS_SC_EXPORTPACK2");
+            ExecuteQuery("TRUNCATE TABLE AS_SC_PACKTEAR1");
+            ExecuteQuery("TRUNCATE TABLE AS_SC_PACKTEAR2");
 
             ExecuteQuery("UPDATE AS_SORT_PACKORDERSTATUS SET STATUS = '0'");
         }
@@ -647,31 +649,21 @@ namespace THOK.AS.Sorting.Dao
             return ExecuteQuery(string.Format(sql,orderId,exportNo)).Tables[0];
         }
 
-        public DataTable packOrderToExport1(int packNo)
+        public DataTable packOrderToExport(int packNo)
         {
             string sql = @"SELECT CONVERT(NVARCHAR(10), A.ORDERDATE, 120)AS ORDERDATE,A.BATCHNO,A.LINECODE,
-                                A.SORTNO,A.ORDERID,A.ROUTECODE,A.ROUTENAME,A.CUSTOMERCODE,A.CUSTOMERNAME,
-                                A.QUANTITY+A.QUANTITY1 AS TQUANTITY,A.PACKNO,B.CIGARETTECODE,B.CIGARETTENAME,SUM(B.QUANTITY)AS QUANTITY
-                             FROM dbo.AS_SC_PALLETMASTER  A LEFT JOIN dbo.AS_SC_ORDER B ON A.SORTNO=B.SORTNO WHERE A.PACKNO={0} OR A.PACKNO1={0}
-                             GROUP BY A.ORDERDATE,A.BATCHNO,A.LINECODE,A.SORTNO,A.ORDERID,A.ROUTECODE,A.ROUTENAME,A.CUSTOMERCODE,
-                                A.CUSTOMERNAME,A.QUANTITY,A.QUANTITY1,A.PACKNO,B.CIGARETTECODE,B.CIGARETTENAME";
+                                A.SORTNO,A.ORDERID,B.PACKNO,A.ROUTECODE,A.ROUTENAME,A.CUSTOMERCODE,A.CUSTOMERNAME,A.ADDRESS AS CUSTOMERADDRESS ,A.ORDERNO,
+                                B.CIGARETTECODE,B.CIGARETTENAME,SUM(B.QUANTITY)AS QUANTITY,B.CHANNELGROUP,B.CHANNELCODE
+                             FROM dbo.AS_SC_PALLETMASTER  A LEFT JOIN dbo.AS_SC_ORDER B ON A.SORTNO=B.SORTNO WHERE B.PACKNO={0}
+                             GROUP BY A.ORDERDATE,A.BATCHNO,A.LINECODE,A.SORTNO,A.ORDERID,B.PACKNO,A.ROUTECODE,A.ROUTENAME,A.CUSTOMERCODE,
+                                A.CUSTOMERNAME,A.ADDRESS,A.ORDERNO,B.CIGARETTECODE,B.CIGARETTENAME,B.CHANNELGROUP,B.CHANNELCODE 
+                                ORDER BY B.CHANNELGROUP DESC,B.CHANNELCODE ASC";
             return ExecuteQuery(string.Format(sql, packNo)).Tables[0];
         }
 
-        public DataTable packOrderToExport2(int packNo)
-        {
-            string sql = @"SELECT CONVERT(NVARCHAR(10), A.ORDERDATE, 120)AS ORDERDATE,A.BATCHNO,A.LINECODE,
-                                A.SORTNO,A.ORDERID,A.ROUTECODE,A.ROUTENAME,A.CUSTOMERCODE,A.CUSTOMERNAME,
-                                A.QUANTITY+A.QUANTITY1 AS TQUANTITY,A.PACKNO1 AS PACKNO,B.CIGARETTECODE,B.CIGARETTENAME,SUM(B.QUANTITY)AS QUANTITY
-                             FROM dbo.AS_SC_PALLETMASTER  A LEFT JOIN dbo.AS_SC_ORDER B ON A.SORTNO=B.SORTNO WHERE A.PACKNO={0} OR A.PACKNO1={0}
-                             GROUP BY A.ORDERDATE,A.BATCHNO,A.LINECODE,A.SORTNO,A.ORDERID,A.ROUTECODE,A.ROUTENAME,A.CUSTOMERCODE,
-                                A.CUSTOMERNAME,A.QUANTITY,A.QUANTITY1,A.PACKNO1,B.CIGARETTECODE,B.CIGARETTENAME";
-            return ExecuteQuery(string.Format(sql, packNo)).Tables[0];
-        }
-        public void InsertPackExport(DataRow InRow,int exportNo)
+        public void InsertPackExport(DataRow InRow,int exportNo,int customerSumQuantity,int bagSumQuantity)
         {
             SqlCreate sql = new SqlCreate(string.Format("AS_SC_EXPORTPACK{0}",exportNo), SqlType.INSERT);
-
             sql.AppendQuote("ORDERDATE", InRow["ORDERDATE"]);
             sql.Append("BATCHNO", InRow["BATCHNO"]);
             sql.AppendQuote("LINECODE", InRow["LINECODE"]);
@@ -681,12 +673,45 @@ namespace THOK.AS.Sorting.Dao
             sql.AppendQuote("ROUTENAME", InRow["ROUTENAME"]);
             sql.AppendQuote("CUSTOMERCODE", InRow["CUSTOMERCODE"]);
             sql.AppendQuote("CUSTOMERNAME", InRow["CUSTOMERNAME"]);
+            sql.AppendQuote("CUSTOMERSORTNO", InRow["ORDERNO"]);
+            sql.AppendQuote("CUSTOMERADDRESS", InRow["CUSTOMERADDRESS"]);
             sql.AppendQuote("CIGARETTECODE", InRow["CIGARETTECODE"]);
             sql.AppendQuote("CIGARETTENAME", InRow["CIGARETTENAME"]);
-            sql.AppendQuote("TQUANTITY", InRow["TQUANTITY"]);
+            sql.AppendQuote("BAGQUANTITY",bagSumQuantity);
+            sql.AppendQuote("TQUANTITY", customerSumQuantity);
             sql.AppendQuote("PACKNO", InRow["PACKNO"]);
             sql.AppendQuote("QUANTITY", InRow["QUANTITY"]);
             ExecuteNonQuery(sql.GetSQL());
+        }
+        /// <summary>
+        /// 客户卷烟量
+        /// </summary>
+        /// <param name="customerCode">客户包</param>
+        /// <returns>客户分拣卷烟总量</returns>
+        public int FindCustomerQuantity(int packNo)
+        {
+            string sql = "SELECT SUM(QUANTITY)AS TQUANTITY FROM AS_SC_ORDER WHERE ORDERID IN(SELECT ORDERID FROM AS_SC_ORDER WHERE PACKNO={0})";
+            return Convert.ToInt32(ExecuteQuery(string.Format(sql, packNo)).Tables[0].Rows[0][0]);
+        }
+        /// <summary>
+        /// 烟包卷烟烟量
+        /// </summary>
+        /// <param name="customerCode">客户包</param>
+        /// <returns>烟包卷烟量</returns>
+        public int FindBagQuantity(int packNo)
+        {
+            string sql = "SELECT SUM(QUANTITY)AS TQUANTITY FROM AS_SC_ORDER WHERE PACKNO={0}";
+            return Convert.ToInt32(ExecuteQuery(string.Format(sql, packNo)).Tables[0].Rows[0][0]);
+        }
+        /// <summary>
+        /// 查找已传给贴标的包号
+        /// </summary>
+        /// <param name="exportNo">包装机号</param>
+        /// <returns>包号表</returns>
+        public DataTable FindexportPack(int exportNo)
+        {
+            string sql = " SELECT DISTINCT PACKNO FROM dbo.AS_SC_EXPORTPACK{0}";
+            return ExecuteQuery(string.Format(sql,exportNo)).Tables[0];
         }
 
     }
