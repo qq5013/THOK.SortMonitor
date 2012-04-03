@@ -118,7 +118,7 @@ namespace THOK.AS.Sorting.Process
                     refreshData.CompleteQuantity = Convert.ToInt32(infoTable.Rows[0]["QUANTITY"]) + Convert.ToInt32(infoTable.Rows[0]["QUANTITY1"]);
                     refreshData.Average = orderDao.FindSortingAverage();
 
-                    WriteToProcess("sortingStatus", "RefreshData", refreshData);
+                    WriteToProcess("SortStatusProcess", "RefreshData", refreshData);
                     messageUtil.SendToSortLed(sortNo, refreshData);
                 }
             }

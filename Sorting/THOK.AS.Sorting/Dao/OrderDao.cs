@@ -59,9 +59,7 @@ namespace THOK.AS.Sorting.Dao
 
         public DataTable FindPackMaster()
         {
-            string sql = "SELECT ROW_NUMBER() OVER(ORDER BY MIN(SORTNO)) AS PACKNO,MIN(SORTNO) AS SORTNO ,ORDERDATE,ORDERID,ROUTECODE,ROUTENAME,CUSTOMERCODE,CUSTOMERNAME,SUM(QUANTITY) AS QUANTITY, SUM(QUANTITY1) AS QUANTITY1 ," +
-                            "CASE WHEN SUM(PACKQUANTITY)=SUM(QUANTITY) THEN '已发送' ELSE '未发送' END [PACKAGE], " +
-                            " CASE WHEN SUM(PACKQUANTITY1)=SUM(QUANTITY1) THEN '已发送' ELSE '未发送' END [PACKAGE1]  "+
+            string sql = "SELECT ROW_NUMBER() OVER(ORDER BY MIN(SORTNO)) AS PACKNO,MIN(SORTNO) AS SORTNO ,ORDERDATE,ORDERID,ROUTECODE,ROUTENAME,CUSTOMERCODE,CUSTOMERNAME,SUM(QUANTITY) AS QUANTITY, SUM(QUANTITY1) AS QUANTITY1 " +
                             "FROM AS_SC_PALLETMASTER GROUP BY ORDERDATE,ROUTECODE,ROUTENAME,ORDERID,CUSTOMERCODE,CUSTOMERNAME ORDER BY SORTNO";
             return ExecuteQuery(sql).Tables[0];
         }
@@ -72,21 +70,20 @@ namespace THOK.AS.Sorting.Dao
                             " (" +
 	                            " SELECT ROW_NUMBER() OVER(ORDER BY MIN(A.SORTNO)) AS PACKNO," +
 	                            " MIN(A.SORTNO) AS SORTNO ,A.ORDERDATE,A.ORDERID,A.ROUTECODE,A.ROUTENAME," +
-	                            " A.CUSTOMERCODE,A.CUSTOMERNAME,SUM(A.QUANTITY) AS QUANTITY," +
-	                            " CASE WHEN SUM(A.PACKQUANTITY)=SUM(A.QUANTITY) THEN '已发送' ELSE '未发送' END PACKAGE" +
+	                            " A.CUSTOMERCODE,A.CUSTOMERNAME,SUM(A.QUANTITY) AS QUANTITY" +
 	                            " FROM AS_SC_PALLETMASTER A" +
 	                            " GROUP BY A.ORDERDATE,A.ROUTECODE,A.ROUTENAME,A.ORDERID,A.CUSTOMERCODE,A.CUSTOMERNAME " +
                             " ) B " +
                             " LEFT JOIN AS_SC_ORDER C ON B.ORDERID = C.ORDERID " +
                             " WHERE {0} " +
-                            " GROUP BY B.PACKNO,B.SORTNO,B.ORDERDATE,B.ROUTECODE,B.ROUTENAME,B.ORDERID,B.CUSTOMERCODE,B.CUSTOMERNAME,B.QUANTITY,B.PACKAGE" +
+                            " GROUP BY B.PACKNO,B.SORTNO,B.ORDERDATE,B.ROUTECODE,B.ROUTENAME,B.ORDERID,B.CUSTOMERCODE,B.CUSTOMERNAME,B.QUANTITY" +
                             " {1} " +
                             " ORDER BY SORTNO";
             return ExecuteQuery(string.Format(sql,filter)).Tables[0];
         }
 
 
-        public DataTable FindPackDetail(string orderId)
+        public DataTable FindPackDetail()
         {
             //string sql = string.Format("SELECT A.ORDERID, A.CIGARETTECODE,A.CIGARETTENAME, SUM(A.QUANTITY) QUANTITY ,CASE WHEN A.CHANNELGROUP=1 THEN 'A线' ELSE 'B线' END  CHANNELLINE,A.CHANNELGROUP " +
             //                        "FROM AS_SC_ORDER A  LEFT JOIN DBO.AS_SC_CHANNELUSED B ON A.CHANNELCODE = B.CHANNELCODE WHERE A.ORDERID='{0}' "+
@@ -98,7 +95,7 @@ namespace THOK.AS.Sorting.Dao
                                 " CASE WHEN A.CHANNELGROUP=1 THEN 'A线' ELSE 'B线' END  CHANNELLINE " +
                                 " FROM AS_SC_ORDER A " +
                                 " LEFT JOIN AS_SC_CHANNELUSED B ON A.CHANNELCODE=B.CHANNELCODE " +
-                                " WHERE A.ORDERID={0} ORDER BY A.CHANNELGROUP,A.SORTNO DESC,B.CHANNELADDRESS DESC", orderId);
+                                " ORDER BY A.CHANNELGROUP,A.SORTNO DESC,B.CHANNELADDRESS DESC");
             return ExecuteQuery(sql).Tables[0];
         }
 
