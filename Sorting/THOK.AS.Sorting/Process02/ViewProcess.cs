@@ -22,128 +22,143 @@ namespace THOK.AS.Sorting.Process
             int channelGroup = 0;
             int exportNo = 0;
             int deviceNo = 0;
-            string packMode = "";
-            int[] sortNoesA = new int[3];
-            int[] sortNoesB = new int[3];
-            int[] sortNoesBarCode1 = new int[2];
-            int[] sortNoesBarCode2 = new int[2];
-            int[] sortNoesPacker1 = new int[2];
-            int[] sortNoesPacker2 = new int[2];
-
-            object stateCacheA = Context.Services["SortPLC"].Read("CacheOrderSortNoesA");
-            object stateCacheB = Context.Services["SortPLC"].Read("CacheOrderSortNoesB");
-            object stateBarCode1 = Context.Services["SortPLC"].Read("CacheOrderSortNoesBarCode1");
-            object stateBarCode2 = Context.Services["SortPLC"].Read("CacheOrderSortNoesBarCode2");
-            object statePacker1 = Context.Services["SortPLC"].Read("CacheOrderSortNoesPacker1");
-            object statePacker2 = Context.Services["SortPLC"].Read("CacheOrderSortNoesPacker2");
-
-            WriteToProcess("CacheOrderProcess", "CacheOrderSortNoesA", stateCacheA);
-            WriteToProcess("CacheOrderProcess", "CacheOrderSortNoesB", stateCacheB);
-            WriteToProcess("CacheOrderProcess", "CacheOrderSortNoesBarCode1", stateBarCode1);
-            WriteToProcess("CacheOrderProcess", "CacheOrderSortNoesBarCode2", stateBarCode2);
-            WriteToProcess("CacheOrderProcess", "CacheOrderSortNoesPacker1", statePacker1);
-            WriteToProcess("CacheOrderProcess", "CacheOrderSortNoesPacker2", statePacker2);
-
-            if (stateCacheA is Array && stateCacheB is Array && stateBarCode1 is Array && stateBarCode2 is Array && statePacker1 is Array && statePacker2 is Array && e.DeviceNo > 0)
+            //WriteToProcess("CacheOrderProcess", "CacheOrderSortNoesA", stateCacheA);
+            //WriteToProcess("CacheOrderProcess", "CacheOrderSortNoesB", stateCacheB);
+            //WriteToProcess("CacheOrderProcess", "CacheOrderSortNoesBarCode1", stateBarCode1);
+            //WriteToProcess("CacheOrderProcess", "CacheOrderSortNoesBarCode2", stateBarCode2);
+            //WriteToProcess("CacheOrderProcess", "CacheOrderSortNoesPacker1", statePacker1);
+            //WriteToProcess("CacheOrderProcess", "CacheOrderSortNoesPacker2", statePacker2);
+            switch (e.DeviceClass)
             {
-                Array arrayCacheA = (Array)stateCacheA;
-                Array arrayCacheB = (Array)stateCacheB;
-                Array arrayBarCode1 = (Array)stateBarCode1;
-                Array arrayBarCode2 = (Array)stateBarCode2;
-                Array arryPacker1 = (Array)statePacker1;
-                Array arryPacker2 = (Array)statePacker2;
-                if (arrayCacheA.Length == 3 && arrayCacheB.Length == 3 && arrayBarCode1.Length == 2 && arrayBarCode2.Length == 2 && arryPacker1.Length == 2 && arryPacker2.Length == 2)
-                {
-                    arrayCacheA.CopyTo(sortNoesA, 0);
-                    arrayCacheB.CopyTo(sortNoesB, 0);
-                    arrayBarCode1.CopyTo(sortNoesBarCode1, 0);
-                    arrayBarCode2.CopyTo(sortNoesBarCode2, 0);
-                    arryPacker1.CopyTo(sortNoesPacker1, 0);
-                    arryPacker2.CopyTo(sortNoesPacker2, 0);
-
-                    switch (e.DeviceClass)
+                //»º´æ¶ÎÈ¥³ýµ²°å£¬¸ÄÓÃ¶à¹µ´ø¡£
+                case "¶à¹µ´ø»º´æ¶Î":
+                    switch (e.DeviceNo)
                     {
-                        //»º´æ¶ÎÈ¥³ýµ²°å£¬¸ÄÓÃ¶à¹µ´ø¡£
-                        case "¶à¹µ´ø»º´æ¶Î":
-                            switch (e.DeviceNo)
+                        case 1:
+                        case 2:
+                            int[] sortNoesB = new int[3];
+                            object stateCacheB = Context.Services["SortPLC"].Read("CacheOrderSortNoesB");
+                            if (stateCacheB is Array)
                             {
-                                case 1:
-                                    sortNoStart = sortNoesA[0];
-                                    frontQuantity = sortNoesA[2];
-                                    laterQuantity = sortNoesA[1];
-                                    channelGroup = 1;
-                                    deviceNo = 1;
-                                    break;
-                                case 2:
-                                    sortNoStart = sortNoesA[0];
-                                    frontQuantity = sortNoesA[2];
-                                    laterQuantity = sortNoesA[1];
-                                    channelGroup = 1;
-                                    deviceNo = 2;
-                                    break;
-                                case 3:
+                                Array arrayCacheB = (Array)stateCacheB;
+                                if (arrayCacheB.Length == 3)
+                                {
+                                    arrayCacheB.CopyTo(sortNoesB, 0);
                                     sortNoStart = sortNoesB[0];
                                     frontQuantity = sortNoesB[2];
                                     laterQuantity = sortNoesB[1];
-                                    channelGroup = 2;
-                                    deviceNo = 3;
-                                    break; ;
-                                case 4:
-                                    sortNoStart = sortNoesB[0];
-                                    frontQuantity = sortNoesB[2];
-                                    laterQuantity = sortNoesB[1];
-                                    channelGroup = 2;
-                                    deviceNo = 4;
-                                    break;
-                                default:
-                                    break;
-
+                                }
                             }
-                            CacheOrderQueryForm cacheOrderQueryForm1 = (new CacheOrderQueryForm(deviceNo, channelGroup, sortNoStart, frontQuantity, laterQuantity));
-                            cacheOrderQueryForm1.Paint += new PaintEventHandler(cacheOrderQueryForm1.CacheOrderQueryFormPaint);//´°ÌåÖØ»æ¼ÓÔØÑÕÉ«
-                            cacheOrderQueryForm1.ShowDialog(Application.OpenForms["MainForm"]);
+                            channelGroup = 2;
+                            deviceNo = e.DeviceNo;
                             break;
-                        case "´òÂë»º´æ¶Î":
-                            if (e.DeviceNo == 5)
+                        case 3:
+                        case 4:
+                            int[] sortNoesA = new int[3];
+                            object stateCacheA = Context.Services["SortPLC"].Read("CacheOrderSortNoesA");
+                            if (stateCacheA is Array)
                             {
-                                sortNo = sortNoesBarCode1[0];
-                                channelGroup = sortNoesBarCode1[1];
-                                deviceNo = 1;
+                                Array arrayCacheA = (Array)stateCacheA;
+                                if (arrayCacheA.Length == 3)
+                                {
+                                    arrayCacheA.CopyTo(sortNoesA, 0);
+                                    sortNoStart = sortNoesA[0];
+                                    frontQuantity = sortNoesA[2];
+                                    laterQuantity = sortNoesA[1];
+                                }
                             }
-                            else if (e.DeviceNo == 6)
-                            {
-                                sortNo = sortNoesBarCode2[0];
-                                channelGroup = sortNoesBarCode1[1];
-                                deviceNo = 2;
-                            }
-                            CacheOrderQueryForm cacheOrderQueryForm2 = new CacheOrderQueryForm(deviceNo, channelGroup, sortNo);
-                            cacheOrderQueryForm2.Text = "´òÂë»º´æ¶Î:";
-                            cacheOrderQueryForm2.ShowDialog(Application.OpenForms["MainForm"]);
-                            break;
-                        case "°ü×°»º´æ¶Î":
-                            if (e.DeviceNo == 7)
-                            {
-                                sortNo = sortNoesPacker1[0];
-                                channelGroup = sortNoesPacker1[1];
-                                exportNo = 1;
-                            }
-                            else if (e.DeviceNo == 8)
-                            {
-                                sortNo = sortNoesPacker1[0];
-                                channelGroup = sortNoesPacker1[1];
-                                exportNo = 2;
-                            }
-                            packMode = "0";//sortNoes[16].ToString();
-                            CacheOrderQueryForm cacheOrderQueryForm3 = new CacheOrderQueryForm(packMode, exportNo, sortNo, channelGroup);
-                            cacheOrderQueryForm3.Paint += new PaintEventHandler(cacheOrderQueryForm3.CacheOrderQueryForm_Paint);
-                            cacheOrderQueryForm3.Text = "°ü×°»º´æ¶Î:";
-                            cacheOrderQueryForm3.ShowDialog(Application.OpenForms["MainForm"]);
+                            channelGroup = 1;
+                            deviceNo = e.DeviceNo;
                             break;
                         default:
                             break;
+
                     }
-                }
+                    CacheOrderQueryForm cacheOrderQueryForm1 = new CacheOrderQueryForm(deviceNo, channelGroup, sortNoStart, frontQuantity, laterQuantity);
+                    cacheOrderQueryForm1.Paint += new PaintEventHandler(cacheOrderQueryForm1.CacheOrderQueryFormPaint);//´°ÌåÖØ»æ¼ÓÔØÑÕÉ«
+                    cacheOrderQueryForm1.ShowDialog(Application.OpenForms["MainForm"]);
+                    break;
+                case "´òÂë»º´æ¶Î":
+                    if (e.DeviceNo == 5)
+                    {
+                        deviceNo = 5;
+                        int[] sortNoesBarCode1 = new int[2];
+                        object stateBarCode1 = Context.Services["SortPLC"].Read("CacheOrderSortNoesBarCode1");
+                        if (stateBarCode1 is Array)
+                        {
+                            Array arrayBarCode1 = (Array)stateBarCode1;
+                            if (arrayBarCode1.Length == 2)
+                            {
+                                arrayBarCode1.CopyTo(sortNoesBarCode1, 0);
+                                sortNo = sortNoesBarCode1[0];
+                                channelGroup = sortNoesBarCode1[1];
+                            }
+                        }
+                    }
+                    else if (e.DeviceNo == 6)
+                    {
+                        deviceNo = 6;
+                        int[] sortNoesBarCode2 = new int[2];
+                        object stateBarCode2 = Context.Services["SortPLC"].Read("CacheOrderSortNoesBarCode2");
+                        if (stateBarCode2 is Array)
+                        {
+                            Array arrayBarCode2 = (Array)stateBarCode2;
+                            if (arrayBarCode2.Length == 2)
+                            {
+                                arrayBarCode2.CopyTo(sortNoesBarCode2, 0);
+                                sortNo = sortNoesBarCode2[0];
+                                channelGroup = sortNoesBarCode2[1];
+                            }
+                        }
+                    }
+                    CacheOrderQueryForm cacheOrderQueryForm2 = new CacheOrderQueryForm(deviceNo, channelGroup, sortNo);
+                    cacheOrderQueryForm2.Text = "´òÂë»º´æ¶Î:";
+                    cacheOrderQueryForm2.ShowDialog(Application.OpenForms["MainForm"]);
+                    break;
+                case "°ü×°»º´æ¶Î":
+                    if (e.DeviceNo == 7)
+                    {
+                        int[] sortNoesPacker1 = new int[2];
+                        object statePacker1 = Context.Services["SortPLC"].Read("CacheOrderSortNoesPacker1");
+                        if (statePacker1 is Array)
+                        {
+                            Array arrayPacker1 = (Array)statePacker1;
+                            if (arrayPacker1.Length == 2)
+                            {
+                                arrayPacker1.CopyTo(sortNoesPacker1, 0);
+                                sortNo = sortNoesPacker1[0];
+                                channelGroup = sortNoesPacker1[1];
+                            }
+                            deviceNo = e.DeviceNo;
+                            exportNo = 1;
+                        }
+                    }
+                    else if (e.DeviceNo == 8)
+                    {
+                        int[] sortNoesPacker2 = new int[2];
+                        object statePacker2 = Context.Services["SortPLC"].Read("CacheOrderSortNoesPacker2");
+                        if (statePacker2 is Array)
+                        {
+                            Array arrayPacker2 = (Array)statePacker2;
+                            if (arrayPacker2.Length == 2)
+                            {
+                                arrayPacker2.CopyTo(sortNoesPacker2, 0);
+                                sortNo = sortNoesPacker2[0];
+                                channelGroup = sortNoesPacker2[1];
+                            }
+                            deviceNo = e.DeviceNo;
+                            exportNo = 2;
+                        }
+                    }
+                    CacheOrderQueryForm cacheOrderQueryForm3 = new CacheOrderQueryForm(deviceNo, channelGroup, sortNo);
+                    cacheOrderQueryForm3.Paint += new PaintEventHandler(cacheOrderQueryForm3.CacheOrderQueryForm_Paint);
+                    cacheOrderQueryForm3.Text = "°ü×°»º´æ¶Î:";
+                    cacheOrderQueryForm3.ShowDialog(Application.OpenForms["MainForm"]);
+                   break;
+                default:
+                    break;
             }
         }
+
     }
 }

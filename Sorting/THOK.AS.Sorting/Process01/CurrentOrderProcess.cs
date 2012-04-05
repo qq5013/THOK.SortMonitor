@@ -39,7 +39,7 @@ namespace THOK.AS.Sorting.Process
         {
             try
             {
-                WriteToProcess("CacheOrderProcess", "CacheOrderSortNoes", null);
+                //WriteToProcess("CacheOrderProcess", "CacheOrderSortNoes", null);
                 
                 string channelGroup = "";
 
@@ -118,13 +118,13 @@ namespace THOK.AS.Sorting.Process
                     refreshData.CompleteQuantity = Convert.ToInt32(infoTable.Rows[0]["QUANTITY"]) + Convert.ToInt32(infoTable.Rows[0]["QUANTITY1"]);
                     refreshData.Average = orderDao.FindSortingAverage();
 
-                    WriteToProcess("SortStatusProcess", "RefreshData", refreshData);
+                    WriteToProcess("sortingStatus", "RefreshData", refreshData);
                     messageUtil.SendToSortLed(sortNo, refreshData);
                 }
             }
             catch (Exception e)
             {
-                Logger.Error(string.Format("更新分拣信息处理失败！原因：{0}！ {1}", e.Message, "CurrentOrderProcess.cs 行号：125！"));
+                Logger.Error(string.Format("更新分拣信息处理失败！原因：{0}！ {1}", e.Message, "CurrentOrderProcess.cs 行号：127！"));
             }
         }
     }

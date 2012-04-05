@@ -37,6 +37,7 @@
       <Item ServiceName="SortPLC" ItemName="MissOrderB" />
     </Process>
     <Process Name="ViewProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.ViewProcess" />
+    <Process Name="SortingStatus" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.View.Control.SortingStatus"/>
     <Process Name="CreatePackAndPrintDataProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.CreatePackAndPrintDataProcess" />
     <Process Name="LEDProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.LEDProcess">
       <Item ServiceName="SortPLC" ItemName="EmptyErrA" />
@@ -49,7 +50,15 @@
       <Item ServiceName="SortPLC" ItemName="SortRunStatus" />
     </Process>
     <Process Name="CacheOrderProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.CacheOrderProcess">
-      <Item ServiceName="SortPLC" ItemName="CacheOrderSortNoes" />
+      <Item ServiceName="SortPLC" ItemName="CacheOrderSortNoesA" />
+      <Item ServiceName="SortPLC" ItemName="CacheOrderSortNoesB" />
+      <Item ServiceName="SortPLC" ItemName="CacheOrderSortNoesBarCode1" />
+      <Item ServiceName="SortPLC" ItemName="CacheOrderSortNoesBarCode2" />
+      <Item ServiceName="SortPLC" ItemName="CacheOrderSortNoesPacker1" />
+      <Item ServiceName="SortPLC" ItemName="CacheOrderSortNoesPacker2" />
     </Process>
+	<Process Name="ExportPackNoProcess" Type="THOK.AS.Sorting.dll, THOK.AS.Sorting.Process.ExportPackNoProcess">
+	  <Item ServiceName="SortPLC" ItemName="ExportPackNoRead" />
+	</Process>
   </Processes>
 </Configuration>

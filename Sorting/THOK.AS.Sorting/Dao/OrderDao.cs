@@ -434,6 +434,17 @@ namespace THOK.AS.Sorting.Dao
             ExecuteNonQuery(string.Format("UPDATE AS_SORT_PACKORDERSTATUS SET STATUS ='1' WHERE PACKCODE = '{0}' ", exportNo));
         }
 
+        internal DataTable FindStartNoForCacheOrderQuery(int channelGroup, int startNo)
+        {
+            string sql = @"SELECT SORTNO FROM AS_SC_ORDER WHERE CHANNELGROUP ={0} 
+                        AND ORDERID IN 
+                        (SELECT ORDERID FROM AS_SC_ORDER WHERE SORTNO ={1}) 
+                        AND ORDERNO IN
+                        (SELECT ORDERNO FROM AS_SC_ORDER WHERE SORTNO ={1})
+                        ORDER BY SORTNO";
+            return ExecuteQuery(string.Format(sql, channelGroup, startNo)).Tables[0];
+        }
+
         internal DataTable FindOrderIDAndOrderNoForCacheOrderQuery(int channelGroup, int sortNo)
         {
             string sql = "SELECT ORDERID,ORDERNO FROM AS_SC_ORDER WHERE  CHANNELGROUP = {0} AND SORTNO ={1}";
@@ -442,17 +453,19 @@ namespace THOK.AS.Sorting.Dao
 
         public DataTable FindDetailForCacheOrderQuery(string orderId, int orderNo, int channelGroup)
         {
-            string sql = "SELECT A.SORTNO,A.ORDERID,C.CUSTOMERNAME,B.CHANNELNAME, " +
-                    " CASE B.CHANNELTYPE WHEN '2' THEN '立式机' WHEN '5' THEN '立式机' ELSE '通道机' END CHANNELTYPE, " +
-                    " A.CIGARETTECODE, A.CIGARETTENAME, A.QUANTITY ,"+
-                    " CASE WHEN A.CHANNELGROUP=1 THEN 'A线' ELSE 'B线' END  CHANNELLINE, "+
-                    " ISNULL((SELECT TOP 1 PACKNO FROM AS_SORT_PACKORDER WHERE SORTNO = A.SORTNO AND EXPORTNO = 0 AND CHANNELGROUP = A.CHANNELGROUP),0) AS PACKNO0,"+
-                    " ISNULL((SELECT TOP 1 PACKNO FROM AS_SORT_PACKORDER WHERE SORTNO = A.SORTNO AND EXPORTNO = 1 AND CHANNELGROUP = A.CHANNELGROUP),0) AS PACKNO1,"+
-                    " ISNULL((SELECT TOP 1 PACKNO FROM AS_SORT_PACKORDER WHERE SORTNO = A.SORTNO AND EXPORTNO = 2 AND CHANNELGROUP = A.CHANNELGROUP),0) AS PACKNO2 "+
-                    " FROM AS_SC_ORDER A "+
-                    " LEFT JOIN AS_SC_CHANNELUSED B ON A.CHANNELCODE=B.CHANNELCODE " +
-                    " LEFT JOIN AS_SC_PALLETMASTER C ON A.SORTNO = C.SORTNO AND A.ORDERID = C.ORDERID AND A.ORDERDATE = C.ORDERDATE  " +
-                    " WHERE A.ORDERID = {0} AND A.ORDERNO = {1} AND A.CHANNELGROUP = {2} ORDER BY A.SORTNO DESC,B.CHANNELADDRESS DESC";
+            string sql = @"SELECT A.SORTNO,A.ORDERID,C.CUSTOMERNAME,B.CHANNELNAME,
+                             CASE B.CHANNELTYPE WHEN '2' THEN '立式机' WHEN '5' THEN '立式机' ELSE '通道机' END CHANNELTYPE,
+                             A.CIGARETTECODE, A.CIGARETTENAME, A.QUANTITY ,
+                                CASE WHEN A.CHANNELGROUP=1 THEN 'A线' ELSE 'B线' END  CHANNELLINE, 
+                                  ISNULL((SELECT TOP 1 PACKNO FROM AS_SORT_PACKORDER WHERE SORTNO = A.SORTNO AND EXPORTNO = 0 AND CHANNELGROUP = A.CHANNELGROUP),0) AS PACKNO0,
+                                  ISNULL((SELECT TOP 1 PACKNO FROM AS_SORT_PACKORDER WHERE SORTNO = A.SORTNO AND EXPORTNO = 1 AND CHANNELGROUP = A.CHANNELGROUP),0) AS PACKNO1,
+                                  ISNULL((SELECT TOP 1 PACKNO FROM AS_SORT_PACKORDER WHERE SORTNO = A.SORTNO AND EXPORTNO = 2 AND CHANNELGROUP = A.CHANNELGROUP),0) AS PACKNO2
+                                    FROM AS_SC_ORDER A
+                                      LEFT JOIN AS_SC_CHANNELUSED B 
+                                        ON A.CHANNELCODE=B.CHANNELCODE
+                                          LEFT JOIN AS_SC_PALLETMASTER C
+                                            ON A.SORTNO = C.SORTNO AND A.ORDERID = C.ORDERID AND A.ORDERDATE = C.ORDERDATE
+                                              WHERE A.ORDERID ='{0}' AND A.ORDERNO ={1} AND A.CHANNELGROUP ={2} ORDER BY A.SORTNO DESC,B.CHANNELADDRESS DESC";
             return ExecuteQuery(string.Format(sql, orderId, orderNo,channelGroup)).Tables[0];
         }
 

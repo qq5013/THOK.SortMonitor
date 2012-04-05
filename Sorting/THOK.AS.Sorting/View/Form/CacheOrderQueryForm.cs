@@ -11,112 +11,195 @@ namespace THOK.AS.Sorting.View
 {
     public partial class CacheOrderQueryForm :Form
     {
+        #region 缓存段参数
         private int sortNo = 0;
-        private int sortNoStart = 0;
-        private int beforeQuantity = 0;
-        private int afterQuantity = 0;
-        private int sumQuantity = 0;
         private int deviceNo = 0;
+        private int sortNoStart = 0;
+        private int frontQuantity = 0;
+        private int laterQuantity = 0;
+        private int sumQuantity = 0;
         private int channelGroup = 0;
         private OrderDal orderDal = new OrderDal();
+        #endregion
+
+        #region 打码段和摆动段数据显示
+        /// <summary>
+        /// 打码段和摆动段数据显示
+        /// </summary>
+        /// <param name="deviceNo">设备号</param>
+        /// <param name="channelGroup">烟道组号</param>
+        /// <param name="sortNo">分拣流水号</param>
         public CacheOrderQueryForm(int deviceNo,int channelGroup, int sortNo)
         {
             InitializeComponent();
+            string cacheName = "";
+            int sumQutity = 0;
+            if (deviceNo == 5)
+            {
+                cacheName = "打码段";
+            }
+            else if (deviceNo == 6)
+            {
+                cacheName = "摆动段";
+            }
+            else if (deviceNo == 7)
+            {
+                cacheName = "1号包装机";
+            }
+            else if (deviceNo == 8)
+            {
+                cacheName = "2号包装机";
+            }
             this.sortNo = sortNo;
             this.channelGroup = channelGroup;
-            int sumQutity = 0;
-
             DataTable table = orderDal.GetOrderDetailForCacheOrderQuery(channelGroup, sortNo);
             if (table.Rows.Count != 0)
             {
                 dgvDetail.DataSource = table;
                 sumQutity = Convert.ToInt32(table.Compute("SUM(QUANTITY)", ""));
             }
-
-            this.Text = this.Text + string.Format("[{0}线-{1}号缓存段-{2}号流水号][总数量：{3}]", channelGroup == 1 ? "A" : "B", deviceNo, sortNo, sumQutity);
+            this.Text = this.Text + string.Format("[{0}线{1}缓存段][流水号：{2}][总数量：{3}]", channelGroup == 1 ? "A" : "B", cacheName, sortNo, sumQutity);
 
         }
+        #endregion
+
+        #region 多沟带缓存段数据显示
         /// <summary>
         /// 窗体加载重载方法查询出多沟带缓存段的所有订单数据
         /// </summary>
-        /// <param name="deviceNo"></param>
-        /// <param name="channelGroup"></param>
-        /// <param name="sortNoStart"></param>
-        /// <param name="beforeQuantity"></param>
-        /// <param name="afterQuantity"></param>
+        /// <param name="deviceNo">设备号</param>
+        /// <param name="channelGroup">烟道组号</param>
+        /// <param name="sortNoStart">开始流水号</param>
+        /// <param name="beforeQuantity">小皮带数量</param>
+        /// <param name="afterQuantity">后端数量</param>
         public CacheOrderQueryForm(int deviceNo, int channelGroup, int sortNoStart, int beforeQuantity,int afterQuantity)
         {
             InitializeComponent();
             this.deviceNo = deviceNo;
             this.channelGroup = channelGroup;
             this.sortNoStart = sortNoStart;
-            this.beforeQuantity = beforeQuantity;
-            this.afterQuantity = afterQuantity;
-            this.sumQuantity = beforeQuantity + afterQuantity;
+            this.frontQuantity = frontQuantity;
+            this.laterQuantity = laterQuantity;
+            this.sumQuantity = frontQuantity + laterQuantity;
             string strhead = "";
-            DataTable beforeTable = new DataTable();
-            CreatTableForCacheOrder(beforeTable);
-            DataTable afterTable = new DataTable();
-            CreatTableForCacheOrder(afterTable);
-
 
             DataTable orderTable = orderDal.GetAllOrderDetailForCacheOrderQuery(channelGroup, sortNoStart);
-            if (orderTable.Rows.Count != 0)
+
+            DataTable Table = new DataTable();
+            CreatTableForCacheOrder(Table);
+
+            if (deviceNo == 2 || deviceNo == 4)
             {
-                int tempQuantity = 0;
-                int flag = 0;
-                foreach (DataRow orderDetailRow in orderTable.Rows)
+                if (orderTable.Rows.Count != 0)
                 {
-                    int orderQuantity = Convert.ToInt32(orderDetailRow["QUANTITY"]);
-                    tempQuantity = tempQuantity + orderQuantity;
-                    if (tempQuantity <= beforeQuantity)
+                    int tempQuantity = 0;
+                    foreach (DataRow orderDetailRow in orderTable.Rows)
                     {
-                        AddCacheOrderTableRow(beforeTable, orderDetailRow);
-                    }
-                    else
-                    {
-                        if (flag == 0)
+                        int orderQuantity = Convert.ToInt32(orderDetailRow["QUANTITY"]);
+                        tempQuantity = tempQuantity + orderQuantity;
+
+                        if (tempQuantity >= frontQuantity)
                         {
-                            orderDetailRow["QUANTITY"] = orderQuantity + beforeQuantity - tempQuantity;//更改最后一单数量
-                            AddCacheOrderTableRow(beforeTable, orderDetailRow);
-                            orderDetailRow["QUANTITY"] = tempQuantity - beforeQuantity;//补上最后一单余数
-                            AddCacheOrderTableRow(beforeTable, orderDetailRow);
-                            orderDetailRow["QUANTITY"] = tempQuantity - beforeQuantity;//余数归到后表
-                            AddCacheOrderTableRow(afterTable, orderDetailRow);
-                            flag = 1;
+                            orderDetailRow["QUANTITY"] = orderQuantity + frontQuantity - tempQuantity;
+                            AddCacheOrderTableRow(Table, orderDetailRow);
+
+                            orderDetailRow["QUANTITY"] = tempQuantity - frontQuantity;
+                            AddCacheOrderTableRow(Table, orderDetailRow);
+                            break;
                         }
                         else
                         {
-                            if (tempQuantity - beforeQuantity <= afterQuantity)
+                            AddCacheOrderTableRow(Table, orderDetailRow);
+                        }
+                    }
+                    strhead = string.Format("[{0}线多沟带前端小皮带][流水号：{2}][总数量：{3}]", channelGroup == 1 ? "A" : "B", deviceNo, sortNoStart, frontQuantity);
+                }
+
+            }
+            else
+            {
+                if (orderTable.Rows.Count != 0)
+                {
+                    int tempQuantity = 0;
+                    bool flag = false;
+                    foreach (DataRow orderDetailRow in orderTable.Rows)
+                    {
+                        int orderQuantity = Convert.ToInt32(orderDetailRow["QUANTITY"]);
+                        tempQuantity = tempQuantity + orderQuantity;
+
+                        if (flag == false)
+                        {
+                            if (tempQuantity >= frontQuantity)
                             {
-                                AddCacheOrderTableRow(afterTable, orderDetailRow);
+                                if (laterQuantity != 0)
+                                {
+                                    orderDetailRow["QUANTITY"] = tempQuantity - frontQuantity;
+                                    AddCacheOrderTableRow(Table, orderDetailRow);
+                                    flag = true;
+                                }
+                                else
+                                {
+                                    orderDetailRow["QUANTITY"] = orderQuantity + frontQuantity - tempQuantity;
+                                    AddCacheOrderTableRow(Table, orderDetailRow);
+
+                                    orderDetailRow["QUANTITY"] = tempQuantity - frontQuantity;
+                                    AddCacheOrderTableRow(Table, orderDetailRow);
+                                    break;
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            if (tempQuantity >= sumQuantity)
+                            {
+                                orderDetailRow["QUANTITY"] = orderQuantity + sumQuantity - tempQuantity;
+                                AddCacheOrderTableRow(Table, orderDetailRow);
+
+                                orderDetailRow["QUANTITY"] = tempQuantity - sumQuantity;
+                                AddCacheOrderTableRow(Table, orderDetailRow);
+                                break;
+
                             }
                             else
                             {
-                                orderDetailRow["QUANTITY"] = orderQuantity + sumQuantity - tempQuantity;//更改最后一单数量
-                                AddCacheOrderTableRow(afterTable, orderDetailRow);
-                                orderDetailRow["QUANTITY"] = tempQuantity - sumQuantity;//补上最后一单余数
-                                AddCacheOrderTableRow(afterTable, orderDetailRow);
-                                break;
+                                AddCacheOrderTableRow(Table, orderDetailRow);
                             }
                         }
-                      }
-                    } 
+                    }
+                    strhead = string.Format("[{0}线多沟带后端缓存段][流水号：{2}][总数量：{3}]", channelGroup == 1 ? "A" : "B", deviceNo, sortNoStart, laterQuantity);
                 }
-                if (deviceNo == 1 || deviceNo == 3)
-                {
-                    dgvDetail.DataSource = afterTable;
-                    strhead = string.Format("[{0}线多沟带缓存{1}][流水号：{2}][总数量：{3}]", channelGroup == 1 ? "A" : "B", deviceNo, sortNoStart,beforeQuantity);
-                    
-                }
-
-                if (deviceNo == 2 || deviceNo == 4)
-                {
-                    dgvDetail.DataSource = beforeTable;
-                    strhead = string.Format("[{0}线多沟带缓存{1}][流水号：{2}][总数量：{3}]", channelGroup == 1 ? "A" : "B", deviceNo, sortNoStart, afterQuantity);
-                }      
-                this.Text = this.Text + strhead;
             }
+            dgvDetail.DataSource = Table;
+            this.Text = this.Text + strhead;
+            }
+        #endregion
+
+        #region 包装机缓存段数据显示(未完成)
+
+        /// <summary>
+        /// 包装机缓存段数据显示
+        /// </summary>
+        /// <param name="exportNo">包装机号</param>
+        /// <param name="deviceNo">设备号（仅作为方法重载区分字段，没太大意义）</param>
+        /// <param name="sortNo">流水号</param>
+        /// <param name="channelGroup">烟道组号</param>
+        public CacheOrderQueryForm(int exportNo, int deviceNo, int sortNo, int channelGroup)
+        {
+            InitializeComponent();
+            this.sortNo = sortNo;
+            this.channelGroup = channelGroup;
+        }
+        #endregion
+
+        #region 实时包装前包装段
+        /// <summary>
+        /// 实时包装前，包装段缓存数据显示
+        /// </summary>
+        /// <param name="packMode"></param>
+        /// <param name="exportNo"></param>
+        /// <param name="sortNo"></param>
+        /// <param name="channelGroup"></param>
         public CacheOrderQueryForm(string packMode, int exportNo,int sortNo,int channelGroup)
         {
             InitializeComponent();
@@ -134,7 +217,9 @@ namespace THOK.AS.Sorting.View
 
             this.Text = this.Text + string.Format("[{0}号包装机缓存段-{1}号流水号][总数量：{2}]",exportNo, sortNo, sumQutity);
         }
+        #endregion
 
+        #region 窗体颜色加载
         public void LoadColor(int sortNo,int channelGroup)
         {
             DataTable table = orderDal.GetOrderDetailForCacheOrderQuery(channelGroup, sortNo);
@@ -154,15 +239,46 @@ namespace THOK.AS.Sorting.View
 
         public void LoadColor()
         {
-            string cigaretteCode1 =dgvDetail.Rows[dgvDetail.Rows.Count - 2].Cells["CIGARETTECODE"].Value.ToString();
-            string cigaretteCode2 =dgvDetail.Rows[dgvDetail.Rows.Count - 1].Cells["CIGARETTECODE"].Value.ToString();
-            if (cigaretteCode1 == cigaretteCode2)
+            if (dgvDetail.Rows.Count == 2)
             {
-                dgvDetail.Rows[dgvDetail.Rows.Count - 2].DefaultCellStyle.BackColor = Color.Green;
-                dgvDetail.Rows[dgvDetail.Rows.Count - 1].DefaultCellStyle.BackColor = Color.Red;
+                string cigaretteCode1 = dgvDetail.Rows[dgvDetail.Rows.Count - 2].Cells["CIGARETTECODE"].Value.ToString();
+                string cigaretteCode2 = dgvDetail.Rows[dgvDetail.Rows.Count - 1].Cells["CIGARETTECODE"].Value.ToString();
+                int quantity = Convert.ToInt32(dgvDetail.Rows[dgvDetail.Rows.Count - 1].Cells["CIGARETTECODE"].Value);
+                if (cigaretteCode1 == cigaretteCode2 && quantity != 0)
+                {
+                    dgvDetail.Rows[dgvDetail.Rows.Count - 1].DefaultCellStyle.BackColor = Color.Red;
+                }
+                if (cigaretteCode1 == cigaretteCode2 && quantity == 0)
+                {
+                    foreach (DataGridViewRow row in dgvDetail.Rows)
+                    {
+                        int quantity1 = Convert.ToInt32(row.Cells["QUANTITY"].Value);
+                        if (quantity1 == 0)
+                        {
+                            dgvDetail.Rows.Remove(row);
+                        }
+                    }
+                }
+            }
+            if (dgvDetail.Rows.Count >= 3)
+            {
+                string cigaretteCode1 = dgvDetail.Rows[dgvDetail.Rows.Count - 2].Cells["CIGARETTECODE"].Value.ToString();
+                string cigaretteCode2 = dgvDetail.Rows[dgvDetail.Rows.Count - 1].Cells["CIGARETTECODE"].Value.ToString();
+                if (cigaretteCode1 == cigaretteCode2)
+                {
+                    dgvDetail.Rows[dgvDetail.Rows.Count - 1].DefaultCellStyle.BackColor = Color.Red;
+                }
+                foreach (DataGridViewRow row in dgvDetail.Rows)
+                {
+                    int quantity = Convert.ToInt32(row.Cells["QUANTITY"].Value);
+                    if (quantity == 0)
+                    {
+                        dgvDetail.Rows.Remove(row);
+                    }
+                }
             }
         }
-
+        
         public void CacheOrderQueryForm_Paint(object sender, PaintEventArgs e)
         {
             LoadColor(this.sortNo, this.channelGroup);
@@ -172,6 +288,9 @@ namespace THOK.AS.Sorting.View
         {
             LoadColor();
         }
+        #endregion
+
+        #region 缓存段表列创建及行添加
         /// <summary>
         /// 添加虚拟表并添加相应字段
         /// </summary>
@@ -191,6 +310,7 @@ namespace THOK.AS.Sorting.View
             Table.Columns.Add("PACKNO1");
             Table.Columns.Add("PACKNO2");
         }
+
         /// <summary>
         /// 增加行数据
         /// </summary>
@@ -212,5 +332,7 @@ namespace THOK.AS.Sorting.View
             Table.Rows[Table.Rows.Count - 1]["PACKNO1"] = orderDetailRow["PACKNO1"];
             Table.Rows[Table.Rows.Count - 1]["PACKNO2"] = orderDetailRow["PACKNO2"];
         }
+        #endregion
+
     }
 }
