@@ -151,10 +151,10 @@ namespace THOK.AS.Sorting.Process
                         }
                     }
                     CacheOrderQueryForm cacheOrderQueryForm3 = new CacheOrderQueryForm(deviceNo, channelGroup, sortNo);
-                    cacheOrderQueryForm3.Paint += new PaintEventHandler(cacheOrderQueryForm3.CacheOrderQueryForm_Paint);
+                    //cacheOrderQueryForm3.Paint += new PaintEventHandler(cacheOrderQueryForm3.CacheOrderQueryForm_Paint);
                     cacheOrderQueryForm3.Text = "°ü×°»º´æ¶Î:";
                     cacheOrderQueryForm3.ShowDialog(Application.OpenForms["MainForm"]);
-                   break;
+                    break;
                 default:
                     break;
             }

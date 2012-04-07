@@ -9,7 +9,7 @@ using THOK.AS.Sorting.Dal;
 
 namespace THOK.AS.Sorting.View
 {
-    public partial class CacheOrderQueryForm :Form
+    public partial class CacheOrderQueryForm : Form
     {
         #region 缓存段参数
         private int sortNo = 0;
@@ -29,7 +29,7 @@ namespace THOK.AS.Sorting.View
         /// <param name="deviceNo">设备号</param>
         /// <param name="channelGroup">烟道组号</param>
         /// <param name="sortNo">分拣流水号</param>
-        public CacheOrderQueryForm(int deviceNo,int channelGroup, int sortNo)
+        public CacheOrderQueryForm(int deviceNo, int channelGroup, int sortNo)
         {
             InitializeComponent();
             string cacheName = "";
@@ -72,14 +72,14 @@ namespace THOK.AS.Sorting.View
         /// <param name="sortNoStart">开始流水号</param>
         /// <param name="beforeQuantity">小皮带数量</param>
         /// <param name="afterQuantity">后端数量</param>
-        public CacheOrderQueryForm(int deviceNo, int channelGroup, int sortNoStart, int beforeQuantity,int afterQuantity)
+        public CacheOrderQueryForm(int deviceNo, int channelGroup, int sortNoStart, int beforeQuantity, int afterQuantity)
         {
             InitializeComponent();
             this.deviceNo = deviceNo;
             this.channelGroup = channelGroup;
             this.sortNoStart = sortNoStart;
-            this.frontQuantity = frontQuantity;
-            this.laterQuantity = laterQuantity;
+            this.frontQuantity = beforeQuantity;
+            this.laterQuantity = afterQuantity;
             this.sumQuantity = frontQuantity + laterQuantity;
             string strhead = "";
 
@@ -112,7 +112,7 @@ namespace THOK.AS.Sorting.View
                             AddCacheOrderTableRow(Table, orderDetailRow);
                         }
                     }
-                    strhead = string.Format("[{0}线多沟带前端小皮带][流水号：{2}][总数量：{3}]", channelGroup == 1 ? "A" : "B", deviceNo, sortNoStart, frontQuantity);
+                    strhead = string.Format("[{0}线多沟带前端小皮带][流水号：{1}][总数量：{2}]", channelGroup == 1 ? "A" : "B", sortNoStart, frontQuantity);
                 }
 
             }
@@ -167,12 +167,12 @@ namespace THOK.AS.Sorting.View
                             }
                         }
                     }
-                    strhead = string.Format("[{0}线多沟带后端缓存段][流水号：{2}][总数量：{3}]", channelGroup == 1 ? "A" : "B", deviceNo, sortNoStart, laterQuantity);
+                    strhead = string.Format("[{0}线多沟带后端缓存段][流水号：{1}][总数量：{2}]", channelGroup == 1 ? "A" : "B", sortNoStart, laterQuantity);
                 }
             }
             dgvDetail.DataSource = Table;
             this.Text = this.Text + strhead;
-            }
+        }
         #endregion
 
         #region 包装机缓存段数据显示(未完成)
@@ -200,14 +200,14 @@ namespace THOK.AS.Sorting.View
         /// <param name="exportNo"></param>
         /// <param name="sortNo"></param>
         /// <param name="channelGroup"></param>
-        public CacheOrderQueryForm(string packMode, int exportNo,int sortNo,int channelGroup)
+        public CacheOrderQueryForm(string packMode, int exportNo, int sortNo, int channelGroup)
         {
             InitializeComponent();
             this.sortNo = sortNo;
             this.channelGroup = channelGroup;
 
             int sumQutity = 0;
-            DataTable table  = orderDal.GetOrderDetailForCacheOrderQuery(packMode, exportNo, sortNo);
+            DataTable table = orderDal.GetOrderDetailForCacheOrderQuery(packMode, exportNo, sortNo);
 
             if (table.Rows.Count != 0)
             {
@@ -215,12 +215,12 @@ namespace THOK.AS.Sorting.View
                 sumQutity = Convert.ToInt32(table.Compute("SUM(QUANTITY)", ""));
             }
 
-            this.Text = this.Text + string.Format("[{0}号包装机缓存段-{1}号流水号][总数量：{2}]",exportNo, sortNo, sumQutity);
+            this.Text = this.Text + string.Format("[{0}号包装机缓存段-{1}号流水号][总数量：{2}]", exportNo, sortNo, sumQutity);
         }
         #endregion
 
         #region 窗体颜色加载
-        public void LoadColor(int sortNo,int channelGroup)
+        public void LoadColor(int sortNo, int channelGroup)
         {
             DataTable table = orderDal.GetOrderDetailForCacheOrderQuery(channelGroup, sortNo);
 
@@ -248,17 +248,6 @@ namespace THOK.AS.Sorting.View
                 {
                     dgvDetail.Rows[dgvDetail.Rows.Count - 1].DefaultCellStyle.BackColor = Color.Red;
                 }
-                if (cigaretteCode1 == cigaretteCode2 && quantity == 0)
-                {
-                    foreach (DataGridViewRow row in dgvDetail.Rows)
-                    {
-                        int quantity1 = Convert.ToInt32(row.Cells["QUANTITY"].Value);
-                        if (quantity1 == 0)
-                        {
-                            dgvDetail.Rows.Remove(row);
-                        }
-                    }
-                }
             }
             if (dgvDetail.Rows.Count >= 3)
             {
@@ -278,7 +267,7 @@ namespace THOK.AS.Sorting.View
                 }
             }
         }
-        
+
         public void CacheOrderQueryForm_Paint(object sender, PaintEventArgs e)
         {
             LoadColor(this.sortNo, this.channelGroup);
@@ -316,7 +305,7 @@ namespace THOK.AS.Sorting.View
         /// </summary>
         /// <param name="Table">订单表</param>
         /// <param name="orderDetailRow">订单行</param>
-        public void AddCacheOrderTableRow(DataTable Table,DataRow orderDetailRow)
+        public void AddCacheOrderTableRow(DataTable Table, DataRow orderDetailRow)
         {
             Table.Rows.Add();
             Table.Rows[Table.Rows.Count - 1]["SORTNO"] = orderDetailRow["SORTNO"];
