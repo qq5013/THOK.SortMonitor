@@ -55,46 +55,50 @@ namespace THOK.AS.Sorting.Process
         {
             try
             {
-                int[] ExportPackNo = new int[2];
-                object stateExportPackNo = Context.Services["SortPLC"].Read("ExportPackNoRead");
-                if (stateExportPackNo is Array)
+                lock (this)
                 {
-                    Array arrayExportPackNo = (Array)stateExportPackNo;
-                    if (arrayExportPackNo.Length == 2)
+                    int[] ExportPackNo = new int[2];
+                    object stateExportPackNo = Context.Services["SortPLC"].Read("ExportPackNoRead");
+                    if (stateExportPackNo is Array)
                     {
-                        arrayExportPackNo.CopyTo(ExportPackNo, 0);
-                        int ExportPackNo1 = ExportPackNo[0];
-                        int ExportPackNo2 = ExportPackNo[1];
-
-                        using (PersistentManager pm = new PersistentManager())
+                        Array arrayExportPackNo = (Array)stateExportPackNo;
+                        if (arrayExportPackNo.Length == 2)
                         {
-                            OrderDao orderDao = new OrderDao();
-                            DataTable ExportTable1 = new DataTable();
-                            ExportTable1 = orderDao.packOrderToExport(ExportPackNo1);
-                            DataTable ExportTable2 = new DataTable();
-                            ExportTable2 = orderDao.packOrderToExport(ExportPackNo2);
-                            bool IsPackNoUpload1 = IsPackNoUpload(ExportPackNo1);
-                            bool IsPackNoUpload2 = IsPackNoUpload(ExportPackNo2);
-                            if (ExportTable1.Rows.Count > 0 && !IsPackNoUpload1)
-                            {
-                                foreach (DataRow inRow in ExportTable1.Rows)
-                                {
-                                    int CustomerSumQuantity1= orderDao.FindCustomerQuantity(Convert.ToInt32(inRow["PACKNO"].ToString()));
-                                    int BagSumQuantity1 = orderDao.FindBagQuantity(Convert.ToInt32(inRow["PACKNO"].ToString()));
-                                    orderDao.InsertPackExport(inRow, 1, CustomerSumQuantity1,BagSumQuantity1);
-                                }
-                            }
-                            if (ExportTable2.Rows.Count > 0 && !IsPackNoUpload2)
-                            {
-                                foreach (DataRow inRow2 in ExportTable2.Rows)
-                                {
-                                    int CustomerSumQuantity2 = orderDao.FindCustomerQuantity(Convert.ToInt32(inRow2["PACKNO"].ToString()));
-                                    int BagSumQuantity2 = orderDao.FindBagQuantity(Convert.ToInt32(inRow2["PACKNO"].ToString()));
-                                    orderDao.InsertPackExport(inRow2, 2, CustomerSumQuantity2,BagSumQuantity2);
-                                }
-                            }
+                            arrayExportPackNo.CopyTo(ExportPackNo, 0);
+                            int ExportPackNo1 = ExportPackNo[0];
+                            int ExportPackNo2 = ExportPackNo[1];
 
-                            WriteToService("SortPLC", "ExportPackNoWrite", ExportPackNo);
+                            using (PersistentManager pm = new PersistentManager())
+                            {
+                                pm.BeginTransaction();
+                                OrderDao orderDao = new OrderDao();
+                                DataTable ExportTable1 = new DataTable();
+                                ExportTable1 = orderDao.packOrderToExport(ExportPackNo1);
+                                DataTable ExportTable2 = new DataTable();
+                                ExportTable2 = orderDao.packOrderToExport(ExportPackNo2);
+                                bool IsPackNoUpload1 = IsPackNoUpload(ExportPackNo1);
+                                bool IsPackNoUpload2 = IsPackNoUpload(ExportPackNo2);
+                                if (ExportTable1.Rows.Count > 0 && !IsPackNoUpload1)
+                                {
+                                    foreach (DataRow inRow in ExportTable1.Rows)
+                                    {
+                                        int CustomerSumQuantity1 = orderDao.FindCustomerQuantity(Convert.ToInt32(inRow["PACKNO"].ToString()));
+                                        int BagSumQuantity1 = orderDao.FindBagQuantity(Convert.ToInt32(inRow["PACKNO"].ToString()));
+                                        orderDao.InsertPackExport(inRow, 1, CustomerSumQuantity1, BagSumQuantity1);
+                                    }
+                                }
+                                if (ExportTable2.Rows.Count > 0 && !IsPackNoUpload2)
+                                {
+                                    foreach (DataRow inRow2 in ExportTable2.Rows)
+                                    {
+                                        int CustomerSumQuantity2 = orderDao.FindCustomerQuantity(Convert.ToInt32(inRow2["PACKNO"].ToString()));
+                                        int BagSumQuantity2 = orderDao.FindBagQuantity(Convert.ToInt32(inRow2["PACKNO"].ToString()));
+                                        orderDao.InsertPackExport(inRow2, 2, CustomerSumQuantity2, BagSumQuantity2);
+                                    }
+                                }
+                                pm.Commit();
+                                WriteToService("SortPLC", "ExportPackNoWrite", ExportPackNo);
+                            }
                         }
                     }
                 }

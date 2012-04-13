@@ -661,13 +661,20 @@ namespace THOK.AS.Sorting.Dao
 
         public DataTable packOrderToExport(int packNo)
         {
-            string sql = @"SELECT CONVERT(NVARCHAR(10), A.ORDERDATE, 120)AS ORDERDATE,A.BATCHNO,A.LINECODE,
-                                A.SORTNO,A.ORDERID,B.PACKNO,A.ROUTECODE,A.ROUTENAME,A.CUSTOMERCODE,A.CUSTOMERNAME,A.ADDRESS AS CUSTOMERADDRESS ,A.ORDERNO,
-                                B.CIGARETTECODE,B.CIGARETTENAME,SUM(B.QUANTITY)AS QUANTITY,B.CHANNELGROUP,B.CHANNELCODE
-                             FROM dbo.AS_SC_PALLETMASTER  A LEFT JOIN dbo.AS_SC_ORDER B ON A.SORTNO=B.SORTNO WHERE B.PACKNO={0}
-                             GROUP BY A.ORDERDATE,A.BATCHNO,A.LINECODE,A.SORTNO,A.ORDERID,B.PACKNO,A.ROUTECODE,A.ROUTENAME,A.CUSTOMERCODE,
-                                A.CUSTOMERNAME,A.ADDRESS,A.ORDERNO,B.CIGARETTECODE,B.CIGARETTENAME,B.CHANNELGROUP,B.CHANNELCODE 
-                                ORDER BY B.CHANNELGROUP DESC,B.CHANNELCODE ASC";
+            string sql = @"SELECT CONVERT(NVARCHAR(10), A.ORDERDATE, 120)AS ORDERDATE,A.BATCHNO,A.LINECODE,A.SORTNO,
+                                A.ORDERID,B.PACKNO,A.ROUTECODE,A.ROUTENAME,A.CUSTOMERCODE,A.CUSTOMERNAME,
+                                A.ADDRESS AS CUSTOMERADDRESS ,A.ORDERNO,
+                                B.CIGARETTECODE,B.CIGARETTENAME,SUM(B.QUANTITY)AS QUANTITY,
+                                B.CHANNELGROUP,B.CHANNELCODE
+                            FROM AS_SC_PALLETMASTER  A 
+                            LEFT JOIN AS_SC_ORDER B ON A.SORTNO=B.SORTNO 
+                            WHERE B.PACKNO={0}
+                            GROUP BY A.ORDERDATE,A.BATCHNO,A.LINECODE,A.SORTNO,
+                                A.ORDERID,B.PACKNO,A.ROUTECODE,A.ROUTENAME,A.CUSTOMERCODE,A.CUSTOMERNAME,
+                                A.ADDRESS,A.ORDERNO,
+                                B.CIGARETTECODE,B.CIGARETTENAME,
+                                B.CHANNELGROUP,B.CHANNELCODE 
+                            ORDER BY B.CHANNELGROUP DESC,B.CHANNELCODE ASC";
             return ExecuteQuery(string.Format(sql, packNo)).Tables[0];
         }
 
