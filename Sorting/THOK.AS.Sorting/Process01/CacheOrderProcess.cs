@@ -72,7 +72,7 @@ namespace THOK.AS.Sorting.Process
                         parameter.Add("PackerTwoSortNo", sortNoesPacker2[0]);
                         parameter.Add("PackerTwoChannelGroup", sortNoesPacker2[1]);
 
-                        messageUtil.SendToExport(parameter);
+                        //messageUtil.SendToExport(parameter);
                     }
                 }
 

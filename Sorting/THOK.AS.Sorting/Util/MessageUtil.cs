@@ -7,8 +7,10 @@ namespace THOK.AS.Sorting.Util
 {
     public class MessageUtil
     {
-        private string exportIP = "";
-        private int exportPort = 0;
+        private string exportIP1 = "";
+        private int exportPort1 = 0;
+        private string exportIP2 = "";
+        private int exportPort2 = 0;
         private string supplyIP = "";
         private int supplyPort = 0;
         private string sortLedIP = "";
@@ -18,8 +20,10 @@ namespace THOK.AS.Sorting.Util
 
         public MessageUtil(THOK.MCP.Collection.AttributeCollection parameters)
         {
-            exportIP = parameters["ExportIP"].ToString();
-            exportPort = Convert.ToInt32(parameters["ExportPort"]);
+            exportIP1 = parameters["ExportIP1"].ToString();
+            exportPort1 = Convert.ToInt32(parameters["ExportPort1"]);
+            exportIP2 = parameters["ExportIP2"].ToString();
+            exportPort2 = Convert.ToInt32(parameters["ExportPort2"]);
             supplyIP = parameters["SupplyIP"].ToString();
             supplyPort = Convert.ToInt32(parameters["SupplyPort"]);
             sortLedIP = parameters["SortLedIP"].ToString();
@@ -27,17 +31,27 @@ namespace THOK.AS.Sorting.Util
 
             lineCode = parameters["LineCode"].ToString();
         }
-        //给出口终端发送信息！
-        public void SendToExport(string sortNo, string channelGroup)
+
+        //给1号出口终端发送包号
+        public void SendToExport1(string packNo)
         {
-            THOK.UDP.Client export = new THOK.UDP.Client(exportIP, exportPort);
-            THOK.UDP.Util.MessageGenerator generator = new THOK.UDP.Util.MessageGenerator("SORTNO", "Sorting");
-            generator.AddParameter("SORTNO", sortNo);
-            generator.AddParameter("ChannelGroup", channelGroup == "A" ? "1" : "2");
+            THOK.UDP.Client export = new THOK.UDP.Client(exportIP1, exportPort1);
+            THOK.UDP.Util.MessageGenerator generator = new THOK.UDP.Util.MessageGenerator("PACKNO", "Sorting");
+            generator.AddParameter("PACKNO", packNo);
             export.Send(generator.GetMessage());
         }
+
+        //给2号出口终端发送包号
+        public void SendToExport2(string packNo)
+        {
+            THOK.UDP.Client export = new THOK.UDP.Client(exportIP2, exportPort2);
+            THOK.UDP.Util.MessageGenerator generator = new THOK.UDP.Util.MessageGenerator("PACKNO", "Sorting");
+            generator.AddParameter("PACKNO", packNo);
+            export.Send(generator.GetMessage());
+        }
+
         //给补货系统发送信息
-        public void SendToSupply(string orderDate,string batchNo,string sortNo, string channelGroup)
+        public void SendToSupply(string orderDate, string batchNo, string sortNo, string channelGroup)
         {
             THOK.UDP.Client client = new THOK.UDP.Client(supplyIP, supplyPort);
             THOK.UDP.Util.MessageGenerator mg = new THOK.UDP.Util.MessageGenerator("SupplyRequest", "Sorting");
@@ -45,7 +59,7 @@ namespace THOK.AS.Sorting.Util
             mg.AddParameter("BatchNo", batchNo);
             mg.AddParameter("LineCode", lineCode);
             mg.AddParameter("SortNo", sortNo);
-            mg.AddParameter("ChannelGroup", channelGroup == "A"?"1":"2");
+            mg.AddParameter("ChannelGroup", channelGroup == "A" ? "1" : "2");
             client.Send(mg.GetMessage());
         }
         public void SendToSortLed(string sortNo, RefreshData refreshData)
@@ -68,10 +82,21 @@ namespace THOK.AS.Sorting.Util
             client.Send(mg.GetMessage());
         }
 
-        internal void SendToExport(Dictionary<string, int> parameter)
+        internal void SendToExport1(Dictionary<string, int> parameter)
         {
-            THOK.UDP.Client export = new THOK.UDP.Client(exportIP, exportPort);
-            THOK.UDP.Util.MessageGenerator generator = new THOK.UDP.Util.MessageGenerator("SORTNO", "Sorting");
+            THOK.UDP.Client export = new THOK.UDP.Client(exportIP1, exportPort1);
+            THOK.UDP.Util.MessageGenerator generator = new THOK.UDP.Util.MessageGenerator("PACKNO", "Sorting");
+
+            foreach (string key in parameter.Keys)
+            {
+                generator.AddParameter(key, parameter[key].ToString());
+            }
+            export.Send(generator.GetMessage());
+        }
+        internal void SendToExport2(Dictionary<string, int> parameter)
+        {
+            THOK.UDP.Client export = new THOK.UDP.Client(exportIP2, exportPort2);
+            THOK.UDP.Util.MessageGenerator generator = new THOK.UDP.Util.MessageGenerator("PACKNO", "Sorting");
 
             foreach (string key in parameter.Keys)
             {

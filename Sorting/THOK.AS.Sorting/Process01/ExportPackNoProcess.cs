@@ -86,6 +86,8 @@ namespace THOK.AS.Sorting.Process
                                         int BagSumQuantity1 = orderDao.FindBagQuantity(Convert.ToInt32(inRow["PACKNO"].ToString()));
                                         orderDao.InsertPackExport(inRow, 1, CustomerSumQuantity1, BagSumQuantity1);
                                     }
+                                    string packNo = ExportPackNo1.ToString();
+                                    messageUtil.SendToExport1(packNo);
                                 }
                                 if (ExportTable2.Rows.Count > 0 && !IsPackNoUpload2)
                                 {
@@ -95,6 +97,8 @@ namespace THOK.AS.Sorting.Process
                                         int BagSumQuantity2 = orderDao.FindBagQuantity(Convert.ToInt32(inRow2["PACKNO"].ToString()));
                                         orderDao.InsertPackExport(inRow2, 2, CustomerSumQuantity2, BagSumQuantity2);
                                     }
+                                    string packNo = ExportPackNo1.ToString();
+                                    messageUtil.SendToExport2(packNo);
                                 }
                                 pm.Commit();
                                 WriteToService("SortPLC", "ExportPackNoWrite", ExportPackNo);
