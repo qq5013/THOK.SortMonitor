@@ -49,8 +49,10 @@ namespace THOK.AS.Sorting.View
             //读取Context配置文件参数
             ConfigUtil configUtil = new ConfigUtil();
             attributes = configUtil.GetAttribute();
-            parameter.ExportIP = attributes["ExportIP"];
-            parameter.ExportPort = attributes["ExportPort"];
+            parameter.ExportIP1 = attributes["ExportIP1"];
+            parameter.ExportPort1 = attributes["ExportPort1"];
+            parameter.ExportIP2 = attributes["ExportIP2"];
+            parameter.ExportPort2 = attributes["ExportPort2"];
             parameter.LineCode = attributes["LineCode"];
             parameter.SupplyIP = attributes["SupplyIP"];
             parameter.SupplyPort = attributes["SupplyPort"];
@@ -93,8 +95,10 @@ namespace THOK.AS.Sorting.View
                 stockConfig.Save();
 
                 //保存Context参数
-                attributes["ExportIP"] = parameter.ExportIP;
-                attributes["ExportPort"] = parameter.ExportPort;
+                attributes["ExportIP1"] = parameter.ExportIP1;
+                attributes["ExportPort1"] = parameter.ExportPort1;
+                attributes["ExportIP2"] = parameter.ExportIP2;
+                attributes["ExportPort2"] = parameter.ExportPort2;
                 attributes["LineCode"] = parameter.LineCode;
                 attributes["SupplyIP"] = parameter.SupplyIP;
                 attributes["SupplyPort"] = parameter.SupplyPort;

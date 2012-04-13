@@ -3,8 +3,10 @@
   <LogLevel>DEBUG</LogLevel>
   <Attributes>
     <Attribute Name="LineCode" Value="01" />
-    <Attribute Name="ExportIP" Value="192.168.1.47" />
-    <Attribute Name="ExportPort" Value="5000" />
+    <Attribute Name="ExportIP1" Value="192.168.1.38" />
+    <Attribute Name="ExportPort1" Value="4000" />
+    <Attribute Name="ExportIP2" Value="192.168.1.39" />
+    <Attribute Name="ExportPort2" Value="5000" />
     <Attribute Name="SupplyIP" Value="192.168.1.21" />
     <Attribute Name="SupplyPort" Value="7000" />
     <Attribute Name="SortLedIP" Value="192.168.1.44" />
