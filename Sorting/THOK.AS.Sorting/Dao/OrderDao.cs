@@ -669,6 +669,8 @@ namespace THOK.AS.Sorting.Dao
                             FROM AS_SC_PALLETMASTER  A 
                             LEFT JOIN AS_SC_ORDER B ON A.SORTNO=B.SORTNO 
                             WHERE B.PACKNO={0}
+								AND B.PACKNO NOT IN (SELECT PACKNO FROM AS_SC_EXPORTPACK1)
+								AND B.PACKNO NOT IN (SELECT PACKNO FROM AS_SC_EXPORTPACK2)
                             GROUP BY A.ORDERDATE,A.BATCHNO,A.LINECODE,A.SORTNO,
                                 A.ORDERID,B.PACKNO,A.ROUTECODE,A.ROUTENAME,A.CUSTOMERCODE,A.CUSTOMERNAME,
                                 A.ADDRESS,A.ORDERNO,
@@ -678,9 +680,10 @@ namespace THOK.AS.Sorting.Dao
             return ExecuteQuery(string.Format(sql, packNo)).Tables[0];
         }
 
+        private static string strsql = "";
         public void InsertPackExport(DataRow InRow,int exportNo,int customerSumQuantity,int bagSumQuantity)
         {
-            SqlCreate sql = new SqlCreate(string.Format("AS_SC_EXPORTPACK{0}",exportNo), SqlType.INSERT);
+            SqlCreate sql = new SqlCreate(string.Format("AS_SC_EXPORTPACK{0}", exportNo), SqlType.INSERT);
             sql.AppendQuote("ORDERDATE", InRow["ORDERDATE"]);
             sql.Append("BATCHNO", InRow["BATCHNO"]);
             sql.AppendQuote("LINECODE", InRow["LINECODE"]);
@@ -694,11 +697,26 @@ namespace THOK.AS.Sorting.Dao
             sql.AppendQuote("CUSTOMERADDRESS", InRow["CUSTOMERADDRESS"]);
             sql.AppendQuote("CIGARETTECODE", InRow["CIGARETTECODE"]);
             sql.AppendQuote("CIGARETTENAME", InRow["CIGARETTENAME"]);
-            sql.AppendQuote("BAGQUANTITY",bagSumQuantity);
+            sql.AppendQuote("BAGQUANTITY", bagSumQuantity);
             sql.AppendQuote("TQUANTITY", customerSumQuantity);
             sql.AppendQuote("PACKNO", InRow["PACKNO"]);
             sql.AppendQuote("QUANTITY", InRow["QUANTITY"]);
+            if (strsql == sql.GetSQL())
+            {
+                THOK.MCP.Logger.Info(sql.GetSQL());
+            }
+
+            strsql = sql.GetSQL();
             ExecuteNonQuery(sql.GetSQL());
+//            string sql = @"INSERT INTO dbo.AS_SC_EXPORTPACK{0}(ORDERDATE,BATCHNO,LINECODE,
+//                            SORTNO,ORDERID,ROUTECODE,ROUTENAME,CUSTOMERCODE,CUSTOMERNAME,
+//                                CUSTOMERSORTNO,CUSTOMERADDRESS,CIGARETTECODE,CIGARETTENAME,BAGQUANTITY,
+//                                TQUANTITY,PACKNO,QUANTITY) VALUES ('{1}','{2}','{3}','{4}','{5}',
+//                                   '{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}')";
+//            ExecuteQuery(string.Format(sql, exportNo, InRow["ORDERDATE"], InRow["BATCHNO"], InRow["LINECODE"], InRow["SORTNO"],
+//                InRow["ORDERID"], InRow["ROUTECODE"], InRow["ROUTENAME"], InRow["CUSTOMERCODE"], InRow["CUSTOMERNAME"],
+//                InRow["ORDERNO"], InRow["CUSTOMERADDRESS"], InRow["CIGARETTECODE"], InRow["CIGARETTENAME"],
+//                bagSumQuantity, customerSumQuantity, InRow["PACKNO"], InRow["QUANTITY"]));
         }
         /// <summary>
         /// 客户卷烟量
@@ -731,5 +749,16 @@ namespace THOK.AS.Sorting.Dao
             return ExecuteQuery(string.Format(sql,exportNo)).Tables[0];
         }
 
+        /// <summary>
+        /// 查找烟包的数据行
+        /// </summary>
+        /// <param name="exportNo">出口终端号</param>
+        /// <param name="packNo">包号</param>
+        /// <returns></returns>
+        public int FindCountDataByPackNo(int exportNo,int packNo)
+        {
+            string sql = "SELECT COUNT(*) FROM dbo.AS_SC_EXPORTPACK{0} WHERE PACKNO={1}";
+            return Convert.ToInt32(ExecuteQuery(string.Format(sql,exportNo, packNo)).Tables[0].Rows[0][0]);
+        }
     }
 }
