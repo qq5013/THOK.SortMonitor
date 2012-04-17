@@ -703,6 +703,7 @@ namespace THOK.AS.Sorting.Dao
             sql.AppendQuote("QUANTITY", InRow["QUANTITY"]);
             if (strsql == sql.GetSQL())
             {
+                THOK.MCP.Logger.Info(System.Threading.Thread.CurrentThread.Name);
                 THOK.MCP.Logger.Info(sql.GetSQL());
             }
 

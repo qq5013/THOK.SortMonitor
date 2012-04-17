@@ -51,11 +51,13 @@ namespace THOK.AS.Sorting.Process
                 return false;
             }
         }
+
+        private static string processlock = "";
         protected override void StateChanged(StateItem stateItem, IProcessDispatcher dispatcher)
         {
             try
             {
-                lock (this)
+                lock (processlock)
                 {
                     int[] ExportPackNo = new int[2];
                     object stateExportPackNo = Context.Services["SortPLC"].Read("ExportPackNoRead");
