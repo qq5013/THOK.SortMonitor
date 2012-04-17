@@ -681,7 +681,7 @@ namespace THOK.AS.Sorting.Dao
         }
 
         private static string strsql = "";
-        public void InsertPackExport(DataRow InRow,int exportNo,int customerSumQuantity,int bagSumQuantity)
+        public void   InsertPackExport(DataRow InRow,int exportNo,int customerSumQuantity,int bagSumQuantity)
         {
             SqlCreate sql = new SqlCreate(string.Format("AS_SC_EXPORTPACK{0}", exportNo), SqlType.INSERT);
             sql.AppendQuote("ORDERDATE", InRow["ORDERDATE"]);

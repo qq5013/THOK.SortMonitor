@@ -77,7 +77,7 @@ namespace THOK.AS.Sorting.Process
                                 DataTable ExportTable1 = new DataTable();
                                 ExportTable1 = orderDao.packOrderToExport(ExportPackNo1);
                                 DataTable ExportTable2 = new DataTable();
-                                ExportTable2 = orderDao.packOrderToExport(ExportPackNo2);
+                                ExportTable2 = orderDao.packOrderToE xport(ExportPackNo2);
                                 bool IsPackNoUpload1 = IsPackNoUpload(ExportPackNo1);
                                 bool IsPackNoUpload2 = IsPackNoUpload(ExportPackNo2);
                                 if (ExportTable1.Rows.Count > 0 && !IsPackNoUpload1 && orderDao.FindCountDataByPackNo(1, ExportPackNo1) == 0)
@@ -128,6 +128,7 @@ namespace THOK.AS.Sorting.Process
             }
             catch (Exception e)
             {
+                THOK.MCP.Logger.Info(System.Threading.Thread.CurrentThread.Name);
                 Logger.Error("包号获取传输错误！原因：" + e.Message);
             }
         }
