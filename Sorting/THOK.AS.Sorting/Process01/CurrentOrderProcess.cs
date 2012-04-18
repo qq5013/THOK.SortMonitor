@@ -69,6 +69,14 @@ namespace THOK.AS.Sorting.Process
                     }
 
                     //»»Ïß
+                    foreach (string maxSortNo in routeMaxSortNoList)
+                    {
+                        if (Convert.ToInt32(maxSortNo) <= Convert.ToInt32(sortNo))
+                        {
+                            sortNo = maxSortNo;
+                        }
+                    }
+
                     if (routeMaxSortNoList.Contains(sortNo))
                     {
                         WriteToService("SortPLC", "RouteChannageTag", 1);
