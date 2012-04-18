@@ -57,7 +57,7 @@ namespace THOK.AS.Sorting.Process
         {
             try
             {
-                lock (this)
+                lock (processlock)
                 {
                     int[] ExportPackNo = new int[2];
                     object stateExportPackNo = Context.Services["SortPLC"].Read("ExportPackNoRead");
