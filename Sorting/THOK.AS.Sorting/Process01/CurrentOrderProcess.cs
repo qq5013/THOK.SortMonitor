@@ -59,7 +59,20 @@ namespace THOK.AS.Sorting.Process
                 if (o != null)
                 {
                     string sortNo = o.ToString();
-                    if (sortNo == "0")
+
+                    bool isInit = true;
+                    List<string> tmpRouteMaxSortNoList = new List<string>();
+                    foreach (string maxSortNo in routeMaxSortNoList)
+                    {
+                        if (Convert.ToInt32(maxSortNo) > Convert.ToInt32( sortNo))
+                        {
+                            continue;
+                        }
+                        isInit = false;
+                        tmpRouteMaxSortNoList.Add(maxSortNo);
+                    }
+
+                    if ((isInit && sortNo != "0")|| sortNo == "-1")
                     {
                         using (PersistentManager pm = new PersistentManager())
                         {
@@ -81,6 +94,14 @@ namespace THOK.AS.Sorting.Process
                     {
                         WriteToService("SortPLC", "RouteChannageTag", 1);
                         routeMaxSortNoList.Remove(sortNo);
+                    }
+
+                    foreach (string maxSortNo in tmpRouteMaxSortNoList)
+                    {
+                        if (routeMaxSortNoList.Contains(maxSortNo))
+                        {
+                            routeMaxSortNoList.Remove(maxSortNo);
+                        }
                     }
 
                     //ˢ�·ּ�״̬                    

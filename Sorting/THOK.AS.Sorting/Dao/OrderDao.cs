@@ -11,7 +11,7 @@ namespace THOK.AS.Sorting.Dao
         public List<string> FindRouteMaxSortNoList()
         {
             List<string> routeMaxSortNoList = new List<string>();
-            string sql = "SELECT MAX(SORTNO) AS ROUTE_MAX_SORTNO FROM AS_SC_PALLETMASTER GROUP BY ROUTECODE";
+            string sql = "SELECT MAX(SORTNO) AS ROUTE_MAX_SORTNO FROM AS_SC_PALLETMASTER  WHERE FINISHEDTIME IS NULL OR FINISHEDTIME1 IS NULL GROUP BY ROUTECODE";
             DataTable table = ExecuteQuery(sql).Tables[0];
             foreach (DataRow row in table.Rows)
             {
@@ -610,14 +610,19 @@ namespace THOK.AS.Sorting.Dao
             }
         }
 
-        public void DeletePackData()
+        /// <summary>
+        /// 删除贴标机数据
+        /// </summary>
+        public void DeleteExportData()
         {
             ExecuteQuery("TRUNCATE TABLE AS_SORT_PACKORDER");
             ExecuteQuery("TRUNCATE TABLE AS_SC_EXPORTPACK1");
             ExecuteQuery("TRUNCATE TABLE AS_SC_EXPORTPACK2");
             ExecuteQuery("TRUNCATE TABLE AS_SC_PACKTEAR1");
             ExecuteQuery("TRUNCATE TABLE AS_SC_PACKTEAR2");
-
+        }
+        public void DeletePackData()
+        {
             ExecuteQuery("UPDATE AS_SORT_PACKORDERSTATUS SET STATUS = '0'");
         }
 
