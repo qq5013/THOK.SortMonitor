@@ -39,7 +39,7 @@ namespace THOK.AS.Sorting.Process
         {
             try
             {
-                WriteToProcess("CacheOrderProcess", "CacheOrderSortNoes", null);
+                //WriteToProcess("CacheOrderProcess", "CacheOrderSortNoes", null);
                 
                 string channelGroup = "";
 
@@ -59,7 +59,20 @@ namespace THOK.AS.Sorting.Process
                 if (o != null)
                 {
                     string sortNo = o.ToString();
-                    if (sortNo == "0")
+
+                    bool isInit = true;
+                    List<string> tmpRouteMaxSortNoList = new List<string>();
+                    foreach (string maxSortNo in routeMaxSortNoList)
+                    {
+                        if (Convert.ToInt32(maxSortNo) > Convert.ToInt32( sortNo))
+                        {
+                            continue;
+                        }
+                        isInit = false;
+                        tmpRouteMaxSortNoList.Add(maxSortNo);
+                    }
+
+                    if ((isInit && sortNo != "0")|| sortNo == "-1")
                     {
                         using (PersistentManager pm = new PersistentManager())
                         {
@@ -69,10 +82,26 @@ namespace THOK.AS.Sorting.Process
                     }
 
                     //换线
+                    foreach (string maxSortNo in routeMaxSortNoList)
+                    {
+                        if (Convert.ToInt32(maxSortNo) <= Convert.ToInt32(sortNo))
+                        {
+                            sortNo = maxSortNo;
+                        }
+                    }
+
                     if (routeMaxSortNoList.Contains(sortNo))
                     {
                         WriteToService("SortPLC", "RouteChannageTag", 1);
                         routeMaxSortNoList.Remove(sortNo);
+                    }
+
+                    foreach (string maxSortNo in tmpRouteMaxSortNoList)
+                    {
+                        if (routeMaxSortNoList.Contains(maxSortNo))
+                        {
+                            routeMaxSortNoList.Remove(maxSortNo);
+                        }
                     }
 
                     //刷新分拣状态                    
@@ -124,7 +153,7 @@ namespace THOK.AS.Sorting.Process
             }
             catch (Exception e)
             {
-                Logger.Error(string.Format("更新分拣信息处理失败！原因：{0}！ {1}", e.Message, "CurrentOrderProcess.cs 行号：125！"));
+                Logger.Error(string.Format("更新分拣信息处理失败！原因：{0}！ {1}", e.Message, "CurrentOrderProcess.cs 行号：127！"));
             }
         }
     }

@@ -122,22 +122,40 @@ namespace THOK.AS.Sorting
             set { stockPwassword = value; }
         }
 
-        private string exportPort;
+        private string exportPort1;
 
-        [CategoryAttribute("出口终端通信参数"), DescriptionAttribute("出口终端监听端口"), Chinese("监听端口")]
-        public string ExportPort
+        [CategoryAttribute("出口终端通信参数"), DescriptionAttribute("1号出口终端监听端口"), Chinese("1号监听端口")]
+        public string ExportPort1
         {
-            get { return exportPort; }
-            set { exportPort = value; }
+            get { return exportPort1; }
+            set { exportPort1 = value; }
         }
 
-        private string exportIP;
+        private string exportIP1;
 
-        [CategoryAttribute("出口终端通信参数"), DescriptionAttribute("出口终端IP地址"), Chinese("IP地址")]
-        public string ExportIP
+        [CategoryAttribute("出口终端通信参数"), DescriptionAttribute("1号出口终端IP地址"), Chinese("1号IP地址")]
+        public string ExportIP1
         {
-            get { return exportIP; }
-            set { exportIP = value; }
+            get { return exportIP1; }
+            set { exportIP1 = value; }
+        }
+
+        private string exportPort2;
+
+        [CategoryAttribute("出口终端通信参数"), DescriptionAttribute("2号出口终端监听端口"), Chinese("2号监听端口")]
+        public string ExportPort2
+        {
+            get { return exportPort2; }
+            set { exportPort2 = value; }
+        }
+
+        private string exportIP2;
+
+        [CategoryAttribute("出口终端通信参数"), DescriptionAttribute("2号出口终端IP地址"), Chinese("2号IP地址")]
+        public string ExportIP2
+        {
+            get { return exportIP2; }
+            set { exportIP2 = value; }
         }
 
         private string supplyIP;

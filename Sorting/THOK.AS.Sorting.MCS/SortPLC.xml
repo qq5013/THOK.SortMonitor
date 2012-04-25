@@ -1,39 +1,39 @@
 ﻿<?xml version='1.0' ?>
 <Config>
   <OPCServer ConnectionString="OPC.SimaticNET">
-    <OPCGroup GroupName="DefaultGroup" GroupString="S7:[AYFJ-01]" UpdateRate="250">
-      <OPCItem ItemName="RestartData" ClientHandler="1" OPCItemName="DB9,INT172,1" ItemType="WRITE"/>
-      <OPCItem ItemName="RouteChannageTag" ClientHandler="2" OPCItemName="DB9,INT200,1"  ItemType="WRITE"/>
-      <OPCItem ItemName="SortStatus" ClientHandler="3" OPCItemName="DB2,INT8,1"  ItemType="READ" />
-
-
-      <OPCItem ItemName="OrderRequestA" ClientHandler="4" OPCItemName="DB2,INT0,1" ItemType="READ"/>
-      <OPCItem ItemName="OrderDataA" ClientHandler="5" OPCItemName="DB10,INT0,97"  ItemType="WRITE"/>
-      <OPCItem ItemName="MissOrderA" ClientHandler="6" OPCItemName="DB9,INT176,1"  ItemType="READ"/>
-      <OPCItem ItemName="UpdateMissOrderA" ClientHandler="7" OPCItemName="DB9,INT178,1" ItemType="WRITE"/>
-      <OPCItem ItemName="CurrentOrderA" ClientHandler="8" OPCItemName="DB2,INT2,1" ItemType="READ"/>
-      <OPCItem ItemName="CheckA" ClientHandler="9" OPCItemName="DB7,INT0,40" ItemType="READ" IsActive="false"/>
-      <OPCItem ItemName="EmptyErrA" ClientHandler="10" OPCItemName="DB9,INT174,1" ItemType="READ"/>
-      <OPCItem ItemName="SortingOrderA" ClientHandler="11" OPCItemName="DB3,INT0,1"  ItemType="READ" />
-      <OPCItem ItemName="ChannelDataA" ClientHandler="12" OPCItemName="DB9,INT0,40"  ItemType="WRITE"/>
-      <OPCItem ItemName="ChannelChangeDataA" ClientHandler="13" OPCItemName="DB9,INT226,3" ItemType="WRITE"/>
-
-
-      <OPCItem ItemName="OrderRequestB" ClientHandler="14" OPCItemName="DB2,INT4,1" ItemType="READ"/>
-      <OPCItem ItemName="OrderDataB" ClientHandler="15" OPCItemName="DB20,INT0,97"  ItemType="WRITE"/>
-      <OPCItem ItemName="MissOrderB" ClientHandler="16" OPCItemName="DB59,INT176,1"  ItemType="READ"/>
-      <OPCItem ItemName="UpdateMissOrderB" ClientHandler="17" OPCItemName="DB59,INT178,1"  ItemType="WRITE"/>
-      <OPCItem ItemName="CurrentOrderB" ClientHandler="18" OPCItemName="DB2,INT6,1" ItemType="READ"/>
-      <OPCItem ItemName="CheckB" ClientHandler="19" OPCItemName="DB7,INT80,40" ItemType="READ" IsActive="false"/>
-      <OPCItem ItemName="EmptyErrB" ClientHandler="20" OPCItemName="DB59,INT174,1" ItemType="READ"/>
-      <OPCItem ItemName="SortingOrderB" ClientHandler="21" OPCItemName="DB3,INT2,1"  ItemType="READ" />
-      <OPCItem ItemName="ChannelDataB" ClientHandler="22" OPCItemName="DB59,INT0,40" ItemType="WRITE"/>
-      <OPCItem ItemName="ChannelChangeDataB" ClientHandler="23" OPCItemName="DB59,INT226,3" ItemType="WRITE"/>
-
-      <OPCItem ItemName="CacheOrderSortNoes" ClientHandler="24" OPCItemName="DB2,INT20,17" ItemType="READ" />
-      <OPCItem ItemName="SortRunStatus" ClientHandler="25" OPCItemName="DB2,INT14,1" ItemType="READ" />
-
-
-    </OPCGroup>
-  </OPCServer>
+    <OPCGroup GroupName="DefaultGroup" GroupString="S7:[NCFJ-01]" UpdateRate="250">
+		<OPCItem ItemName="OrderRequestA" ClientHandler="1" OPCItemName="DB2,INT0,1" ItemType="READ"/>
+		<OPCItem ItemName="CurrentOrderA" ClientHandler="2" OPCItemName="DB2,INT2,1" ItemType="READ"/>
+		<OPCItem ItemName="MissOrderA" ClientHandler="3" OPCItemName="DB2,INT4,1"  ItemType="READ"/>
+		<OPCItem ItemName="EmptyErrA" ClientHandler="4" OPCItemName="DB2,INT6,1" ItemType="READ"/>
+		<OPCItem ItemName="SortingOrderA" ClientHandler="5" OPCItemName="DB2,INT8,1"  ItemType="READ" />
+		<OPCItem ItemName="CacheOrderSortNoesA" ClientHandler="6" OPCItemName="DB2,INT10,3" ItemType="READ" />
+		<OPCItem ItemName="UpdateMissOrderA" ClientHandler="7" OPCItemName="DB2,INT16,1" ItemType="WRITE"/>
+		<OPCItem ItemName="ChannelChangeDataA" ClientHandler="8" OPCItemName="DB2,INT18,3" ItemType="WRITE"/>
+		<OPCItem ItemName="CheckA" ClientHandler="9" OPCItemName="DB7,INT0,42" ItemType="READ" IsActive="false"/>
+		<OPCItem ItemName="ChannelDataA" ClientHandler="10" OPCItemName="DB8,INT0,42"  ItemType="WRITE"/>
+		<OPCItem ItemName="OrderDataA" ClientHandler="11" OPCItemName="DB10,INT0,97"  ItemType="WRITE"/>
+		<OPCItem ItemName="OrderRequestB" ClientHandler="12" OPCItemName="DB22,INT0,1" ItemType="READ"/>
+		<OPCItem ItemName="CurrentOrderB" ClientHandler="13" OPCItemName="DB22,INT2,1" ItemType="READ"/>
+		<OPCItem ItemName="MissOrderB" ClientHandler="14" OPCItemName="DB22,INT4,1"  ItemType="READ"/>
+		<OPCItem ItemName="EmptyErrB" ClientHandler="15" OPCItemName="DB22,INT6,1" ItemType="READ"/>
+		<OPCItem ItemName="SortingOrderB" ClientHandler="16" OPCItemName="DB22,INT8,1"  ItemType="READ" />
+		<OPCItem ItemName="CacheOrderSortNoesB" ClientHandler="17" OPCItemName="DB22,INT10,3" ItemType="READ" />
+		<OPCItem ItemName="UpdateMissOrderB" ClientHandler="18" OPCItemName="DB22,INT16,1"  ItemType="WRITE"/>
+		<OPCItem ItemName="ChannelChangeDataB" ClientHandler="19" OPCItemName="DB22,INT18,3" ItemType="WRITE"/>
+		<OPCItem ItemName="CheckB" ClientHandler="20" OPCItemName="DB27,INT0,42" ItemType="READ" IsActive="false"/>
+		<OPCItem ItemName="ChannelDataB" ClientHandler="21" OPCItemName="DB28,INT0,42" ItemType="WRITE"/>
+		<OPCItem ItemName="OrderDataB" ClientHandler="22" OPCItemName="DB30,INT0,97"  ItemType="WRITE"/>
+		<OPCItem ItemName="RestartData" ClientHandler="23" OPCItemName="DB100,INT0,1" ItemType="WRITE"/>
+		<OPCItem ItemName="RouteChannageTag" ClientHandler="24" OPCItemName="DB100,INT2,1"  ItemType="WRITE"/>
+		<OPCItem ItemName="SortStatus" ClientHandler="25" OPCItemName="DB100,INT6,1"  ItemType="READ" />
+		<OPCItem ItemName="SortRunStatus" ClientHandler="26" OPCItemName="DB100,INT8,1" ItemType="READ" />
+		<OPCItem ItemName="CacheOrderSortNoesBarCode1" ClientHandler="27" OPCItemName="DB100,INT10,2" ItemType="READ" />
+		<OPCItem ItemName="CacheOrderSortNoesBarCode2" ClientHandler="28" OPCItemName="DB100,INT14,2" ItemType="READ" />
+		<OPCItem ItemName="CacheOrderSortNoesPacker1" ClientHandler="29" OPCItemName="DB100,INT22,2" ItemType="READ" />
+		<OPCItem ItemName="CacheOrderSortNoesPacker2" ClientHandler="30" OPCItemName="DB100,INT26,2" ItemType="READ" />
+		<OPCItem ItemName="ExportPackNoRead" ClientHandler="31" OPCItemName="DB100,INT30,2" ItemType="READ" />
+		<OPCItem ItemName="ExportPackNoWrite" ClientHandler="32" OPCItemName="DB100,INT34,2" ItemType="WRITE" />
+	</OPCGroup>
+</OPCServer>
 </Config>

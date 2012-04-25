@@ -62,14 +62,14 @@ namespace THOK.AS.Sorting.View
                 if (btnDownload.Enabled == true)
                 {
                     UploadDataDal udal=new UploadDataDal();
-                    DataTable sortTable =udal.GetSortUploadData("1");
-                    if (sortTable==null||sortTable.Rows.Count==0)
-                    {
+                    //DataTable sortTable =udal.GetSortUploadData("1");
+                    //if (sortTable==null||sortTable.Rows.Count==0)
+                    //{
                         btnDownload.Enabled = false;
                         DownloadData();
                         btnDownload.Enabled = true;
-                    }else
-                        MessageBox.Show("分拣情况表数据没有上报！请确认上报数据，再下载！", "消息", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    //}else
+                    //    MessageBox.Show("分拣情况表数据没有上报！请确认上报数据，再下载！", "消息", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }            
         }
@@ -148,6 +148,8 @@ namespace THOK.AS.Sorting.View
                             string orderDate = table.Rows[0]["ORDERDATE"].ToString();
                             string batchNo = table.Rows[0]["BATCHNO"].ToString();
 
+                            orderDao.DeleteExportData();//删除贴标机数据
+
                             Context.ProcessDispatcher.WriteToProcess("monitorView", "ProgressState", new ProgressState("下载烟道表", 5, 1));
                             table = serverDao.FindChannel(orderDate, batchNo, lineCode);
                             channelDao.InsertChannel(table);
@@ -175,8 +177,8 @@ namespace THOK.AS.Sorting.View
                             Logger.Info("数据下载完成");
                             Context.ProcessDispatcher.WriteToProcess("LEDProcess", "NewData", null);
                             Context.ProcessDispatcher.WriteToProcess("CreatePackAndPrintDataProcess", "NewData", null);
-                            Context.ProcessDispatcher.WriteToProcess("CurrentOrderProcess", "CurrentOrderA", new int[] { 0 });
-                            Context.ProcessDispatcher.WriteToProcess("CurrentOrderProcess", "CurrentOrderB", new int[] { 0 });
+                            Context.ProcessDispatcher.WriteToProcess("CurrentOrderProcess", "CurrentOrderA", new int[] { -1 });
+                            Context.ProcessDispatcher.WriteToProcess("CurrentOrderProcess", "CurrentOrderB", new int[] { -1 });
                             Context.ProcessDispatcher.WriteToProcess("monitorView", "ProgressState", new ProgressState());
                             Context.ProcessDispatcher.WriteToProcess("SortingOrderProcess", "OrderInfo", new string[] { orderDate ,batchNo });
                         }

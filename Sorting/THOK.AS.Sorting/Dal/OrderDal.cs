@@ -81,12 +81,12 @@ namespace THOK.AS.Sorting.Dal
             }
         }
 
-        public DataTable GetPackDetail(string orderId)
+        public DataTable GetPackDetail()
         {
             using (PersistentManager pm = new PersistentManager())
             {
                 OrderDao orderDao = new OrderDao();
-                return orderDao.FindPackDetail(orderId);
+                return orderDao.FindPackDetail();
             }
         }
 
@@ -128,6 +128,7 @@ namespace THOK.AS.Sorting.Dal
                 return (new DataTable());
             }
         }
+
         public DataTable GetOrderDetailForCacheOrderQuery(int channelGroup, int sortNo)
         {
             using (PersistentManager pm = new PersistentManager())

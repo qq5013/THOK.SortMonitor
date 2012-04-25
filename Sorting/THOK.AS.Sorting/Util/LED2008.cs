@@ -4,6 +4,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Collections;
 using System.Drawing;
+using EQ2008_DataStruct;
 
 namespace THOK.AS.Sorting.Util
 {
