@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using THOK.MCP;
+using System.Diagnostics;
+
 
 namespace THOK.AS.Sorting.MCS
 {
@@ -16,24 +18,8 @@ namespace THOK.AS.Sorting.MCS
         private Context context = null;
         
         public MainForm()
-        {
-            InitializeComponent();
-            try
-            {
-                Logger.OnLog += new LogEventHandler(Logger_OnLog);
-
-                context = new Context();
-                context.RegisterProcessControl(sortingStatus);
-
-                ContextInitialize initialize = new ContextInitialize();
-                initialize.InitializeContext(context);
-                context.RegisterProcessControl(monitorView);
-                context.RegisterProcessControl(buttonArea);
-            }
-            catch (Exception e)
-            {
-                Logger.Error("初始化处理失败请检查配置，原因：" + e.Message);
-            }            
+        {            
+            InitializeComponent();       
         }
 
         private void CreateDirectory(string directoryName)
@@ -101,11 +87,33 @@ namespace THOK.AS.Sorting.MCS
         private void MainForm_Load(object sender, EventArgs e)
         {
             tabLeft.DrawMode = TabDrawMode.OwnerDrawFixed;
-        }
 
+            try
+            {               
+                Logger.OnLog += new LogEventHandler(Logger_OnLog);
+                if (Init())
+                {
+                    context = new Context();
+                    context.RegisterProcessControl(sortingStatus);
+                    context.RegisterProcessControl(monitorView);
+                    context.RegisterProcessControl(buttonArea);
+
+                    ContextInitialize initialize = new ContextInitialize();
+                    initialize.InitializeContext(context);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("初始化处理失败请检查配置，原因：" + ex.Message);
+            }     
+        }
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            context.Release();
+            if (context != null)
+            {
+                context.Release();
+            }            
         }
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -113,10 +121,28 @@ namespace THOK.AS.Sorting.MCS
             if (abc == CloseReason.UserClosing)
                 e.Cancel = true;
         }
-
         private void MainForm_Resize(object sender, EventArgs e)
         {
             lblTitle.Left = (pnlTitle.Width - lblTitle.Width) / 2;
         }
+
+        #region  程序运行控制只允许一个进程运行。
+
+        string appName = "THOK.AS.Sorting.MCS";
+
+        private bool Init()
+        {
+            if (System.Diagnostics.Process.GetProcessesByName(appName).Length > 1)
+            {
+                if (MessageBox.Show("程序已启动，将自动退出本程序！", appName , MessageBoxButtons.OK).ToString() == "OK")
+                {
+                    Application.Exit();
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        #endregion
     }
 }
