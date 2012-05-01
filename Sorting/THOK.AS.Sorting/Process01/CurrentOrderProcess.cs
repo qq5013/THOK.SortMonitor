@@ -13,24 +13,17 @@ namespace THOK.AS.Sorting.Process
     public class CurrentOrderProcess: AbstractProcess
     {
         private MessageUtil messageUtil = null;
-        private List<string> routeMaxSortNoList = new List<string>();
 
         public override void Initialize(Context context)
         {
             try
             {
                 base.Initialize(context);
-
-                using (PersistentManager pm = new PersistentManager())
-                {
-                    OrderDao orderDao = new OrderDao();
-                    routeMaxSortNoList = orderDao.FindRouteMaxSortNoList();
-                }
                 messageUtil = new MessageUtil(context.Attributes);
             }
             catch (Exception e)
             {
-                Logger.Error(string.Format("CurrentOrderProcess 初始化失败！原因：{0}！ {1}", e.Message, "CurrentOrderProcess.cs 行号：33！"));
+                Logger.Error(string.Format("CurrentOrderProcess 初始化失败！原因：{0}！ {1}", e.Message, "CurrentOrderProcess.cs 行号：26！"));
             }
 
         }
@@ -38,9 +31,7 @@ namespace THOK.AS.Sorting.Process
         protected override void StateChanged(StateItem stateItem, IProcessDispatcher dispatcher)
         {
             try
-            {
-                //WriteToProcess("CacheOrderProcess", "CacheOrderSortNoes", null);
-                
+            {              
                 string channelGroup = "";
 
                 switch (stateItem.ItemName)
@@ -58,61 +49,10 @@ namespace THOK.AS.Sorting.Process
                 object o = ObjectUtil.GetObject(stateItem.State);
                 if (o != null)
                 {
-                    string sortNo = o.ToString();
-
-                    bool isInit = true;
-                    List<string> tmpRouteMaxSortNoList = new List<string>();
-                    foreach (string maxSortNo in routeMaxSortNoList)
-                    {
-                        if (Convert.ToInt32(maxSortNo) > Convert.ToInt32( sortNo))
-                        {
-                            continue;
-                        }
-                        isInit = false;
-                        tmpRouteMaxSortNoList.Add(maxSortNo);
-                    }
-
-                    if ((isInit && sortNo != "0")|| sortNo == "-1")
-                    {
-                        using (PersistentManager pm = new PersistentManager())
-                        {
-                            OrderDao orderDao = new OrderDao();
-                            routeMaxSortNoList = orderDao.FindRouteMaxSortNoList();
-                        }
-                    }
-
-                    //换线
-                    foreach (string maxSortNo in routeMaxSortNoList)
-                    {
-                        if (Convert.ToInt32(maxSortNo) <= Convert.ToInt32(sortNo))
-                        {
-                            sortNo = maxSortNo;
-                        }
-                    }
-
-                    if (routeMaxSortNoList.Contains(sortNo))
-                    {
-                        WriteToService("SortPLC", "RouteChannageTag", 1);
-                        routeMaxSortNoList.Remove(sortNo);
-                    }
-
-                    foreach (string maxSortNo in tmpRouteMaxSortNoList)
-                    {
-                        if (routeMaxSortNoList.Contains(maxSortNo))
-                        {
-                            routeMaxSortNoList.Remove(maxSortNo);
-                        }
-                    }
+                    string sortNo = o.ToString();       
 
                     //刷新分拣状态                    
                     Refresh(sortNo,channelGroup);
-
-                    //发送订单号给 分拣出口终端系统
-                    //if (Convert.ToInt32(sortNo) > 0)
-                    //{
-                    //    sortNo = Convert.ToString(Convert.ToInt32(sortNo) + 1);
-                    //    messageUtil.SendToExport(sortNo,channelGroup);
-                    //}
                 }
             }
             catch (Exception e)
@@ -153,7 +93,7 @@ namespace THOK.AS.Sorting.Process
             }
             catch (Exception e)
             {
-                Logger.Error(string.Format("更新分拣信息处理失败！原因：{0}！ {1}", e.Message, "CurrentOrderProcess.cs 行号：127！"));
+                Logger.Error(string.Format("更新分拣信息处理失败！原因：{0}！ {1}", e.Message, "CurrentOrderProcess.cs 行号：97！"));
             }
         }
     }

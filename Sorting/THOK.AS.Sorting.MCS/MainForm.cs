@@ -95,11 +95,12 @@ namespace THOK.AS.Sorting.MCS
                 {
                     context = new Context();
                     context.RegisterProcessControl(sortingStatus);
-                    context.RegisterProcessControl(monitorView);
-                    context.RegisterProcessControl(buttonArea);
 
                     ContextInitialize initialize = new ContextInitialize();
                     initialize.InitializeContext(context);
+
+                    context.RegisterProcessControl(monitorView);
+                    context.RegisterProcessControl(buttonArea);
                 }
 
             }

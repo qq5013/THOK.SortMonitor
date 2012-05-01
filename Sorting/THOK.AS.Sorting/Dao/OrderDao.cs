@@ -8,17 +8,21 @@ namespace THOK.AS.Sorting.Dao
 {
     public class OrderDao: BaseDao
     {
-        public List<string> FindRouteMaxSortNoList()
+        public List<int> FindRouteMaxPackNoList()
         {
-            List<string> routeMaxSortNoList = new List<string>();
-            string sql = "SELECT MAX(SORTNO) AS ROUTE_MAX_SORTNO FROM AS_SC_PALLETMASTER  WHERE FINISHEDTIME IS NULL OR FINISHEDTIME1 IS NULL GROUP BY ROUTECODE";
+            List<int> routeMaxPackNoList = new List<int>();
+            string sql = @"SELECT ISNULL(MAX(PACKNO),0) AS ROUTE_MAX_PACKNO,ISNULL(MAX(PACKNO1),0) AS ROUTE_MAX_PACKNO1 
+                            FROM AS_SC_PALLETMASTER  
+                            GROUP BY ROUTECODE";
             DataTable table = ExecuteQuery(sql).Tables[0];
             foreach (DataRow row in table.Rows)
             {
-                routeMaxSortNoList.Add(row["ROUTE_MAX_SORTNO"].ToString());
+                int maxPackNo = Convert.ToInt32(row["ROUTE_MAX_PACKNO"]) > Convert.ToInt32(row["ROUTE_MAX_PACKNO1"]) ? Convert.ToInt32(row["ROUTE_MAX_PACKNO"]) : Convert.ToInt32(row["ROUTE_MAX_PACKNO1"]);
+                routeMaxPackNoList.Add(maxPackNo);
             }
-            return routeMaxSortNoList;
+            return routeMaxPackNoList;
         }
+
         public DataTable FindMaster()
         {
             string sql = "SELECT ORDERDATE,BATCHNO,SORTNO, ORDERID,ROUTECODE,ROUTENAME,CUSTOMERCODE,CUSTOMERNAME, " +
@@ -697,10 +701,16 @@ namespace THOK.AS.Sorting.Dao
             return ExecuteQuery(string.Format(sql, packNo)).Tables[0];
         }
 
+        internal int GetPackOrderMaxId(int exportPackNo)
+        {
+            return Convert.ToInt32(ExecuteScalar(string.Format("SELECT ISNULL(MAX(IDENTITYNO),0) + 1 FROM AS_SC_EXPORTPACK{0}", exportPackNo)));
+        }
+
         private static string strsql = "";
-        public void   InsertPackExport(DataRow InRow,int exportNo,int customerSumQuantity,int bagSumQuantity)
+        public void   InsertPackExport(DataRow InRow,int exportNo,int customerSumQuantity,int bagSumQuantity,int packOrderMaxId)
         {
             SqlCreate sql = new SqlCreate(string.Format("AS_SC_EXPORTPACK{0}", exportNo), SqlType.INSERT);
+            sql.Append("IDENTITYNO", packOrderMaxId);
             sql.AppendQuote("ORDERDATE", InRow["ORDERDATE"]);
             sql.Append("BATCHNO", InRow["BATCHNO"]);
             sql.AppendQuote("LINECODE", InRow["LINECODE"]);
@@ -718,24 +728,17 @@ namespace THOK.AS.Sorting.Dao
             sql.AppendQuote("TQUANTITY", customerSumQuantity);
             sql.AppendQuote("PACKNO", InRow["PACKNO"]);
             sql.AppendQuote("QUANTITY", InRow["QUANTITY"]);
+
             if (strsql == sql.GetSQL())
             {
                 THOK.MCP.Logger.Info(System.Threading.Thread.CurrentThread.Name);
                 THOK.MCP.Logger.Info(sql.GetSQL());
             }
-
             strsql = sql.GetSQL();
+
             ExecuteNonQuery(sql.GetSQL());
-//            string sql = @"INSERT INTO dbo.AS_SC_EXPORTPACK{0}(ORDERDATE,BATCHNO,LINECODE,
-//                            SORTNO,ORDERID,ROUTECODE,ROUTENAME,CUSTOMERCODE,CUSTOMERNAME,
-//                                CUSTOMERSORTNO,CUSTOMERADDRESS,CIGARETTECODE,CIGARETTENAME,BAGQUANTITY,
-//                                TQUANTITY,PACKNO,QUANTITY) VALUES ('{1}','{2}','{3}','{4}','{5}',
-//                                   '{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}')";
-//            ExecuteQuery(string.Format(sql, exportNo, InRow["ORDERDATE"], InRow["BATCHNO"], InRow["LINECODE"], InRow["SORTNO"],
-//                InRow["ORDERID"], InRow["ROUTECODE"], InRow["ROUTENAME"], InRow["CUSTOMERCODE"], InRow["CUSTOMERNAME"],
-//                InRow["ORDERNO"], InRow["CUSTOMERADDRESS"], InRow["CIGARETTECODE"], InRow["CIGARETTENAME"],
-//                bagSumQuantity, customerSumQuantity, InRow["PACKNO"], InRow["QUANTITY"]));
         }
+
         /// <summary>
         /// ¿Í»§¾íÑÌÁ¿
         /// </summary>
