@@ -6,6 +6,9 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using THOK.AS.Sorting.Dal;
+using THOK.AS.Sorting.Dao;
+using THOK.MCP;
+using THOK.Util;
 
 namespace THOK.AS.Sorting.View
 {
@@ -32,6 +35,19 @@ namespace THOK.AS.Sorting.View
             {
                 dgvMain.DataSource = channelDal.GetChannel(sortnoDialog.SortNo, channelGroup);
                 channelGroup = channelGroup == "A" ? "B" : "A";
+            }
+            else
+            {
+                using (PersistentManager pm = new PersistentManager())
+                {
+                    string sortNo_A = "";
+                    string sortNo_B = "";
+                    OrderDao orderDao = new OrderDao();
+                    sortNo_A = orderDao.FindMaxSortedMaster("A");
+                    sortNo_B = orderDao.FindMaxSortedMaster("B");
+                    ChannelDao channelDao = new ChannelDao();
+                    dgvMain.DataSource = channelDao.FindAllChannelQuantity(sortNo_A, sortNo_B);
+                }
             }
         }
     }

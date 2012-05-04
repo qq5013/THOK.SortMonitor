@@ -50,6 +50,40 @@ namespace THOK.AS.Sorting.Dao
         }
 
         /// <summary>
+        /// 根据流水号查询烟道信息
+        /// </summary>
+        /// <param name="sortNo">A线流水号</param>
+        /// <param name="channelGroup">B线流水号</param>
+        /// <returns>返回查询到的烟道信息表</returns>
+        public DataTable FindAllChannelQuantity(string sortNo_A, string sortNo_B)
+        {
+            string sql = string.Format(@"SELECT *, REMAINQUANTITY / 50 BOXQUANTITY, REMAINQUANTITY % 50 ITEMQUANTITY    
+                                          FROM (SELECT A.CHANNELNAME, A.LEDGROUP, A.LEDNO,    
+                                                  CASE CHANNELTYPE WHEN '2' THEN '立式机' WHEN '5' THEN '立式机' ELSE '通道机' END CHANNELTYPE,   
+                                                  A.CIGARETTECODE, A.CIGARETTENAME, A.QUANTITY,ISNULL(B.QUANTITY,0) SORTQUANTITY,   
+                                                  A.QUANTITY - ISNULL(B.QUANTITY,0) REMAINQUANTITY,   
+                                                  A.LED_X,A.LED_Y,A.LED_WIDTH,A.LED_HEIGHT,A.CHANNELADDRESS,A.CHANNELGROUP    
+                                                  FROM AS_SC_CHANNELUSED A    
+                                                  LEFT JOIN(SELECT CHANNELCODE, SUM(QUANTITY) QUANTITY    
+                                                              FROM AS_SC_ORDER WHERE SORTNO <= '{0}' GROUP BY CHANNELCODE) B    
+                                                              ON A.CHANNELCODE = B.CHANNELCODE) C     
+                                          WHERE CHANNELGROUP =1
+                                       union all
+                                        SELECT *, REMAINQUANTITY / 50 BOXQUANTITY, REMAINQUANTITY % 50 ITEMQUANTITY    
+                                          FROM (SELECT A.CHANNELNAME, A.LEDGROUP, A.LEDNO,    
+                                                  CASE CHANNELTYPE WHEN '2' THEN '立式机' WHEN '5' THEN '立式机' ELSE '通道机' END CHANNELTYPE,   
+                                                  A.CIGARETTECODE, A.CIGARETTENAME, A.QUANTITY,ISNULL(B.QUANTITY,0) SORTQUANTITY,   
+                                                  A.QUANTITY - ISNULL(B.QUANTITY,0) REMAINQUANTITY,   
+                                                  A.LED_X,A.LED_Y,A.LED_WIDTH,A.LED_HEIGHT,A.CHANNELADDRESS,A.CHANNELGROUP    
+                                                  FROM AS_SC_CHANNELUSED A    
+                                                  LEFT JOIN(SELECT CHANNELCODE, SUM(QUANTITY) QUANTITY    
+                                                              FROM AS_SC_ORDER WHERE SORTNO <= '{1}' GROUP BY CHANNELCODE) B    
+                                                              ON A.CHANNELCODE = B.CHANNELCODE) C     
+                                          WHERE CHANNELGROUP =2 ORDER BY CHANNELNAME", sortNo_A,sortNo_B);
+            return ExecuteQuery(sql).Tables[0];
+        }
+
+        /// <summary>
         /// 实时查询分拣烟道内所剩的卷烟数量
         /// </summary>
         /// <param name="sortNo">分拣流水号</param>
