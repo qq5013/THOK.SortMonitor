@@ -33,7 +33,7 @@ namespace THOK.AS.Sorting.Dao
 
         public DataTable FindDetail(string sortNo)
         {
-            string sql = string.Format("SELECT A.SORTNO, ORDERID, B.CHANNELNAME, "+
+            string sql = string.Format("SELECT A.SORTNO, A.PACKNO,ORDERID, B.CHANNELNAME, "+
                                             " CASE B.CHANNELTYPE WHEN '2' THEN '立式机' WHEN '5' THEN '立式机' ELSE '通道机' END CHANNELTYPE, " +
                                             " A.CIGARETTECODE, A.CIGARETTENAME, A.QUANTITY ," +
                                             " CASE WHEN A.CHANNELGROUP=1 THEN 'A线' ELSE 'B线' END  CHANNELLINE "+
@@ -93,7 +93,7 @@ namespace THOK.AS.Sorting.Dao
             //                        "FROM AS_SC_ORDER A  LEFT JOIN DBO.AS_SC_CHANNELUSED B ON A.CHANNELCODE = B.CHANNELCODE WHERE A.ORDERID='{0}' "+
             //                        " GROUP BY ORDERID,A.CHANNELGROUP,A.SORTNO ,B.CHANNELNAME,A.CIGARETTECODE,A.CIGARETTENAME ORDER BY A.CHANNELGROUP,A.SORTNO,B.CHANNELNAME", orderId);
             //return ExecuteQuery(sql).Tables[0];
-            string sql = string.Format("SELECT A.SORTNO, ORDERID, B.CHANNELNAME, " +
+            string sql = string.Format("SELECT A.PACKNO AS PACK,A.SORTNO, ORDERID, B.CHANNELNAME, " +
                                 " CASE B.CHANNELTYPE WHEN '2' THEN '立式机' WHEN '5' THEN '立式机' ELSE '通道机' END CHANNELTYPE, " +
                                 " A.CIGARETTECODE, A.CIGARETTENAME, A.QUANTITY ," +
                                 " CASE WHEN A.CHANNELGROUP=1 THEN 'A线' ELSE 'B线' END  CHANNELLINE " +
@@ -218,6 +218,18 @@ namespace THOK.AS.Sorting.Dao
         }
 
         /// <summary>
+        /// 查询A线或B线最后客户的最小流水号
+        /// </summary>
+        /// <param name="channelGroup">A线或者B线</param>
+        /// <returns>返回一个流水号</returns>
+        public string FindLastCustomerSortNo(string channelGroup)
+        {
+            string sql = "SELECT MIN(SORTNO) FROM AS_SC_PALLETMASTER WHERE CUSTOMERSORTNO = (SELECT MAX(CUSTOMERSORTNO) FROM AS_SC_PALLETMASTER) AND STATUS{0}=1";
+            return ExecuteScalar(string.Format(sql, channelGroup == "A" ? "" : "1")).ToString();
+        }
+
+
+        /// <summary>
         /// 修改A线或者B线已分拣完的流水号的时间
         /// </summary>
         /// <param name="sortNo">完成的流水号</param>
@@ -225,6 +237,17 @@ namespace THOK.AS.Sorting.Dao
         public void UpdateFinisheTime(string sortNo, string channelGroup)
         {
             string sql = "UPDATE AS_SC_PALLETMASTER SET FINISHEDTIME{0} = GETDATE() WHERE STATUS{0}='1' AND SORTNO <= '{1}' ";
+            ExecuteNonQuery(string.Format(sql, channelGroup == "A" ? "" : "1", sortNo));
+        }
+
+        /// <summary>
+        /// 修改A线或者B线已分拣完流水号的时间
+        /// </summary>
+        /// <param name="sortNo">最后客户的最小流水号</param>
+        /// <param name="channelGroup">A线或者B线</param>
+        public void UpdateAllFinisheTime(string sortNo, string channelGroup)
+        {
+            string sql = "UPDATE AS_SC_PALLETMASTER SET FINISHEDTIME{0} = GETDATE() WHERE STATUS{0}='1' AND SORTNO >= '{1}' ";
             ExecuteNonQuery(string.Format(sql, channelGroup == "A" ? "" : "1", sortNo));
         }
 

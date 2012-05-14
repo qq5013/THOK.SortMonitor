@@ -69,10 +69,15 @@ namespace THOK.AS.Sorting.Process
                 {
                     OrderDao orderDao = new OrderDao();
                     if (sortNo == null)
-                        sortNo = orderDao.FindLastSortNo(channelGroup);                       
-
+                        sortNo = orderDao.FindLastSortNo(channelGroup);
                     //更新完成时间
                     orderDao.UpdateFinisheTime(sortNo, channelGroup);
+
+                    if (Convert.ToInt32(sortNo) >= Convert.ToInt32(orderDao.FindLastCustomerSortNo(channelGroup)))
+                    {
+                        orderDao.UpdateAllFinisheTime(sortNo, channelGroup);
+                    }
+                    
 
                     //刷新主界面分拣状态
                     DataTable infoTable = orderDao.FindOrderInfo(null);
